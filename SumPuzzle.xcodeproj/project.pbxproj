@@ -14,6 +14,11 @@
 		A819025F1B0C13EC00DCD8CB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A819025E1B0C13EC00DCD8CB /* Images.xcassets */; };
 		A81902621B0C13EC00DCD8CB /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A81902601B0C13EC00DCD8CB /* LaunchScreen.xib */; };
 		A819026E1B0C13EC00DCD8CB /* SumPuzzleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A819026D1B0C13EC00DCD8CB /* SumPuzzleTests.m */; };
+		A81902791B0C148900DCD8CB /* BarView.m in Sources */ = {isa = PBXBuildFile; fileRef = A81902781B0C148900DCD8CB /* BarView.m */; };
+		A819027E1B0C16D900DCD8CB /* Board.m in Sources */ = {isa = PBXBuildFile; fileRef = A819027D1B0C16D900DCD8CB /* Board.m */; };
+		A81902811B0C177400DCD8CB /* Space.m in Sources */ = {isa = PBXBuildFile; fileRef = A81902801B0C177400DCD8CB /* Space.m */; };
+		A819028A1B0C19A000DCD8CB /* BoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = A81902891B0C19A000DCD8CB /* BoardView.m */; };
+		A819028D1B0C1A6D00DCD8CB /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A819028C1B0C1A6D00DCD8CB /* GameViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +45,17 @@
 		A81902671B0C13EC00DCD8CB /* SumPuzzleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SumPuzzleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A819026C1B0C13EC00DCD8CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A819026D1B0C13EC00DCD8CB /* SumPuzzleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SumPuzzleTests.m; sourceTree = "<group>"; };
+		A81902771B0C148900DCD8CB /* BarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BarView.h; path = ../BarView.h; sourceTree = "<group>"; };
+		A81902781B0C148900DCD8CB /* BarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BarView.m; path = ../BarView.m; sourceTree = "<group>"; };
+		A819027B1B0C159700DCD8CB /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		A819027C1B0C16D900DCD8CB /* Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Board.h; sourceTree = "<group>"; };
+		A819027D1B0C16D900DCD8CB /* Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Board.m; sourceTree = "<group>"; };
+		A819027F1B0C177400DCD8CB /* Space.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Space.h; sourceTree = "<group>"; };
+		A81902801B0C177400DCD8CB /* Space.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Space.m; sourceTree = "<group>"; };
+		A81902881B0C19A000DCD8CB /* BoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardView.h; sourceTree = "<group>"; };
+		A81902891B0C19A000DCD8CB /* BoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardView.m; sourceTree = "<group>"; };
+		A819028B1B0C1A6D00DCD8CB /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		A819028C1B0C1A6D00DCD8CB /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +101,18 @@
 				A81902561B0C13EC00DCD8CB /* AppDelegate.m */,
 				A81902581B0C13EC00DCD8CB /* ViewController.h */,
 				A81902591B0C13EC00DCD8CB /* ViewController.m */,
+				A819028B1B0C1A6D00DCD8CB /* GameViewController.h */,
+				A819028C1B0C1A6D00DCD8CB /* GameViewController.m */,
 				A819025B1B0C13EC00DCD8CB /* Main.storyboard */,
+				A819027B1B0C159700DCD8CB /* Constants.h */,
+				A81902771B0C148900DCD8CB /* BarView.h */,
+				A81902781B0C148900DCD8CB /* BarView.m */,
+				A819027C1B0C16D900DCD8CB /* Board.h */,
+				A819027D1B0C16D900DCD8CB /* Board.m */,
+				A819027F1B0C177400DCD8CB /* Space.h */,
+				A81902801B0C177400DCD8CB /* Space.m */,
+				A81902881B0C19A000DCD8CB /* BoardView.h */,
+				A81902891B0C19A000DCD8CB /* BoardView.m */,
 				A819025E1B0C13EC00DCD8CB /* Images.xcassets */,
 				A81902601B0C13EC00DCD8CB /* LaunchScreen.xib */,
 				A81902511B0C13EC00DCD8CB /* Supporting Files */,
@@ -219,9 +246,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A819028D1B0C1A6D00DCD8CB /* GameViewController.m in Sources */,
+				A81902811B0C177400DCD8CB /* Space.m in Sources */,
+				A81902791B0C148900DCD8CB /* BarView.m in Sources */,
 				A819025A1B0C13EC00DCD8CB /* ViewController.m in Sources */,
 				A81902571B0C13EC00DCD8CB /* AppDelegate.m in Sources */,
 				A81902541B0C13EC00DCD8CB /* main.m in Sources */,
+				A819027E1B0C16D900DCD8CB /* Board.m in Sources */,
+				A819028A1B0C19A000DCD8CB /* BoardView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

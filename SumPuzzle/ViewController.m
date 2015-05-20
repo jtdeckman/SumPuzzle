@@ -15,13 +15,68 @@
 @implementation ViewController
 
 - (void)viewDidLoad {
+   
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    self.view.backgroundColor = [UIColor blackColor];
+    
+    [self setUpButtons];
 }
 
 - (void)didReceiveMemoryWarning {
+    
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
+}
+
+- (void)buttonPressed: (UIButton*)button {
+    
+    gameViewController = [[GameViewController alloc] init];
+    
+    [self presentViewController:gameViewController animated:YES completion:nil];
+    
+}
+- (void)setUpButtons {
+    
+    CGFloat fWidth = self.view.frame.size.width;
+    CGFloat fHeight = self.view.frame.size.height;
+    
+    CGFloat bWidth = BUTTON_WIDTH_FACT*fWidth;
+    CGFloat bHeight = BUTTON_HEIGHT_FACT*fHeight;
+    
+    CGFloat spacing = BUTTON_SPACING_FACT*fWidth;
+    
+    CGFloat fontSize = FONT_FACT*bHeight;
+    
+    CGPoint center, origin;
+    
+    center.x = fWidth/2.0;
+    center.y = fHeight/2.0;
+    
+    // New Game button
+    
+    origin.x = center.x - bWidth/2.0;
+    origin.y = center.y + bHeight/2.0 + spacing; //- bHeight/2.0 - spacing;
+    
+    newGameButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    newGameButton.frame = CGRectMake(origin.x, origin.y, bWidth, bHeight);
+    
+    [self.view addSubview:newGameButton];
+    
+    newGameButton.layer.cornerRadius = 5.0;
+    newGameButton.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    
+    //  [newGameButton setBackgroundColor:[UIColor lightGrayColor]];
+    
+    [newGameButton.layer setBorderWidth:1.0f];
+    [newGameButton setTitle:@"New Game" forState:UIControlStateNormal];
+    
+    [newGameButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:fontSize]];
+    [newGameButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    
+    [newGameButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    newGameButton.hidden = false;
 }
 
 @end
