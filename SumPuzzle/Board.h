@@ -25,13 +25,13 @@
 }
 
 - (void)initBoard: (CGRect)bvFrame : (int)dimx : (int)dimy : (CGFloat)offset;
-- (void)addPiece: (int)ii : (int)ji : (int)val : (BOOL)isTar : (JDColor)clr;
+- (void)addPiece: (int)ii : (int)ji : (int)val : (int)player : (JDColor)clr;
 
 - (Space*)getSpaceForIndices: (int)ii : (int)ji;
 - (Space*)getSpaceFromPoint: (CGPoint)loc;
 
-- (int)nbrOccupied: (Space*)space;
-- (int)sumNbrs: (Space*)space;
+- (int)nbrOccupied: (Space*)space : (int)plyr;
+- (int)sumNbrs: (Space*)space : (int)plyr;
 
 
 @end

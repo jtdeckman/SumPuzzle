@@ -21,21 +21,20 @@
     
     JDColor topColor;
     JDColor botColor;
-    JDColor pieceColor;
-    JDColor targetColor;
+    JDColor p1Color;
+    JDColor p2Color;
     
     int dimx;
     int dimy;
     
     int numSpaces;
-    int numTargets;
     int numPieces;
     
     int level;
-    int targetFact;
     int numberFact;
-    
     int nextValue;
+    
+    int currPlayer;
     
     BOOL addTile;
     
@@ -52,6 +51,5 @@
 - (void)addPiecesToView;
 
 - (void)addPiece: (Space*)space;
-- (void)addTarget;
 
 @end

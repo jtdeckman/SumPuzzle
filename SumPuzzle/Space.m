@@ -11,7 +11,7 @@
 @implementation Space
 
 @synthesize value, isOccupied, isTarget, piece, spaceFrame;
-@synthesize nnbrs, iind, jind;
+@synthesize nnbrs, iind, jind, player;
 
 - (void)initSpace : (int)ii : (int)ji : (CGRect)spaceFrm : (CGRect)labelframe {
     
@@ -35,11 +35,6 @@
         nbrs[i][0] = -1;
     
     nnbrs = 0;
-    
-    /*  [self setColor:0.2 :0.2 :0.8 :1.0];
-     piece.backgroundColor = [UIColor colorWithRed:color.red green:color.green blue:color.blue alpha:1.0];
-     piece.layer.borderColor = [[UIColor colorWithRed:color.red green:color.green blue:color.blue alpha:1.0] CGColor];
-     piece.layer.borderWidth = 2.0f; */
 }
 
 - (void)setColor: (CGFloat)red : (CGFloat)green : (CGFloat)blue : (CGFloat)alpha {
@@ -65,7 +60,6 @@
         nbrs[nnbrs][1] = j;
         ++nnbrs;
     }
-    
 }
 
 - (void)getNbrIndices: (int)nbr : (int*)inbr : (int*)jnbr {

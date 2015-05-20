@@ -83,12 +83,12 @@
     
 }
 
-- (void)addPiece: (int)ii : (int)ji : (int)val : (BOOL)isTar : (JDColor)clr {
+- (void)addPiece: (int)ii : (int)ji : (int)val : (int)player : (JDColor)clr {
     
     Space *space = spaces[ii][ji];
     
     space.isOccupied = YES;
-    space.isTarget = isTar;
+    space.player = player;
     
     space.value = val;
     
@@ -119,7 +119,7 @@
     return NULL;
 }
 
-- (int)nbrOccupied: (Space*)space {
+- (int)nbrOccupied: (Space*)space : (int)plyr {
     
     Space *nbrSpace;
     
@@ -131,13 +131,13 @@
         
         nbrSpace = [self getSpaceForIndices:inbr :jnbr];
         
-        if(nbrSpace.isOccupied && !nbrSpace.isTarget) ++nocc;
+        if(nbrSpace.isOccupied && nbrSpace.player == plyr) ++nocc;
     }
     
     return nocc;
 }
 
-- (int)sumNbrs: (Space*)space {
+- (int)sumNbrs: (Space*)space : (int)plyr {
     
     int sum = 0;
     
@@ -151,7 +151,7 @@
         
         nbrSpace = [self getSpaceForIndices:inbr :jnbr];
         
-        if(!nbrSpace.isTarget)
+        if(nbrSpace.player == plyr)
             sum += nbrSpace.value;
     }
     

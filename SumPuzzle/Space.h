@@ -19,8 +19,9 @@
     int nbrs[4][2];
     int nnbrs;
     
+    int player;
+    
     BOOL isOccupied;
-    BOOL isTarget;
     
     CGRect spaceFrame;
     
@@ -33,6 +34,7 @@
 @property (nonatomic) int iind;
 @property (nonatomic) int jind;
 @property (nonatomic) int nnbrs;
+@property (nonatomic) int player;
 
 @property (nonatomic) CGRect spaceFrame;
 

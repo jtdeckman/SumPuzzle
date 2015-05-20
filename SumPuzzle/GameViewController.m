@@ -42,36 +42,23 @@
     else {
         
         Space *space = [board getSpaceFromPoint:location];
-        int nocc = [board nbrOccupied:space];
+        int nocc = [board nbrOccupied:space : currPlayer];
         
-        if(space != NULL && !space.isOccupied && ((nocc > 0 && addTile) || (nocc > 1 && !addTile))) {
+        if(space != NULL && ((nocc > 0 && addTile) || (nocc > 1 && !addTile))) {
             
-            [self addPiece:space];
+            if(space.isOccupied) {
+            
+            }
+            else {
+                [self addPiece:space];
+            }
         }
-        
     }
-}
-
-
-- (void)addTarget {
-    
-    int num = rand() % targetFact;
-    
-    [board addPiece:3 :3 : num :YES :targetColor];
-    
-    ++numTargets;
-    
-    num = rand() % targetFact;
-    
-    [board addPiece:7 :7 : num :YES :targetColor];
-    
-    ++numTargets;
-    
 }
 
 - (void)addPiece: (Space*)space {
     
-    int nbrSum = [board sumNbrs:space];
+    int nbrSum = [board sumNbrs:space : currPlayer];
     
     if(addTile) {
         
@@ -80,14 +67,25 @@
         
         num *= pow(-1, expf);
         
-        [board addPiece:space.iind :space.jind : nextValue+nbrSum :NO :pieceColor];
-        addTile = NO;
-        nextValue = num;
-        nextTile.text = [NSString stringWithFormat:@"%d", nextValue];
+        if(currPlayer == 1) {
+            [board addPiece:space.iind :space.jind : nextValue+nbrSum :1 :p1Color];
+        }
+        else {
+            [board addPiece:space.iind :space.jind : nextValue+nbrSum :2 :p2Color];
+            addTile = NO;
+            nextValue = num;
+            nextTile.text = [NSString stringWithFormat:@"%d", nextValue];
+        }
     }
     else {
-        [board addPiece:space.iind :space.jind : nbrSum :NO :pieceColor];
+        if(currPlayer == 1)
+            [board addPiece:space.iind :space.jind : nbrSum :1 :p1Color];
+        else
+            [board addPiece:space.iind :space.jind : nbrSum :2 :p2Color];
     }
+    
+    if(currPlayer == 1) ++currPlayer;
+    else --currPlayer;
     
     ++numPieces;
 }
@@ -115,13 +113,13 @@
     botColor.green = 0.25;
     botColor.blue = 0.95;
     
-    pieceColor.red = 0.25;
-    pieceColor.green = 0.55;
-    pieceColor.blue = 0.8;
+    p1Color.red = 0.25;
+    p1Color.green = 0.55;
+    p1Color.blue = 0.8;
     
-    targetColor.red = 0.8;
-    targetColor.green = 0.1;
-    targetColor.blue = 0.1;
+    p2Color.red = 0.8;
+    p2Color.green = 0.1;
+    p2Color.blue = 0.1;
 }
 
 - (void)loadData {
@@ -239,19 +237,20 @@
 - (void)setUpGamePlay {
     
     numSpaces = dimx*dimy;
-    numTargets = 0;
     numPieces = 0;
-    
-    targetFact = 100;
     numberFact = 5;
+    
+    currPlayer = 1;
     
     level = 1;
     
     int num = rand() % numberFact;
     
-    [board addPiece:9 :0 :num :NO :pieceColor];
+    [board addPiece:0 :5 :num :1 :p1Color];
     
-    [self addTarget];
+    num = rand() % numberFact;
+    
+    [board addPiece:9 :4 :num :2 :p2Color];
     
     addTile = YES;
     
