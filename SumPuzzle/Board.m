@@ -10,6 +10,8 @@
 
 @implementation Board
 
+@synthesize selectedSpace;
+
 - (void)initBoard: (CGRect)bvFrame : (int)dx : (int)dy : (CGFloat)offset {
     
     NSMutableArray *row;
@@ -43,8 +45,6 @@
     xini = os2;
     yini = os2;
     
-    int inbr, jnbr;
-    
     for(int i=0; i<dimx; i++) {
         
         row = [[NSMutableArray alloc] initWithCapacity:dimy];
@@ -62,35 +62,81 @@
             [newSpace initSpace:i :j :spcFrm :pcFrm];
             
             [row addObject:newSpace];
-            
-            inbr = i-1;
-            jnbr = j;
-            if(inbr > -1) [newSpace addNbr:inbr :jnbr];
-            
-            inbr = i+1;
-            if(inbr < dimy) [newSpace addNbr:inbr :jnbr];
-            
-            inbr = i;
-            jnbr = j-1;
-            if(jnbr > -1) [newSpace addNbr:inbr :jnbr];
-            
-            jnbr = j+1;
-            if(jnbr < dimx) [newSpace addNbr:inbr :jnbr];
         }
         
         [spaces addObject:row];
     }
     
+    [self findNeighbors];
 }
 
-- (void)addPiece: (int)ii : (int)ji : (int)val : (int)player : (JDColor)clr {
+
+- (void)findNeighbors {
+    
+    Space *space;
+    
+    int inbr, jnbr;
+    
+    for(int i=0; i<dimx; i++) {
+        for(int j=0; j<dimy; j++) {
+            
+            space = [self getSpaceForIndices:i :j];
+            
+            inbr = i-1;
+            jnbr = j;
+            
+            if(inbr > -1) {
+                [space.nearestNbrs addObject:[self getSpaceForIndices:inbr :jnbr]];
+                [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
+            }
+            
+            inbr = i+1;
+            if(inbr < dimy) {
+                [space.nearestNbrs addObject:[self getSpaceForIndices:inbr :jnbr]];
+                [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
+            }
+            
+            inbr = i;
+            jnbr = j-1;
+            if(jnbr > -1) {
+                [space.nearestNbrs addObject:[self getSpaceForIndices:inbr :jnbr]];
+                [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
+            }
+            
+            jnbr = j+1;
+            if(jnbr < dimx) {
+                [space.nearestNbrs addObject:[self getSpaceForIndices:inbr :jnbr]];
+                [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
+            }
+            
+            inbr = i-1;
+            jnbr = j-1;
+            if(inbr > -1 && jnbr > -1)
+                [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
+            
+            jnbr = j+1;
+            if(inbr > -1 && jnbr < dimx)
+                [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
+            
+            inbr = i+1;
+            if(inbr < dimy && jnbr < dimx)
+                [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
+            
+            jnbr = j-1;
+            if(inbr < dimy && jnbr > -1)
+                [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
+        }
+    }
+}
+
+- (void)addPiece: (int)ii : (int)ji : (int)val : (Player)plyr : (JDColor)clr {
     
     Space *space = spaces[ii][ji];
     
     space.isOccupied = YES;
-    space.player = player;
-    
     space.value = val;
+    
+    space.player = plyr;
     
     [space setColor:clr.red :clr.green :clr.blue :1.0f];
     [space configurePiece];
@@ -119,43 +165,99 @@
     return NULL;
 }
 
-- (int)nbrOccupied: (Space*)space : (int)plyr {
+- (int)nbrNearestOccupied: (Space*)space : (Player)plyr{
     
-    Space *nbrSpace;
+    int nocc = 0;
     
-    int inbr, jnbr, nocc = 0;
-    
-    for(int i=0; i<space.nnbrs; i++) {
-        
-        [space getNbrIndices:i :&inbr :&jnbr];
-        
-        nbrSpace = [self getSpaceForIndices:inbr :jnbr];
-        
-        if(nbrSpace.isOccupied && nbrSpace.player == plyr) ++nocc;
-    }
+    if(space != nil)
+        for(Space* item in space.nearestNbrs)
+            if(item.isOccupied && item.player == plyr) ++nocc;
     
     return nocc;
 }
 
-- (int)sumNbrs: (Space*)space : (int)plyr {
+- (int)nbrOccupied: (Space*)space : (Player)plyr {
+    
+    int nocc = 0;
+    
+    if(space != nil)
+        for(Space* item in space.neighbors)
+            if(item.isOccupied && item.player == plyr) ++nocc;
+    
+    return nocc;
+}
+
+- (int)sumNbrs: (Space*)space {
     
     int sum = 0;
     
-    Space *nbrSpace;
-    
-    int inbr, jnbr;
-    
-    for(int i=0; i<space.nnbrs; i++) {
-        
-        [space getNbrIndices:i :&inbr :&jnbr];
-        
-        nbrSpace = [self getSpaceForIndices:inbr :jnbr];
-        
-        if(nbrSpace.player == plyr)
-            sum += nbrSpace.value;
+    for(Space* item in space.neighbors) {
+        if(item.isOccupied && item.isSelected)
+            sum += item.value;
     }
     
     return sum;
+}
+
+- (void)clearSelectedSpace {
+    
+    if(selectedSpace != nil) {
+        
+        for(Space* item in selectedSpace.neighbors) {
+            item.isHighlighted = NO;
+            item.isSelected = NO;
+            [item unHighlightPiece];
+        }
+        
+        selectedSpace = nil;
+    }
+}
+
+- (void)highlightNeighbors: (Space*)space : (Player)plyr{
+    
+    int count = 0;
+    
+    if(space != nil) {
+        for(Space* item in space.neighbors) {
+            if(item.isOccupied && item.player == plyr) {
+                item.isHighlighted = YES;
+                item.isSelected = NO;
+                [item highlightPiece];
+                ++count;
+                if(count >= MAX_NEARBY_NEIGHBORS) break;
+            }
+        }
+    }
+    
+    selectedSpace = space;
+}
+
+- (int)numSelected {
+    
+    int count = 0;
+    
+    if(selectedSpace != nil) {
+        for(Space* item in selectedSpace.neighbors)
+            if(item.isSelected) ++ count;
+    }
+    
+    return count;
+}
+
+- (void)addPieceToSelectedSpace: (JDColor)clr : (Player)plyr {
+    
+    selectedSpace.isOccupied = YES;
+    
+    selectedSpace.value = [self sumNbrs:selectedSpace];
+    
+    selectedSpace.player = plyr;
+    
+    [selectedSpace setColor:clr.red :clr.green :clr.blue :1.0f];
+    [selectedSpace configurePiece];
+    
+    selectedSpace.piece.hidden = false;
+    
+    [self clearSelectedSpace];
 }
 
 @end

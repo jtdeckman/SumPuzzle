@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 JDeckman. All rights reserved.
 //
 
-#ifndef SumPuzzle_Constants_h
-#define SumPuzzle_Constants_h
-
 #import <UIKit/UIKit.h>
+
+#ifndef NumSum_Constants_h
+#define NumSum_Constants_h
 
 #define WIDTH_FACT 1.00
 #define HEIGHT_FACT 1.00
@@ -22,11 +22,9 @@
 #define DIMX 10
 #define DIMY 10
 
-#define FONT_FACT 0.4
+#define FONT_FACT 0.6
 
-#define BUTTON_WIDTH_FACT 0.5
-#define BUTTON_HEIGHT_FACT 0.065
-#define BUTTON_SPACING_FACT 0.07
+#define MAX_NEARBY_NEIGHBORS 4
 
 typedef struct {
     
@@ -35,5 +33,31 @@ typedef struct {
     CGFloat blue;
     
 } JDColor;
+
+
+typedef enum : NSUInteger {
+    
+    gameRunning,
+    gamePaused,
+    gameOver,
+    
+} GameState;
+
+typedef enum : NSUInteger {
+    
+    freeState,
+    pieceSelected,
+    spaceSelected,
+    placeTile
+    
+} PlaceMode;
+
+typedef enum : NSUInteger {
+    
+    notAssigned,
+    player1,
+    player2
+    
+} Player;
 
 #endif

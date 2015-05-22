@@ -6,9 +6,15 @@
 //  Copyright (c) 2015 JDeckman. All rights reserved.
 //
 
-#import "GameViewController.h"
+#import "ViewController.h"
+#import "BoardView.h"
+#import "Constants.h"
 
-@implementation GameViewController
+@interface ViewController ()
+
+@end
+
+@implementation ViewController
 
 - (void)viewDidLoad {
     
@@ -36,58 +42,77 @@
     UITouch *touch = [[event allTouches] anyObject];
     CGPoint location = [touch locationInView:touch.view];
     
-    if(touch.view == bottomBar) {
-        addTile = YES;
+    if(touch.view == topBar) {
+        placeMode = freeState;
+        [board clearSelectedSpace];
     }
-    else {
+    else if(touch.view == bottomBar) {
+        placeMode = placeTile;
+        [board clearSelectedSpace];
+    }
+    else if(touch.view == boardView) {
         
         Space *space = [board getSpaceFromPoint:location];
-        int nocc = [board nbrOccupied:space : currPlayer];
         
-        if(space != NULL && ((nocc > 0 && addTile) || (nocc > 1 && !addTile))) {
+        if(space != NULL) {
             
-            if(space.isOccupied) {
+            int nocc = [board nbrNearestOccupied:space : currentPlayer];
             
+            if(placeMode == placeTile) {
+                
+                if(!space.isOccupied && nocc > 0)
+                    [self addPiece:space];
             }
-            else {
-                [self addPiece:space];
+            else if(placeMode == freeState) {
+                
+                if(!space.isOccupied && nocc > 0) {
+                    if([board nbrOccupied:space : currentPlayer] > 1)
+                        [board highlightNeighbors:space : currentPlayer];
+                    
+                    placeMode = spaceSelected;
+                }
             }
+            else if(placeMode == spaceSelected) {
+                
+                if(space.isHighlighted) {
+                    space.isSelected = YES;
+                    [space unHighlightPiece];
+                    
+                    if([board numSelected] > 1) {
+                        [board addPieceToSelectedSpace:[self getColorForPlayer] : currentPlayer];
+                        ++numPieces;
+                        [board clearSelectedSpace];
+                        placeMode = freeState;
+                    }
+                }
+                else {
+                    [board clearSelectedSpace];
+                    placeMode = freeState;
+                }
+            }
+            
         }
     }
 }
 
+
+
 - (void)addPiece: (Space*)space {
     
-    int nbrSum = [board sumNbrs:space : currPlayer];
+    //  int nbrSum = [board sumNbrs:space];
     
-    if(addTile) {
-        
-        int num = (rand() % numberFact) + 1;
-        int expf = rand() % 3;
-        
-        num *= pow(-1, expf);
-        
-        if(currPlayer == 1) {
-            [board addPiece:space.iind :space.jind : nextValue+nbrSum :1 :p1Color];
-        }
-        else {
-            [board addPiece:space.iind :space.jind : nextValue+nbrSum :2 :p2Color];
-            addTile = NO;
-            nextValue = num;
-            nextTile.text = [NSString stringWithFormat:@"%d", nextValue];
-        }
-    }
-    else {
-        if(currPlayer == 1)
-            [board addPiece:space.iind :space.jind : nbrSum :1 :p1Color];
-        else
-            [board addPiece:space.iind :space.jind : nbrSum :2 :p2Color];
-    }
+    int num = (rand() % numberFact) + 1;
+    int expf = rand() % 3;
     
-    if(currPlayer == 1) ++currPlayer;
-    else --currPlayer;
+    num *= pow(-1, expf);
+    
+    [board addPiece:space.iind :space.jind : nextValue : currentPlayer : [self getColorForPlayer]];
+    nextValue = num;
+    nextTile.text = [NSString stringWithFormat:@"%d", nextValue];
     
     ++numPieces;
+    
+    placeMode = freeState;
 }
 
 - (void)addPiecesToView {
@@ -101,6 +126,36 @@
         }
     }
     
+}
+
+- (void)setUpGamePlay {
+    
+    numSpaces = dimx*dimy;
+    numPieces = 0;
+    
+    numberFact = 5;
+    
+    level = 1;
+    
+    gameState = gameRunning;
+    placeMode = placeTile;
+    currentPlayer = player1;
+    
+    int num = rand() % numberFact;
+    
+    [board addPiece:9 :0 :num : currentPlayer : [self getColorForPlayer]];
+    
+    nextValue = rand() % numberFact;
+    
+    nextTile.text = [NSString stringWithFormat:@"%d", nextValue];
+}
+
+- (void)setUpBoard:(CGFloat)offset {
+    
+    board = [[Board alloc] init];
+    [board initBoard:boardView.frame :dimx :dimy :offset];
+    
+    [self addPiecesToView];
 }
 
 - (void)setUpColors {
@@ -118,8 +173,21 @@
     p1Color.blue = 0.8;
     
     p2Color.red = 0.8;
-    p2Color.green = 0.1;
-    p2Color.blue = 0.1;
+    p2Color.green = 0.2;
+    p2Color.blue = 0.2;
+    
+    tileColor.red = 0.7;
+    tileColor.green = 0.5;
+    tileColor.blue = 0.2;
+
+}
+
+- (JDColor)getColorForPlayer {
+
+    if(currentPlayer == player1)
+        return p1Color;
+    
+    return p2Color;
 }
 
 - (void)loadData {
@@ -128,13 +196,21 @@
     dimy = 10;
 }
 
+- (void)switchPlayers {
+
+    if(currentPlayer == player1)
+        currentPlayer = player2;
+    else
+        currentPlayer = player1;
+}
+
 - (void)setUpLabels {
     
     CGRect viewFrame;
     
     Space *space = [board getSpaceForIndices:0 :0];
     
-    viewFrame.origin.x = 0.15*self.view.frame.size.width;
+    viewFrame.origin.x = 0.5*self.view.frame.size.width - space.spaceFrame.size.width/2.0;
     viewFrame.origin.y = 0.85*self.view.frame.size.height;
     viewFrame.size.width = space.spaceFrame.size.width;
     viewFrame.size.height = space.spaceFrame.size.height;
@@ -143,6 +219,10 @@
     nextTile.hidden = NO;
     nextTile.layer.cornerRadius = 3.0;
     nextTile.clipsToBounds = YES;
+    nextTile.backgroundColor = [UIColor colorWithRed:tileColor.red green:tileColor.green blue:tileColor.blue alpha:1.0];
+    nextTile.layer.borderColor = [[UIColor whiteColor] CGColor];
+    nextTile.layer.borderWidth = 2.0f;
+    nextTile.textColor = [UIColor whiteColor];
     
     [nextTile setTextAlignment:NSTextAlignmentCenter];
     [nextTile setFont:[UIFont fontWithName:@"Arial" size:FONT_FACT*viewFrame.size.width]];
@@ -169,9 +249,6 @@
     
     // Top Bar Set-Up
     
-    //   viewFrame.origin.x = offset;
-    //   viewFrame.origin.y = 2.0*offset;
-    
     viewFrame.origin.x = 0.0;
     viewFrame.origin.y = 0.0;
     viewFrame.size.width = width;
@@ -184,8 +261,6 @@
     [self.view addSubview:topBar];
     
     // BoardView Set-Up
-    
-    // height = width*HEIGHT_FACT;
     
     viewFrame.origin.x = offset;
     viewFrame.origin.y = topBar.frame.origin.y + topBar.frame.size.height + 3.0*offset;
@@ -203,9 +278,6 @@
     
     // Bottom Bar Set-Up
     
-    //  viewFrame.origin.x = offset;
-    //  viewFrame.origin.y = boardView.frame.origin.y + boardView.frame.size.height + offset;
-    
     viewFrame.origin.x = 0;
     viewFrame.origin.y = boardView.frame.origin.y + boardView.frame.size.height + offset;
     
@@ -221,42 +293,7 @@
     // Board set-up
     
     [self setUpBoard:lineThickness];
-    
     [self setUpLabels];
-}
-
-- (void)setUpBoard:(CGFloat)offset {
-    
-    board = [[Board alloc] init];
-    
-    [board initBoard:boardView.frame :dimx :dimy :offset];
-    
-    [self addPiecesToView];
-}
-
-- (void)setUpGamePlay {
-    
-    numSpaces = dimx*dimy;
-    numPieces = 0;
-    numberFact = 5;
-    
-    currPlayer = 1;
-    
-    level = 1;
-    
-    int num = rand() % numberFact;
-    
-    [board addPiece:0 :5 :num :1 :p1Color];
-    
-    num = rand() % numberFact;
-    
-    [board addPiece:9 :4 :num :2 :p2Color];
-    
-    addTile = YES;
-    
-    nextValue = rand() % numberFact;
-    
-    nextTile.text = [NSString stringWithFormat:@"%d", nextValue];
 }
 
 @end

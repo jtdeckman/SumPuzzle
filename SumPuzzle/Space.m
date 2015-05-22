@@ -10,8 +10,9 @@
 
 @implementation Space
 
-@synthesize value, isOccupied, isTarget, piece, spaceFrame;
-@synthesize nnbrs, iind, jind, player;
+@synthesize value, isOccupied, piece, spaceFrame, player;
+@synthesize iind, jind, neighbors, isHighlighted, isSelected;
+@synthesize nearestNbrs;
 
 - (void)initSpace : (int)ii : (int)ji : (CGRect)spaceFrm : (CGRect)labelframe {
     
@@ -19,9 +20,12 @@
     jind = ji;
     
     isOccupied = NO;
-    isTarget = NO;
+    isHighlighted = NO;
+    isSelected = NO;
     
     spaceFrame = spaceFrm;
+    
+    player = notAssigned;
     
     piece = [[UILabel alloc] initWithFrame:labelframe];
     piece.hidden = YES;
@@ -31,10 +35,9 @@
     [piece setTextAlignment:NSTextAlignmentCenter];
     [piece setFont:[UIFont fontWithName:@"Arial" size:FONT_FACT*spaceFrame.size.width]];
     
-    for(int i=0; i<4; i++)
-        nbrs[i][0] = -1;
+    nearestNbrs = [[NSMutableSet alloc] initWithCapacity:4];
+    neighbors = [[NSMutableSet alloc] initWithCapacity:10];
     
-    nnbrs = 0;
 }
 
 - (void)setColor: (CGFloat)red : (CGFloat)green : (CGFloat)blue : (CGFloat)alpha {
@@ -50,22 +53,29 @@
     piece.backgroundColor = [UIColor colorWithRed:color.red green:color.green blue:color.blue alpha:1.0];
     piece.textColor = [UIColor whiteColor];
     piece.layer.borderColor = [[UIColor colorWithRed:color.red green:color.green blue:color.blue alpha:1.0] CGColor];
-    piece.layer.borderWidth = 5.0f;
+    piece.layer.borderWidth = 2.0f;
 }
 
-- (void)addNbr: (int)i : (int)j {
+- (void)highlightPiece {
     
-    if(nnbrs < 4) {
-        nbrs[nnbrs][0] = i;
-        nbrs[nnbrs][1] = j;
-        ++nnbrs;
+    piece.layer.borderColor = [[UIColor whiteColor] CGColor];
+    
+}
+
+- (void)unHighlightPiece {
+    
+    piece.layer.borderColor = [[UIColor colorWithRed:color.red green:color.green blue:color.blue alpha:1.0] CGColor];
+}
+
+- (int)numSelPieces {
+    
+    int numSel = 0;
+    
+    for(Space* item in neighbors) {
+        if(item.isSelected) ++numSel;
     }
-}
-
-- (void)getNbrIndices: (int)nbr : (int*)inbr : (int*)jnbr {
     
-    *inbr = nbrs[nbr][0];
-    *jnbr = nbrs[nbr][1];
+    return numSel;
 }
 
 @end

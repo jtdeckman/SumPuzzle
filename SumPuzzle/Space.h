@@ -16,37 +16,45 @@
     int iind;
     int jind;
     
-    int nbrs[4][2];
-    int nnbrs;
-    
-    int player;
-    
     BOOL isOccupied;
+    BOOL isHighlighted;
+    BOOL isSelected;
+    
+    NSMutableSet *nearestNbrs;
+    NSMutableSet *neighbors;
     
     CGRect spaceFrame;
     
     UILabel *piece;
     
     JDColor color;
+    
+    Player player;
 }
 
 @property (nonatomic) int value;
 @property (nonatomic) int iind;
 @property (nonatomic) int jind;
-@property (nonatomic) int nnbrs;
-@property (nonatomic) int player;
 
 @property (nonatomic) CGRect spaceFrame;
 
 @property (nonatomic) BOOL isOccupied;
-@property (nonatomic) BOOL isTarget;
+@property (nonatomic) BOOL isHighlighted;
+@property (nonatomic) BOOL isSelected;
+
+@property (nonatomic) Player player;
 
 @property (nonatomic, strong) UILabel *piece;
+@property (nonatomic, strong) NSMutableSet *neighbors;
+@property (nonatomic, strong) NSMutableSet *nearestNbrs;
 
 - (void)initSpace: (int)ii : (int)ji : (CGRect)spaceFrm : (CGRect)labelframe;
 - (void)setColor: (CGFloat)red : (CGFloat)green : (CGFloat)blue : (CGFloat)alpha;
 - (void)configurePiece;
-- (void)addNbr: (int)i : (int)j;
-- (void)getNbrIndices: (int)nbr : (int*)inbr : (int*)jnbr;
+
+- (void)highlightPiece;
+- (void)unHighlightPiece;
+
+- (int)numSelPieces;
 
 @end

@@ -24,14 +24,23 @@
     CGFloat pieceWidth;
 }
 
+@property (nonatomic, strong) Space* selectedSpace;
+
 - (void)initBoard: (CGRect)bvFrame : (int)dimx : (int)dimy : (CGFloat)offset;
-- (void)addPiece: (int)ii : (int)ji : (int)val : (int)player : (JDColor)clr;
+- (void)addPiece: (int)ii : (int)ji : (int)val : (Player)plyr : (JDColor)clr;
 
 - (Space*)getSpaceForIndices: (int)ii : (int)ji;
 - (Space*)getSpaceFromPoint: (CGPoint)loc;
 
-- (int)nbrOccupied: (Space*)space : (int)plyr;
-- (int)sumNbrs: (Space*)space : (int)plyr;
+- (int)nbrNearestOccupied: (Space*)space : (Player)plyr;
+- (int)nbrOccupied: (Space*)space : (Player)plyr;
+- (int)sumNbrs: (Space*)space;
 
+- (void)clearSelectedSpace;
+- (void)highlightNeighbors: (Space*)space : (Player)plyr;
+- (void)addPieceToSelectedSpace: (JDColor)clr : (Player)plyr;
+
+- (int)numSelected;
 
 @end
+
