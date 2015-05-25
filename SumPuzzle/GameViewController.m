@@ -72,10 +72,13 @@
                     placeMode = spaceSelected;
                 }
                 else if(space.isOccupied && space.player == currentPlayer) {
-                    if([board numberOfNearestOppPieces:space] > 0) {
-                        [board highlightOppPieces: space];
-                        placeMode = overTake;
-                    }
+                  //  if([board numberOfNearestOppPieces:space] > 0) {
+                  //      [board highlightOppPieces: space];
+                  //      placeMode = overTake;
+                  //  }
+                    placeMode = swipeMove;
+                    selectedPiece = space;
+                    [self setUpFloatPiece: space];
                 }
             }
             else if(placeMode == spaceSelected) {
@@ -117,6 +120,55 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     
+    UITouch *touch = [[event allTouches] anyObject];
+    CGPoint location = [touch locationInView:touch.view];
+
+    if(placeMode == swipeMove) {
+     
+        CGRect frm;
+        frm.origin.x = location.x;// + boardView.frame.origin.x;
+        frm.origin.y = location.y + boardView.frame.origin.y;
+        
+        frm.size = floatPiece.frame.size;
+        [floatPiece setFrame:frm];
+        
+    }
+}
+
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    UITouch *touch = [[event allTouches] anyObject];
+    CGPoint location = [touch locationInView:touch.view];
+    
+    if(placeMode == swipeMove) {
+        
+        CGRect frm;
+        frm.origin = location;
+        frm.size = floatPiece.frame.size;
+        
+        [floatPiece setFrame:frm];
+        floatPiece.hidden = YES;
+        
+        Space *space = [board getSpaceFromPoint:location];
+        
+        if(space != nil) {
+            
+            if(!space.isOccupied && selectedPiece.value > 2) {
+                int newVal = (int)((float)selectedPiece.value/2.0);
+                selectedPiece.value = newVal;
+                selectedPiece.piece.text = [NSString stringWithFormat:@"%d", newVal];
+                [board addPiece:space.iind :space.jind : newVal : currentPlayer : [self getColorForPlayer]];
+                
+                ++numPieces;
+                [self switchPlayers];
+                
+            }
+        }
+        placeMode = freeState;
+    }
+
+
 }
 
 - (void)addPiece: (Space*)space {
@@ -152,6 +204,24 @@
     
 }
 
+- (void)setUpFloatPiece: (Space*)space {
+
+    CGRect frm;
+    
+    frm.origin.x = space.piece.frame.origin.x + boardView.frame.origin.x;
+    frm.origin.y = space.piece.frame.origin.y + boardView.frame.origin.y;
+    frm.size = space.piece.frame.size;
+    
+    floatPiece.hidden = NO;
+    JDColor currClr = [self getColorForPlayer];
+    floatPiece.text = [NSString stringWithFormat:@"%d", space.value];
+    floatPiece.backgroundColor = [UIColor colorWithRed:currClr.red green:currClr.green blue:currClr.blue alpha:1.0];
+    floatPiece.layer.borderColor = [[UIColor colorWithRed:currClr.red green:currClr.green blue:currClr.blue alpha:1.0] CGColor];
+
+    [floatPiece setFrame:frm];
+    
+}
+
 - (void)setUpGamePlay {
     
     numSpaces = dimx*dimy;
@@ -165,7 +235,7 @@
     placeMode = placeTile;
     currentPlayer = player1;
     
-    int num = rand() % numberFact;
+    int num = 50;
     
     [board addPiece:0 :0 :num : player1 : p1Color];
     [board addPiece:0 :3 :num : player1 : p1Color];
@@ -274,7 +344,6 @@
     floatPiece.layer.cornerRadius = 3.0;
     floatPiece.clipsToBounds = YES;
     floatPiece.backgroundColor = [UIColor colorWithRed:tileColor.red green:tileColor.green blue:tileColor.blue alpha:1.0];
-    floatPiece.layer.borderColor = [[UIColor whiteColor] CGColor];
     floatPiece.layer.borderWidth = 2.0f;
     floatPiece.textColor = [UIColor whiteColor];
     

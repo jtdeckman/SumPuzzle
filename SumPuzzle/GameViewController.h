@@ -19,6 +19,8 @@
     BoardView *boardView;
     Board *board;
     
+    Space *selectedPiece;
+    
     JDColor topColor;
     JDColor botColor;
     JDColor p1Color;
