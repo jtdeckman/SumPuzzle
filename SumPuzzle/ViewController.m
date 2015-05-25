@@ -41,12 +41,12 @@
     CGFloat fWidth = self.view.frame.size.width;
     CGFloat fHeight = self.view.frame.size.height;
     
-    CGFloat bWidth = BUTTON_WIDTH_FACT*fWidth;
+    CGFloat bWidth = 1.25*BUTTON_WIDTH_FACT*fWidth;
     CGFloat bHeight = BUTTON_HEIGHT_FACT*fHeight;
     
     CGFloat spacing = BUTTON_SPACING_FACT*fWidth;
     
-    CGFloat fontSize = FONT_FACT*bHeight;
+    CGFloat fontSize = 0.5*FONT_FACT*bHeight;
     
     CGPoint center, origin;
     

@@ -33,7 +33,7 @@
     piece.clipsToBounds = YES;
     
     [piece setTextAlignment:NSTextAlignmentCenter];
-    [piece setFont:[UIFont fontWithName:@"Arial" size:FONT_FACT*spaceFrame.size.width]];
+    [piece setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*spaceFrame.size.width]];
     
     nearestNbrs = [[NSMutableSet alloc] initWithCapacity:4];
     neighbors = [[NSMutableSet alloc] initWithCapacity:10];

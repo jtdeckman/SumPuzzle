@@ -15,6 +15,10 @@
 #define HEIGHT_FACT 1.00
 #define TOPBAR_V_FACT 0.15
 
+#define BUTTON_WIDTH_FACT 0.25
+#define BUTTON_HEIGHT_FACT 0.1
+#define BUTTON_SPACING_FACT 0.1
+
 #define SPACING_FACT 0.05
 
 #define LINE_THICK_FACT 0.0025
@@ -22,9 +26,9 @@
 #define DIMX 10
 #define DIMY 10
 
-#define FONT_FACT 0.6
+#define FONT_FACT 0.3
 
-#define MAX_NEARBY_NEIGHBORS 4
+#define MAX_NEARBY_NEIGHBORS 8
 
 typedef struct {
     
@@ -48,7 +52,9 @@ typedef enum : NSUInteger {
     freeState,
     pieceSelected,
     spaceSelected,
-    placeTile
+    overTake,
+    placeTile,
+    swipeMove
     
 } PlaceMode;
 

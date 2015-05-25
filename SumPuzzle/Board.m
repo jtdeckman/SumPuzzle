@@ -186,7 +186,45 @@
     
     return nocc;
 }
+- (int)numberOfNearestOppPieces: (Space*)space {
 
+    int nocc = 0;
+    
+    if(space != nil)
+        for(Space* item in space.nearestNbrs)
+            if(item.isOccupied && item.player != space.player && item.value <= space.value) ++nocc;
+    
+    return nocc;
+}
+
+- (void)highlightOppPieces: (Space*)space {
+    
+    int count = 0;
+    
+    if(space != nil) {
+        for(Space* item in space.nearestNbrs) {
+            if(item.isOccupied && item.player != space.player && item.value <= space.value) {
+                item.isHighlighted = YES;
+                item.isSelected = NO;
+                [item highlightPiece];
+                ++count;
+                if(count >= 8) break;
+            }
+        }
+    }
+    
+    selectedSpace = space;
+}
+
+- (void)overTakeSpace: (Space*)space : (Player)plyr : (JDColor)clr {
+    
+    if(space != nil) {
+        space.value = selectedSpace.value - space.value;
+        space.player = plyr;
+        [space setColor:clr.red :clr.green :clr.blue :1.0f];
+        [space configurePiece];
+    }
+}
 - (int)sumNbrs: (Space*)space {
     
     int sum = 0;
@@ -224,7 +262,7 @@
                 item.isSelected = NO;
                 [item highlightPiece];
                 ++count;
-                if(count >= MAX_NEARBY_NEIGHBORS) break;
+                if(count >= 8) break;
             }
         }
     }
@@ -258,6 +296,15 @@
     selectedSpace.piece.hidden = false;
     
     [self clearSelectedSpace];
+}
+
+- (void)removePiece: (Space*)space {
+
+    space.isOccupied = NO;
+    space.isHighlighted = NO;
+    space.player = notAssigned;
+    space.piece.hidden = YES;
+    
 }
 
 @end

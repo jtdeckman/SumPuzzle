@@ -10,11 +10,11 @@
 #import "BoardView.h"
 #import "Constants.h"
 
-@interface ViewController ()
+@interface GameViewController ()
 
 @end
 
-@implementation ViewController
+@implementation GameViewController
 
 - (void)viewDidLoad {
     
@@ -71,6 +71,12 @@
                     
                     placeMode = spaceSelected;
                 }
+                else if(space.isOccupied && space.player == currentPlayer) {
+                    if([board numberOfNearestOppPieces:space] > 0) {
+                        [board highlightOppPieces: space];
+                        placeMode = overTake;
+                    }
+                }
             }
             else if(placeMode == spaceSelected) {
                 
@@ -83,7 +89,21 @@
                         ++numPieces;
                         [board clearSelectedSpace];
                         placeMode = freeState;
+                        [self switchPlayers];
                     }
+                }
+                else {
+                    [board clearSelectedSpace];
+                    placeMode = freeState;
+                }
+            }
+            else if(placeMode == overTake) {
+                if(space.isHighlighted) {
+                    [board overTakeSpace:space :currentPlayer :[self getColorForPlayer]];
+                    [board removePiece: board.selectedSpace];
+                    --numPieces;
+                    [self switchPlayers];
+                    placeMode = freeState;
                 }
                 else {
                     [board clearSelectedSpace];
@@ -95,7 +115,9 @@
     }
 }
 
-
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+}
 
 - (void)addPiece: (Space*)space {
     
@@ -113,6 +135,8 @@
     ++numPieces;
     
     placeMode = freeState;
+    
+    [self switchPlayers];
 }
 
 - (void)addPiecesToView {
@@ -143,11 +167,20 @@
     
     int num = rand() % numberFact;
     
-    [board addPiece:9 :0 :num : currentPlayer : [self getColorForPlayer]];
+    [board addPiece:0 :0 :num : player1 : p1Color];
+    [board addPiece:0 :3 :num : player1 : p1Color];
+    [board addPiece:0 :dimy-1 :num : player1 : p1Color];
+    
+    [board addPiece:dimx-1 :0 :num : player2 : p2Color];
+    [board addPiece:dimx-1 :3 :num : player2 : p2Color];
+    [board addPiece:dimx-1 :dimy-1 :num : player2 : p2Color];
+    
+    numPieces = 6;
     
     nextValue = rand() % numberFact;
     
     nextTile.text = [NSString stringWithFormat:@"%d", nextValue];
+    playerLabel.text = [NSString stringWithFormat:@"Player 1"];
 }
 
 - (void)setUpBoard:(CGFloat)offset {
@@ -192,16 +225,20 @@
 
 - (void)loadData {
     
-    dimx = 10;
-    dimy = 10;
+    dimx = 7;
+    dimy = 7;
 }
 
 - (void)switchPlayers {
 
-    if(currentPlayer == player1)
+    if(currentPlayer == player1) {
         currentPlayer = player2;
-    else
+        playerLabel.text = [NSString stringWithFormat:@"Player 2"];
+    }
+    else {
         currentPlayer = player1;
+        playerLabel.text = [NSString stringWithFormat:@"Player 1"];
+    }
 }
 
 - (void)setUpLabels {
@@ -225,10 +262,49 @@
     nextTile.textColor = [UIColor whiteColor];
     
     [nextTile setTextAlignment:NSTextAlignmentCenter];
-    [nextTile setFont:[UIFont fontWithName:@"Arial" size:FONT_FACT*viewFrame.size.width]];
+    [nextTile setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
     
     [self.view addSubview:nextTile];
     
+  
+ // Movable (floating) piece
+    
+    floatPiece = [[UILabel alloc] initWithFrame:viewFrame];
+    floatPiece.hidden = YES;
+    floatPiece.layer.cornerRadius = 3.0;
+    floatPiece.clipsToBounds = YES;
+    floatPiece.backgroundColor = [UIColor colorWithRed:tileColor.red green:tileColor.green blue:tileColor.blue alpha:1.0];
+    floatPiece.layer.borderColor = [[UIColor whiteColor] CGColor];
+    floatPiece.layer.borderWidth = 2.0f;
+    floatPiece.textColor = [UIColor whiteColor];
+    
+    [floatPiece setTextAlignment:NSTextAlignmentCenter];
+    [floatPiece setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
+    
+    [self.view addSubview:floatPiece];
+
+    
+ // Player label:
+    
+    viewFrame.size.width = 0.4*self.view.frame.size.width;
+    viewFrame.size.height = 0.05*self.view.frame.size.height;
+    viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;
+    viewFrame.origin.y = 0.075*self.view.frame.size.height;
+    
+    playerLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    
+    playerLabel.hidden = NO;
+    playerLabel.layer.cornerRadius = 3.0;
+    playerLabel.clipsToBounds = YES;
+    playerLabel.backgroundColor = [UIColor clearColor];
+    playerLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
+    playerLabel.layer.borderWidth = 2.0f;
+    playerLabel.textColor = [UIColor whiteColor];
+    
+    [playerLabel setTextAlignment:NSTextAlignmentCenter];
+    [playerLabel setFont:[UIFont fontWithName:@"Arial" size:0.3*FONT_FACT*viewFrame.size.width]];
+
+      [self.view addSubview:playerLabel];
 }
 
 - (void)setUpViewController {

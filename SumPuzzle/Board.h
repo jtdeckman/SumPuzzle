@@ -41,6 +41,11 @@
 - (void)addPieceToSelectedSpace: (JDColor)clr : (Player)plyr;
 
 - (int)numSelected;
+- (int)numberOfNearestOppPieces: (Space*)space;
+
+- (void)highlightOppPieces: (Space*)space;
+- (void)overTakeSpace: (Space*)space : (Player)plyr : (JDColor)clr;
+- (void)removePiece: (Space*)space;
 
 @end
 

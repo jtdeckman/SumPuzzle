@@ -11,7 +11,7 @@
 #import "Board.h"
 #import "BarView.h"
 
-@interface ViewController : UIViewController {
+@interface GameViewController : UIViewController {
     
     BarView *topBar;
     BarView *bottomBar;
@@ -39,6 +39,8 @@
     int nextValue;
     
     UILabel *nextTile;
+    UILabel *playerLabel;
+    UILabel *floatPiece;
     
     NSTimer *timer;
     
