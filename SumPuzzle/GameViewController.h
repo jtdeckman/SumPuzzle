@@ -49,6 +49,8 @@
     GameState gameState;
     PlaceMode placeMode;
     Player currentPlayer;
+    
+    CGRect nextTileLoc;
 }
 
 - (void)runLoop;
@@ -61,6 +63,8 @@
 - (void)switchPlayers;
 
 - (JDColor)getColorForPlayer;
+
+- (bool)didTouchAddPiece: (CGPoint)crd;
 
 @end
 

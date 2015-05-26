@@ -298,6 +298,15 @@
     [self clearSelectedSpace];
 }
 
+- (void)convertPiece: (Space*)space : (int)val :(JDColor)clr : (Player)plyr {
+
+    space.value = val;
+    space.player = plyr;
+    
+    [space setColor:clr.red :clr.green :clr.blue :1.0f];
+    [space configurePiece];
+}
+
 - (void)removePiece: (Space*)space {
 
     space.isOccupied = NO;

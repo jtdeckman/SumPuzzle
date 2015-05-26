@@ -47,5 +47,7 @@
 - (void)overTakeSpace: (Space*)space : (Player)plyr : (JDColor)clr;
 - (void)removePiece: (Space*)space;
 
+- (void)convertPiece: (Space*)space : (int)val :(JDColor)clr : (Player)plyr;
+
 @end
 

@@ -57,4 +57,6 @@
 
 - (int)numSelPieces;
 
+- (bool)isNearestNearestNbrOf: (Space*)space;
+
 @end

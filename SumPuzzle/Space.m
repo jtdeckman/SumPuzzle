@@ -78,4 +78,11 @@
     return numSel;
 }
 
+- (bool)isNearestNearestNbrOf: (Space*)space {
+
+    if([nearestNbrs containsObject:space]) return YES;
+    
+    return NO;
+}
+
 @end

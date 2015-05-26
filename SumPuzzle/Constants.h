@@ -54,7 +54,7 @@ typedef enum : NSUInteger {
     spaceSelected,
     overTake,
     placeTile,
-    swipeMove
+    swipeMove,
     
 } PlaceMode;
 
