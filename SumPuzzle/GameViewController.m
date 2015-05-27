@@ -144,11 +144,14 @@
                     space.value += selectedPiece.value;
                     space.piece.text = [NSString stringWithFormat:@"%d", space.value];
                     [board removePiece:selectedPiece];
+                    --numPieces;
                     [self switchPlayers];
                 }
                 else if(space.player != currentPlayer && selectedPiece.value > space.value) {
                     int newVal = selectedPiece.value - space.value;
                     [board convertPiece:space :newVal :[self getColorForPlayer] :currentPlayer];
+                    [board removePiece:selectedPiece];
+                    --numPieces;
                     [self switchPlayers];
                 }
             }
@@ -165,9 +168,9 @@
     //  int nbrSum = [board sumNbrs:space];
     
     int num = (rand() % numberFact) + 1;
-    int expf = rand() % 3;
+   // int expf = rand() % 3;
     
-    num *= pow(-1, expf);
+   // num *= pow(-1, expf);
     
     [board addPiece:space.iind :space.jind : nextValue : currentPlayer : [self getColorForPlayer]];
     nextValue = num;
@@ -228,7 +231,7 @@
     numSpaces = dimx*dimy;
     numPieces = 0;
     
-    numberFact = 5;
+    numberFact = 25;
     
     level = 1;
     
@@ -236,7 +239,7 @@
     placeMode = freeState;
     currentPlayer = player1;
     
-    int num = 50;
+    int num = 100;
     
     [board addPiece:0 :0 :num : player1 : p1Color];
     [board addPiece:0 :3 :num : player1 : p1Color];
