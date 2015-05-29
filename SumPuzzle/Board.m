@@ -316,4 +316,39 @@
     
 }
 
+- (void)clearBoard {
+    
+    Space *space;
+    
+    for(int i=0; i<dimx; i++) {
+        for(int j=0; j<dimy; j++) {
+            
+            space = spaces[i][j];
+            
+            space.isHighlighted = NO;
+            space.isOccupied = NO;
+            space.isSelected = NO;
+            
+            space.piece.hidden = YES;
+        }
+    }
+}
+
+- (int)numPieceForPlayer: (Player)player {
+    
+    Space *space;
+    
+    int count = 0;
+    
+    for(int i=0; i<dimx; i++) {
+        for(int j=0; j<dimy; j++) {
+            space = spaces[i][j];
+            if(space.isOccupied && space.player == player)
+                ++count;
+        }
+    }
+    
+    return count;
+}
+
 @end

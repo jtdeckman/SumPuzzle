@@ -17,6 +17,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    [AppDelegate setUpDefaults];
+    
     return YES;
 }
 
@@ -41,5 +44,34 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
++ (void)setUpDefaults {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *init = [defaults objectForKey:@"init"];
+    
+    if(![init isEqualToString:@"initialized"] || init == nil) {
+        
+        [defaults setBool:YES forKey:@"computerPlayer"];
+        [defaults setBool:NO forKey:@"newGame"];
+    
+        [defaults setInteger:7 forKey:@"dimx"];
+        [defaults setInteger:7 forKey:@"dimy"];
+        
+        [defaults setObject:@"initialized" forKey:@"init"];
+        
+        [defaults setInteger:0 forKey:@"p1wins"];
+        [defaults setInteger:0 forKey:@"p2wins"];
+        
+        [defaults setInteger:500 forKey:@"startValue"];
+        
+        [defaults setInteger:10 forKey:@"tileValue"];
+        [defaults setInteger:2 forKey:@"tileInc"];
+        
+        [defaults synchronize];
+    }
+}
+
 
 @end

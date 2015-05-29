@@ -49,5 +49,7 @@
 
 - (void)convertPiece: (Space*)space : (int)val :(JDColor)clr : (Player)plyr;
 
+- (void)clearBoard;
+
 @end
 

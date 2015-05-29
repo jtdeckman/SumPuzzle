@@ -29,7 +29,7 @@
     
     piece = [[UILabel alloc] initWithFrame:labelframe];
     piece.hidden = YES;
-    piece.layer.cornerRadius = 3.0;
+    piece.layer.cornerRadius = 5.0;
     piece.clipsToBounds = YES;
     
     [piece setTextAlignment:NSTextAlignmentCenter];

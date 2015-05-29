@@ -23,7 +23,7 @@
     [self setUpViewController];
     [self setUpGamePlay];
     
-    timer = [NSTimer timerWithTimeInterval:1/4 target:self selector:@selector(runLoop) userInfo:nil repeats:YES];
+   // timer = [NSTimer timerWithTimeInterval:1/4 target:self selector:@selector(runLoop) userInfo:nil repeats:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -134,24 +134,32 @@
                 selectedPiece.value = newVal;
                 selectedPiece.piece.text = [NSString stringWithFormat:@"%d", newVal];
                 [board addPiece:space.iind :space.jind : newVal : currentPlayer : [self getColorForPlayer]];
-                
-                ++numPieces;
+                [self updateCurrentPlayer:NO];
                 [self switchPlayers];
                 
             }
             else if(space.isOccupied && [selectedPiece isNearestNearestNbrOf:space]) {
                 if(space.player == currentPlayer) {
-                    space.value += selectedPiece.value;
+                    if(selectedPiece.value > 1) {
+                        int newVal = (int)((float)selectedPiece.value/2.0);
+                        space.value += newVal;
+                        selectedPiece.value = newVal;
+                        selectedPiece.piece.text = [NSString stringWithFormat:@"%d", selectedPiece.value];
+                    }
+                    else {
+                        space.value += 1;
+                        [board removePiece:selectedPiece];
+                    }
+                    
                     space.piece.text = [NSString stringWithFormat:@"%d", space.value];
-                    [board removePiece:selectedPiece];
-                    --numPieces;
+                    [self updateCurrentPlayer:NO];
                     [self switchPlayers];
                 }
                 else if(space.player != currentPlayer && selectedPiece.value > space.value) {
                     int newVal = selectedPiece.value - space.value;
                     [board convertPiece:space :newVal :[self getColorForPlayer] :currentPlayer];
                     [board removePiece:selectedPiece];
-                    --numPieces;
+                    [self updateCurrentPlayer:NO];
                     [self switchPlayers];
                 }
             }
@@ -165,20 +173,11 @@
 
 - (void)addPiece: (Space*)space {
     
-    //  int nbrSum = [board sumNbrs:space];
-    
-    int num = (rand() % numberFact) + 1;
-   // int expf = rand() % 3;
-    
-   // num *= pow(-1, expf);
+    int nextValue = [self getNextValueForPlayer];
     
     [board addPiece:space.iind :space.jind : nextValue : currentPlayer : [self getColorForPlayer]];
-    nextValue = num;
-    nextTile.text = [NSString stringWithFormat:@"%d", nextValue];
     
-    ++numPieces;
-    
-    placeMode = freeState;
+    [self updateCurrentPlayer:YES];
     
     [nextTile setFrame:nextTileLoc];
     
@@ -229,31 +228,24 @@
 - (void)setUpGamePlay {
     
     numSpaces = dimx*dimy;
-    numPieces = 0;
-    
-    numberFact = 25;
-    
-    level = 1;
     
     gameState = gameRunning;
     placeMode = freeState;
     currentPlayer = player1;
     
-    int num = 100;
+    [board addPiece:0 :0 :startValue : player1 : p1Color];
+    [board addPiece:0 :3 :startValue : player1 : p1Color];
+    [board addPiece:0 :dimy-1 :startValue : player1 : p1Color];
     
-    [board addPiece:0 :0 :num : player1 : p1Color];
-    [board addPiece:0 :3 :num : player1 : p1Color];
-    [board addPiece:0 :dimy-1 :num : player1 : p1Color];
+    [board addPiece:dimx-1 :0 :startValue : player2 : p2Color];
+    [board addPiece:dimx-1 :3 :startValue : player2 : p2Color];
+    [board addPiece:dimx-1 :dimy-1 :startValue : player2 : p2Color];
     
-    [board addPiece:dimx-1 :0 :num : player2 : p2Color];
-    [board addPiece:dimx-1 :3 :num : player2 : p2Color];
-    [board addPiece:dimx-1 :dimy-1 :num : player2 : p2Color];
+    nextValueP1 = tileValue;
+    nextValueP2 = tileValue;
     
-    numPieces = 6;
+    [self changeNextTileForPlayer];
     
-    nextValue = rand() % numberFact;
-    
-    nextTile.text = [NSString stringWithFormat:@"%d", nextValue];
     playerLabel.text = [NSString stringWithFormat:@"Player 1"];
 }
 
@@ -267,25 +259,29 @@
 
 - (void)setUpColors {
     
-    topColor.red = 0.7;
-    topColor.green = 0.6;
-    topColor.blue = 0.5;
+    topColor.red = 0.8;
+    topColor.green = 0.75;
+    topColor.blue = 0.65;
     
     botColor.red = 0.25;
-    botColor.green = 0.25;
-    botColor.blue = 0.95;
+    botColor.green = 0.55;
+    botColor.blue = 0.8;
     
-    p1Color.red = 0.25;
-    p1Color.green = 0.55;
-    p1Color.blue = 0.8;
+    p1Color.red = 0.8;
+    p1Color.green = 0.65;
+    p1Color.blue = 0.2;
+    
+  //  p1Color.red = 0.2;
+  //  p1Color.green = 0.3;
+  //  p1Color.blue = 0.8;
     
     p2Color.red = 0.8;
     p2Color.green = 0.2;
     p2Color.blue = 0.2;
     
-    tileColor.red = 0.7;
-    tileColor.green = 0.5;
-    tileColor.blue = 0.2;
+    tileColor.red = 0.4;
+    tileColor.green = 0.4;
+    tileColor.blue = 0.4;
 
 }
 
@@ -299,8 +295,18 @@
 
 - (void)loadData {
     
-    dimx = 7;
-    dimy = 7;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    dimx = (int)[defaults integerForKey:@"dimx"];
+    dimy = (int)[defaults integerForKey:@"dimy"];
+    
+    computerPlayer = [defaults boolForKey:@"computerPlayer"];
+    
+    startValue = (int)[defaults integerForKey:@"startValue"];
+    tileValue = (int)[defaults integerForKey:@"tileValue"];
+    tileInc = (int)[defaults integerForKey:@"tileInc"];
+
+    [defaults synchronize];
 }
 
 - (void)switchPlayers {
@@ -313,6 +319,8 @@
         currentPlayer = player1;
         playerLabel.text = [NSString stringWithFormat:@"Player 1"];
     }
+    
+    [self changeNextTileForPlayer];
     
     selectedPiece = nil;
     
@@ -449,6 +457,53 @@
     
     [self setUpBoard:lineThickness];
     [self setUpLabels];
+}
+
+- (void)setUpNewGame {
+
+    [board clearBoard];
+    [self loadData];
+    [self setUpGamePlay];
+}
+
+- (int)getNextValueForPlayer {
+
+    if(currentPlayer == player1)
+        return nextValueP1;
+    
+    return nextValueP2;
+}
+
+- (void)resetNextValueForPlayer {
+
+    if(currentPlayer == player1)
+        nextValueP1 = tileValue;
+    else
+        nextValueP2 = tileValue;
+}
+
+- (void)changeNextTileForPlayer {
+
+    if(currentPlayer == player1) {
+        nextTile.text = [NSString stringWithFormat:@"%d",nextValueP1];
+        nextTile.backgroundColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
+    }
+    else {
+        nextTile.text = [NSString stringWithFormat:@"%d",nextValueP2];
+        nextTile.backgroundColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
+    }
+}
+
+- (void)updateCurrentPlayer: (bool)isFloatPiece {
+    
+    if(currentPlayer == player1) {
+        if(isFloatPiece) nextValueP1 = tileValue;
+        else nextValueP1 += tileInc;
+    }
+    else {
+        if(isFloatPiece) nextValueP2 = tileValue;
+        else nextValueP2 += tileInc;
+    }
 }
 
 @end

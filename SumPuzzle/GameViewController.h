@@ -33,12 +33,13 @@
     int dimy;
     
     int numSpaces;
-    int numPieces;
     
-    int level;
-    int numberFact;
+    int nextValueP1;
+    int nextValueP2;
     
-    int nextValue;
+    int startValue;
+    int tileValue;
+    int tileInc;
     
     UILabel *nextTile;
     UILabel *playerLabel;
@@ -51,6 +52,8 @@
     Player currentPlayer;
     
     CGRect nextTileLoc;
+    
+    BOOL computerPlayer;
 }
 
 - (void)runLoop;
