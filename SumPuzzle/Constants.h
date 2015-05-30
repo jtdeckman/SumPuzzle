@@ -44,6 +44,7 @@ typedef enum : NSUInteger {
     gameRunning,
     gamePaused,
     gameOver,
+    gameMenu
     
 } GameState;
 

@@ -18,7 +18,8 @@
 		A819027E1B0C16D900DCD8CB /* Board.m in Sources */ = {isa = PBXBuildFile; fileRef = A819027D1B0C16D900DCD8CB /* Board.m */; };
 		A81902811B0C177400DCD8CB /* Space.m in Sources */ = {isa = PBXBuildFile; fileRef = A81902801B0C177400DCD8CB /* Space.m */; };
 		A819028A1B0C19A000DCD8CB /* BoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = A81902891B0C19A000DCD8CB /* BoardView.m */; };
-		A819028D1B0C1A6D00DCD8CB /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A819028C1B0C1A6D00DCD8CB /* GameViewController.m */; };
+		A8A51E2A1B1A663100C90315 /* MenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A51E291B1A663100C90315 /* MenuView.m */; };
+		A8A51E301B1A760100C90315 /* menuBars.png in Resources */ = {isa = PBXBuildFile; fileRef = A8A51E2F1B1A760100C90315 /* menuBars.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,8 +55,9 @@
 		A81902801B0C177400DCD8CB /* Space.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Space.m; sourceTree = "<group>"; };
 		A81902881B0C19A000DCD8CB /* BoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardView.h; sourceTree = "<group>"; };
 		A81902891B0C19A000DCD8CB /* BoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardView.m; sourceTree = "<group>"; };
-		A819028B1B0C1A6D00DCD8CB /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
-		A819028C1B0C1A6D00DCD8CB /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		A8A51E281B1A663100C90315 /* MenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuView.h; path = ../MenuView.h; sourceTree = "<group>"; };
+		A8A51E291B1A663100C90315 /* MenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuView.m; path = ../MenuView.m; sourceTree = "<group>"; };
+		A8A51E2F1B1A760100C90315 /* menuBars.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menuBars.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,8 +103,6 @@
 				A81902561B0C13EC00DCD8CB /* AppDelegate.m */,
 				A81902581B0C13EC00DCD8CB /* ViewController.h */,
 				A81902591B0C13EC00DCD8CB /* ViewController.m */,
-				A819028B1B0C1A6D00DCD8CB /* GameViewController.h */,
-				A819028C1B0C1A6D00DCD8CB /* GameViewController.m */,
 				A819025B1B0C13EC00DCD8CB /* Main.storyboard */,
 				A819027B1B0C159700DCD8CB /* Constants.h */,
 				A81902771B0C148900DCD8CB /* BarView.h */,
@@ -113,6 +113,8 @@
 				A81902801B0C177400DCD8CB /* Space.m */,
 				A81902881B0C19A000DCD8CB /* BoardView.h */,
 				A81902891B0C19A000DCD8CB /* BoardView.m */,
+				A8A51E281B1A663100C90315 /* MenuView.h */,
+				A8A51E291B1A663100C90315 /* MenuView.m */,
 				A819025E1B0C13EC00DCD8CB /* Images.xcassets */,
 				A81902601B0C13EC00DCD8CB /* LaunchScreen.xib */,
 				A81902511B0C13EC00DCD8CB /* Supporting Files */,
@@ -123,6 +125,7 @@
 		A81902511B0C13EC00DCD8CB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A8A51E2F1B1A760100C90315 /* menuBars.png */,
 				A81902521B0C13EC00DCD8CB /* Info.plist */,
 				A81902531B0C13EC00DCD8CB /* main.m */,
 			);
@@ -226,6 +229,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8A51E301B1A760100C90315 /* menuBars.png in Resources */,
 				A819025D1B0C13EC00DCD8CB /* Main.storyboard in Resources */,
 				A81902621B0C13EC00DCD8CB /* LaunchScreen.xib in Resources */,
 				A819025F1B0C13EC00DCD8CB /* Images.xcassets in Resources */,
@@ -246,12 +250,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A819028D1B0C1A6D00DCD8CB /* GameViewController.m in Sources */,
 				A81902811B0C177400DCD8CB /* Space.m in Sources */,
 				A81902791B0C148900DCD8CB /* BarView.m in Sources */,
 				A819025A1B0C13EC00DCD8CB /* ViewController.m in Sources */,
 				A81902571B0C13EC00DCD8CB /* AppDelegate.m in Sources */,
 				A81902541B0C13EC00DCD8CB /* main.m in Sources */,
+				A8A51E2A1B1A663100C90315 /* MenuView.m in Sources */,
 				A819027E1B0C16D900DCD8CB /* Board.m in Sources */,
 				A819028A1B0C19A000DCD8CB /* BoardView.m in Sources */,
 			);
@@ -450,6 +454,7 @@
 				A81902731B0C13EC00DCD8CB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A81902741B0C13EC00DCD8CB /* Build configuration list for PBXNativeTarget "SumPuzzleTests" */ = {
 			isa = XCConfigurationList;
@@ -458,6 +463,7 @@
 				A81902761B0C13EC00DCD8CB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

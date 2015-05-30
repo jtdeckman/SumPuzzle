@@ -14,6 +14,9 @@
     
     NSMutableArray *spaces;
     
+    NSMutableSet *player1Spaces;
+    NSMutableSet *player2Spaces;
+    
     int dimx;
     int dimy;
     int numSpaces;
@@ -44,12 +47,14 @@
 - (int)numberOfNearestOppPieces: (Space*)space;
 
 - (void)highlightOppPieces: (Space*)space;
-- (void)overTakeSpace: (Space*)space : (Player)plyr : (JDColor)clr;
+//- (void)overTakeSpace: (Space*)space : (Player)plyr : (JDColor)clr;
 - (void)removePiece: (Space*)space;
 
 - (void)convertPiece: (Space*)space : (int)val :(JDColor)clr : (Player)plyr;
 
 - (void)clearBoard;
+
+- (Player)checkForWinner;
 
 @end
 

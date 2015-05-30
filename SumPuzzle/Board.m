@@ -68,6 +68,9 @@
     }
     
     [self findNeighbors];
+
+    player1Spaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy + 1];
+    player2Spaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy + 1];
 }
 
 
@@ -142,6 +145,12 @@
     [space configurePiece];
     
     space.piece.hidden = false;
+    
+    if(plyr == player1)
+        [player1Spaces addObject:space];
+    else
+        [player2Spaces addObject:space];
+    
 }
 
 - (Space*)getSpaceForIndices: (int)ii : (int)ji {
@@ -216,15 +225,6 @@
     selectedSpace = space;
 }
 
-- (void)overTakeSpace: (Space*)space : (Player)plyr : (JDColor)clr {
-    
-    if(space != nil) {
-        space.value = selectedSpace.value - space.value;
-        space.player = plyr;
-        [space setColor:clr.red :clr.green :clr.blue :1.0f];
-        [space configurePiece];
-    }
-}
 - (int)sumNbrs: (Space*)space {
     
     int sum = 0;
@@ -305,10 +305,24 @@
     
     [space setColor:clr.red :clr.green :clr.blue :1.0f];
     [space configurePiece];
+    
+    if(plyr == player1) {
+        [player1Spaces addObject:space];
+        [player2Spaces removeObject:space];
+    }
+    else {
+        [player2Spaces addObject:space];
+        [player1Spaces removeObject:space];
+    }
 }
 
 - (void)removePiece: (Space*)space {
 
+    if(space.player == player1)
+        [player1Spaces removeObject:space];
+    else
+        [player2Spaces removeObject:space];
+    
     space.isOccupied = NO;
     space.isHighlighted = NO;
     space.player = notAssigned;
@@ -332,6 +346,9 @@
             space.piece.hidden = YES;
         }
     }
+    
+    [player1Spaces removeAllObjects];
+    [player2Spaces removeAllObjects];
 }
 
 - (int)numPieceForPlayer: (Player)player {
@@ -350,5 +367,44 @@
     
     return count;
 }
+
+- (int)farthestRowForPlayer: (Player)player {
+    
+    int ind;
+    
+    if(player == player1) {
+        ind = -1;
+        for(Space* item in player1Spaces)
+            if(item.iind > ind) ind = item.iind;
+    }
+    else {
+        ind = dimx;
+        for(Space* item in player2Spaces)
+            if(item.iind < ind) ind = item.iind;
+    }
+    
+    return ind;
+}
+
+- (Player)checkForWinner {
+
+    int numPlyr1 = (int)[player1Spaces count];
+    int numPlyr2 = (int)[player2Spaces count];
+    
+    if(numPlyr1 == 0)
+        return player2;
+    
+    if(numPlyr2 == 0)
+        return player1;
+    
+    if([self farthestRowForPlayer:player1] == dimx-1)
+        return player1;
+    
+    if([self farthestRowForPlayer:player2] == 0)
+        return player2;
+    
+    return notAssigned;
+}
+
 
 @end
