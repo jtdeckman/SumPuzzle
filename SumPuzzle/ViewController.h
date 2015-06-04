@@ -42,9 +42,14 @@
     int tileValue;
     int tileInc;
     
+    int p1PointsOnBoard;
+    int p2PointsOnBoard;
+    
     UILabel *nextTile;
     UILabel *playerLabel;
     UILabel *floatPiece;
+    UILabel *player1PntsLabel;
+    UILabel *player2PntsLabel;
     
     UIImageView *menuBar;
     
@@ -71,6 +76,7 @@
 - (JDColor)getColorForPlayer;
 
 - (bool)didTouchAddPiece: (CGPoint)crd;
+- (bool)isMenuBarItem: (CGPoint)crd  : (CGRect)viewFrame;
 
 @end
 

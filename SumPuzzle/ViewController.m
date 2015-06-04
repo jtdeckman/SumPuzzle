@@ -84,6 +84,17 @@
             gameState = gameRunning;
             menu.hidden = YES;
         }
+        else {
+            location = [touch locationInView:menu];
+            if([self isMenuBarItem:location :menu.settingsLabel.frame]) {
+                
+            }
+            else if([self isMenuBarItem:location :menu.nwGameLabel.frame]) {
+                menu.hidden = YES;
+                [board clearBoard];
+                [self setUpGamePlay];
+            }
+        }
     }
 }
 
@@ -256,6 +267,13 @@
     [self changeNextTileForPlayer];
     
     playerLabel.text = [NSString stringWithFormat:@"Player 1"];
+    
+    p1PointsOnBoard = [board pointsForPlayer:player1];
+    p2PointsOnBoard = [board pointsForPlayer:player2];
+    
+    player1PntsLabel.text = [NSString stringWithFormat:@"%d", p1PointsOnBoard];
+    player2PntsLabel.text = [NSString stringWithFormat:@"%d", p2PointsOnBoard];
+    
 }
 
 - (void)setUpBoard:(CGFloat)offset {
@@ -264,34 +282,6 @@
     [board initBoard:boardView.frame :dimx :dimy :offset];
     
     [self addPiecesToView];
-}
-
-- (void)setUpColors {
-    
-    topColor.red = 0.8;
-    topColor.green = 0.75;
-    topColor.blue = 0.65;
-    
-    botColor.red = 0.25;
-    botColor.green = 0.55;
-    botColor.blue = 0.8;
-    
-    p1Color.red = 0.8;
-    p1Color.green = 0.65;
-    p1Color.blue = 0.2;
-    
-    //  p1Color.red = 0.2;
-    //  p1Color.green = 0.3;
-    //  p1Color.blue = 0.8;
-    
-    p2Color.red = 0.8;
-    p2Color.green = 0.2;
-    p2Color.blue = 0.2;
-    
-    tileColor.red = 0.4;
-    tileColor.green = 0.4;
-    tileColor.blue = 0.4;
-    
 }
 
 - (JDColor)getColorForPlayer {
@@ -321,10 +311,16 @@
 - (void)switchPlayers {
     
     if(currentPlayer == player1) {
+        p1PointsOnBoard = [board pointsForPlayer:player1];
+        player1PntsLabel.text = [NSString stringWithFormat:@"%d", p1PointsOnBoard];
+        
         currentPlayer = player2;
         playerLabel.text = [NSString stringWithFormat:@"Player 2"];
     }
     else {
+        p2PointsOnBoard = [board pointsForPlayer:player2];
+        player2PntsLabel.text = [NSString stringWithFormat:@"%d", p2PointsOnBoard];
+        
         currentPlayer = player1;
         playerLabel.text = [NSString stringWithFormat:@"Player 1"];
     }
@@ -423,6 +419,46 @@
     [playerLabel setFont:[UIFont fontWithName:@"Arial" size:0.3*FONT_FACT*viewFrame.size.width]];
     
     [self.view addSubview:playerLabel];
+    
+    viewFrame.size.width /= 3.0;
+    
+    CGFloat crd = (topBar.frame.size.width - playerLabel.frame.size.width)/2.0;
+    
+    viewFrame.origin.x = crd/2.0 - viewFrame.size.width/2.0;
+    
+    player1PntsLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    
+    player1PntsLabel.hidden = NO;
+    player1PntsLabel.layer.cornerRadius = 3.0;
+    player1PntsLabel.clipsToBounds = YES;
+    player1PntsLabel.backgroundColor = [UIColor clearColor];
+    player1PntsLabel.layer.borderColor = [[UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0] CGColor];
+    player1PntsLabel.layer.borderWidth = 2.0f;
+    player1PntsLabel.textColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
+    
+    [player1PntsLabel setTextAlignment:NSTextAlignmentCenter];
+    [player1PntsLabel setFont:[UIFont fontWithName:@"Arial" size:0.75*FONT_FACT*viewFrame.size.width]];
+    
+    [self.view addSubview:player1PntsLabel];
+
+    crd = playerLabel.frame.origin.x - (player1PntsLabel.frame.origin.x + player1PntsLabel.frame.size.width);
+    viewFrame.origin.x = playerLabel.frame.origin.x + playerLabel.frame.size.width + crd;
+    
+    player2PntsLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    
+    player2PntsLabel.hidden = NO;
+    player2PntsLabel.layer.cornerRadius = 3.0;
+    player2PntsLabel.clipsToBounds = YES;
+    player2PntsLabel.backgroundColor = [UIColor clearColor];
+    player2PntsLabel.layer.borderColor = [[UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0] CGColor];
+    player2PntsLabel.layer.borderWidth = 2.0f;
+    player2PntsLabel.textColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
+    
+    [player2PntsLabel setTextAlignment:NSTextAlignmentCenter];
+    [player2PntsLabel setFont:[UIFont fontWithName:@"Arial" size:0.75*FONT_FACT*viewFrame.size.width]];
+    
+    [self.view addSubview:player2PntsLabel];
+
 }
 
 - (void)setUpViewController {
@@ -556,6 +592,47 @@
     }
 
     return NO;
+}
+
+- (bool)isMenuBarItem: (CGPoint)crd  : (CGRect)viewFrame {
+    
+    if(crd.x >= viewFrame.origin.x && crd.x <= (viewFrame.origin.x + viewFrame.size.width)) {
+        if(crd.y >= viewFrame.origin.y && crd.y <= (viewFrame.origin.y + viewFrame.size.height)) return YES;
+    }
+    
+    return NO;
+}
+
+- (void)setUpColors {
+    
+    topColor.red = 0.8;
+    topColor.green = 0.75;
+    topColor.blue = 0.65;
+    
+    botColor.red = 0.25;
+    botColor.green = 0.55;
+    botColor.blue = 0.8;
+    
+    p1Color.red = 0.5;
+    p1Color.green = 0.5;
+    p1Color.blue = 0.5;
+    
+ //   p1Color.red = 0.8;
+ //   p1Color.green = 0.65;
+ //   p1Color.blue = 0.2;
+    
+    //  p1Color.red = 0.2;
+    //  p1Color.green = 0.3;
+    //  p1Color.blue = 0.8;
+    
+    p2Color.red = 0.8;
+    p2Color.green = 0.2;
+    p2Color.blue = 0.2;
+    
+    tileColor.red = 0.4;
+    tileColor.green = 0.4;
+    tileColor.blue = 0.4;
+    
 }
 
 @end

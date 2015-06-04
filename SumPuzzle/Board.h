@@ -56,5 +56,7 @@
 
 - (Player)checkForWinner;
 
+- (int)pointsForPlayer: (Player)player;
+
 @end
 

@@ -406,5 +406,29 @@
     return notAssigned;
 }
 
+- (int)pointsForPlayer: (Player)player {
+    
+    int value = 0;
+    
+    if(player == player1) {
+        for(Space* item in player1Spaces)
+            if(item.isOccupied && item.player == player)
+                value += item.value;
+        
+        return value;
+    }
+    
+    if(player == player2) {
+        for(Space* item in player2Spaces)
+            if(item.isOccupied && item.player == player)
+                value += item.value;
+        
+        return value;
+    }
+    
+    
+    return -1;
+}
+
 
 @end
