@@ -492,6 +492,7 @@
     menu.backgroundColor = [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.9];
     
     menu.hidden = YES;
+    [menu setUpView];
     
     [self.view addSubview:menu];
     

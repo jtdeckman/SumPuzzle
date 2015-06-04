@@ -11,8 +11,15 @@
 
 @interface MenuView : UIView {
     
-    UILabel *newGameLabel;
+    UILabel *nwGameLabel;
+    UILabel *settingsLabel;
+    UILabel *howToLabel;
+    
 }
+
+@property (nonatomic, strong) UILabel *nwGameLabel;
+@property (nonatomic, strong) UILabel *settingsLabel;
+@property (nonatomic, strong) UILabel *howToLabel;
 
 - (void)setUpView;
 
