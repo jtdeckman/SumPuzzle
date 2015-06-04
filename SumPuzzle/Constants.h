@@ -13,7 +13,7 @@
 
 #define WIDTH_FACT 1.00
 #define HEIGHT_FACT 1.00
-#define TOPBAR_V_FACT 0.15
+#define TOPBAR_V_FACT 0.2
 
 #define BUTTON_WIDTH_FACT 0.25
 #define BUTTON_HEIGHT_FACT 0.1

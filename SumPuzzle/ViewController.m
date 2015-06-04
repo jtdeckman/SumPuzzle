@@ -390,7 +390,7 @@
     viewFrame.size.width = 0.65*viewFrame.size.width;
     viewFrame.size.height = 0.65*viewFrame.size.height;
     
-    viewFrame.origin.y = bottomBar.frame.origin.y + bottomBar.frame.size.height/2.0 -viewFrame.size.height;
+    viewFrame.origin.y = bottomBar.frame.origin.y + bottomBar.frame.size.height/2.0 -viewFrame.size.height/2.0;
     
     menuBar = [[UIImageView alloc] initWithFrame:viewFrame];
     menuBar.image = [UIImage imageNamed:@"menuBars.png"];
@@ -401,9 +401,9 @@
     // Player label:
     
     viewFrame.size.width = 0.4*self.view.frame.size.width;
-    viewFrame.size.height = 0.05*self.view.frame.size.height;
+    viewFrame.size.height = 0.055*self.view.frame.size.height;
     viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;
-    viewFrame.origin.y = 0.075*self.view.frame.size.height;
+    viewFrame.origin.y = 0.085*self.view.frame.size.height;
     
     playerLabel = [[UILabel alloc] initWithFrame:viewFrame];
     
@@ -416,15 +416,20 @@
     playerLabel.textColor = [UIColor whiteColor];
     
     [playerLabel setTextAlignment:NSTextAlignmentCenter];
-    [playerLabel setFont:[UIFont fontWithName:@"Arial" size:0.3*FONT_FACT*viewFrame.size.width]];
+    [playerLabel setFont:[UIFont fontWithName:@"Arial" size:0.4*FONT_FACT*viewFrame.size.width]];
     
     [self.view addSubview:playerLabel];
     
-    viewFrame.size.width /= 3.0;
+    viewFrame.size.width /= 2.5;
     
     CGFloat crd = (topBar.frame.size.width - playerLabel.frame.size.width)/2.0;
     
     viewFrame.origin.x = crd/2.0 - viewFrame.size.width/2.0;
+    
+    JDColor clr;
+    clr.red = 0.4;
+    clr.green = 0.4;
+    clr.blue = 0.4;
     
     player1PntsLabel = [[UILabel alloc] initWithFrame:viewFrame];
     
@@ -432,12 +437,12 @@
     player1PntsLabel.layer.cornerRadius = 3.0;
     player1PntsLabel.clipsToBounds = YES;
     player1PntsLabel.backgroundColor = [UIColor clearColor];
-    player1PntsLabel.layer.borderColor = [[UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0] CGColor];
+   // player1PntsLabel.layer.borderColor = [[UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0] CGColor];
+    player1PntsLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
     player1PntsLabel.layer.borderWidth = 2.0f;
     player1PntsLabel.textColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
-    
     [player1PntsLabel setTextAlignment:NSTextAlignmentCenter];
-    [player1PntsLabel setFont:[UIFont fontWithName:@"Arial" size:0.75*FONT_FACT*viewFrame.size.width]];
+    [player1PntsLabel setFont:[UIFont fontWithName:@"Arial" size:0.85*FONT_FACT*viewFrame.size.width]];
     
     [self.view addSubview:player1PntsLabel];
 
@@ -450,12 +455,13 @@
     player2PntsLabel.layer.cornerRadius = 3.0;
     player2PntsLabel.clipsToBounds = YES;
     player2PntsLabel.backgroundColor = [UIColor clearColor];
-    player2PntsLabel.layer.borderColor = [[UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0] CGColor];
+  //  player2PntsLabel.layer.borderColor = [[UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0] CGColor];
+      player2PntsLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
     player2PntsLabel.layer.borderWidth = 2.0f;
     player2PntsLabel.textColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
-    
+   
     [player2PntsLabel setTextAlignment:NSTextAlignmentCenter];
-    [player2PntsLabel setFont:[UIFont fontWithName:@"Arial" size:0.75*FONT_FACT*viewFrame.size.width]];
+    [player2PntsLabel setFont:[UIFont fontWithName:@"Arial" size:0.85*FONT_FACT*viewFrame.size.width]];
     
     [self.view addSubview:player2PntsLabel];
 
@@ -493,7 +499,7 @@
     // BoardView Set-Up
     
     viewFrame.origin.x = offset;
-    viewFrame.origin.y = topBar.frame.origin.y + topBar.frame.size.height + 3.0*offset;
+    viewFrame.origin.y = topBar.frame.origin.y + topBar.frame.size.height +  offset;//3.0*offset;
     
     viewFrame.size.width = width - 2.0*offset;
     viewFrame.size.height = viewFrame.size.width*HEIGHT_FACT;

@@ -51,7 +51,7 @@
     
     NSString *init = [defaults objectForKey:@"init"];
     
-    if(![init isEqualToString:@"initialized"] || init == nil) {
+    if([init isEqualToString:@"initialized"] || init == nil) {
         
         [defaults setBool:YES forKey:@"computerPlayer"];
         [defaults setBool:NO forKey:@"newGame"];
@@ -67,7 +67,7 @@
         [defaults setInteger:500 forKey:@"startValue"];
         
         [defaults setInteger:10 forKey:@"tileValue"];
-        [defaults setInteger:2 forKey:@"tileInc"];
+        [defaults setInteger:10 forKey:@"tileInc"];
         
         [defaults synchronize];
     }
