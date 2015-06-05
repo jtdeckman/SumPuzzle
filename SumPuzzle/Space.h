@@ -26,6 +26,8 @@
     CGRect spaceFrame;
     
     UILabel *piece;
+    UIImage *p1Img;
+    UIImage *p2Img;
     
     JDColor color;
     

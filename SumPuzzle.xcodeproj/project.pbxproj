@@ -20,6 +20,9 @@
 		A819028A1B0C19A000DCD8CB /* BoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = A81902891B0C19A000DCD8CB /* BoardView.m */; };
 		A8A51E2A1B1A663100C90315 /* MenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A51E291B1A663100C90315 /* MenuView.m */; };
 		A8A51E301B1A760100C90315 /* menuBars.png in Resources */ = {isa = PBXBuildFile; fileRef = A8A51E2F1B1A760100C90315 /* menuBars.png */; };
+		A8A51E381B2219D500C90315 /* blueSquare.png in Resources */ = {isa = PBXBuildFile; fileRef = A8A51E371B2219D500C90315 /* blueSquare.png */; };
+		A8A51E3A1B2219DA00C90315 /* redSquare.png in Resources */ = {isa = PBXBuildFile; fileRef = A8A51E391B2219DA00C90315 /* redSquare.png */; };
+		A8A51E3C1B221BCE00C90315 /* p1square.png in Resources */ = {isa = PBXBuildFile; fileRef = A8A51E3B1B221BCE00C90315 /* p1square.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +61,9 @@
 		A8A51E281B1A663100C90315 /* MenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuView.h; path = ../MenuView.h; sourceTree = "<group>"; };
 		A8A51E291B1A663100C90315 /* MenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuView.m; path = ../MenuView.m; sourceTree = "<group>"; };
 		A8A51E2F1B1A760100C90315 /* menuBars.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menuBars.png; sourceTree = "<group>"; };
+		A8A51E371B2219D500C90315 /* blueSquare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueSquare.png; sourceTree = "<group>"; };
+		A8A51E391B2219DA00C90315 /* redSquare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redSquare.png; sourceTree = "<group>"; };
+		A8A51E3B1B221BCE00C90315 /* p1square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = p1square.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +131,9 @@
 		A81902511B0C13EC00DCD8CB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A8A51E371B2219D500C90315 /* blueSquare.png */,
+				A8A51E391B2219DA00C90315 /* redSquare.png */,
+				A8A51E3B1B221BCE00C90315 /* p1square.png */,
 				A8A51E2F1B1A760100C90315 /* menuBars.png */,
 				A81902521B0C13EC00DCD8CB /* Info.plist */,
 				A81902531B0C13EC00DCD8CB /* main.m */,
@@ -229,10 +238,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8A51E3C1B221BCE00C90315 /* p1square.png in Resources */,
 				A8A51E301B1A760100C90315 /* menuBars.png in Resources */,
 				A819025D1B0C13EC00DCD8CB /* Main.storyboard in Resources */,
+				A8A51E3A1B2219DA00C90315 /* redSquare.png in Resources */,
 				A81902621B0C13EC00DCD8CB /* LaunchScreen.xib in Resources */,
 				A819025F1B0C13EC00DCD8CB /* Images.xcassets in Resources */,
+				A8A51E381B2219D500C90315 /* blueSquare.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -236,10 +236,11 @@
     frm.size = space.piece.frame.size;
     
     floatPiece.hidden = NO;
-    JDColor currClr = [self getColorForPlayer];
+  
     floatPiece.text = [NSString stringWithFormat:@"%d", space.value];
-    floatPiece.backgroundColor = [UIColor colorWithRed:currClr.red green:currClr.green blue:currClr.blue alpha:1.0];
-    floatPiece.layer.borderColor = [[UIColor colorWithRed:currClr.red green:currClr.green blue:currClr.blue alpha:1.0] CGColor];
+    floatPiece.layer.borderColor = [[UIColor clearColor] CGColor];
+    
+    [self changeTileBackground:floatPiece];
     
     [floatPiece setFrame:frm];
     
@@ -273,7 +274,6 @@
     
     player1PntsLabel.text = [NSString stringWithFormat:@"%d", p1PointsOnBoard];
     player2PntsLabel.text = [NSString stringWithFormat:@"%d", p2PointsOnBoard];
-    
 }
 
 - (void)setUpBoard:(CGFloat)offset {
@@ -282,6 +282,10 @@
     [board initBoard:boardView.frame :dimx :dimy :offset];
     
     [self addPiecesToView];
+    
+    Space *tmpSpace = [board getSpaceForIndices:0 :0];
+    imgSize = tmpSpace.spaceFrame.size;
+
 }
 
 - (JDColor)getColorForPlayer {
@@ -311,20 +315,20 @@
 - (void)switchPlayers {
     
     if(currentPlayer == player1) {
-        p1PointsOnBoard = [board pointsForPlayer:player1];
-        player1PntsLabel.text = [NSString stringWithFormat:@"%d", p1PointsOnBoard];
-        
         currentPlayer = player2;
-        playerLabel.text = [NSString stringWithFormat:@"Player 2"];
+        if(computerPlayer)
+            playerLabel.text = @"Computer";
+        else
+            playerLabel.text = @"Player 2";
+         playerLabel.textColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
     }
     else {
-        p2PointsOnBoard = [board pointsForPlayer:player2];
-        player2PntsLabel.text = [NSString stringWithFormat:@"%d", p2PointsOnBoard];
-        
         currentPlayer = player1;
-        playerLabel.text = [NSString stringWithFormat:@"Player 1"];
+        playerLabel.text = @"Player 1";
+        playerLabel.textColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
     }
     
+    [self upDatePoints];
     [self changeNextTileForPlayer];
     
     selectedPiece = nil;
@@ -340,6 +344,15 @@
     }
 }
 
+- (void)upDatePoints {
+
+    p1PointsOnBoard = [board pointsForPlayer:player1];
+    p2PointsOnBoard = [board pointsForPlayer:player2];
+    
+    player1PntsLabel.text = [NSString stringWithFormat:@"%d", p1PointsOnBoard];
+    player2PntsLabel.text = [NSString stringWithFormat:@"%d", p2PointsOnBoard];
+}
+
 - (void)setUpLabels {
     
     CGRect viewFrame;
@@ -347,9 +360,10 @@
     Space *space = [board getSpaceForIndices:0 :0];
     
     viewFrame.origin.x = 0.5*self.view.frame.size.width - space.spaceFrame.size.width/2.0;
-    viewFrame.origin.y = 0.85*self.view.frame.size.height;
+   // viewFrame.origin.y = 0.85*self.view.frame.size.height;
     viewFrame.size.width = space.spaceFrame.size.width;
     viewFrame.size.height = space.spaceFrame.size.height;
+    viewFrame.origin.y = bottomBar.frame.origin.y + bottomBar.frame.size.height/2.0 -viewFrame.size.height/2.0;
     
     nextTileLoc = viewFrame;
     
@@ -357,13 +371,16 @@
     nextTile.hidden = NO;
     nextTile.layer.cornerRadius = 3.0;
     nextTile.clipsToBounds = YES;
-    nextTile.backgroundColor = [UIColor colorWithRed:tileColor.red green:tileColor.green blue:tileColor.blue alpha:1.0];
-    nextTile.layer.borderColor = [[UIColor whiteColor] CGColor];
-    nextTile.layer.borderWidth = 2.0f;
+ 
+    nextTile.backgroundColor = [UIColor colorWithPatternImage:p1Img];
+ //   nextTile.layer.borderColor = [[UIColor clearColor] CGColor];
+  //  nextTile.layer.borderWidth = 2.0f;
     nextTile.textColor = [UIColor whiteColor];
     
     [nextTile setTextAlignment:NSTextAlignmentCenter];
     [nextTile setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
+ 
+    [self changeTileBackground:nextTile];
     
     [self.view addSubview:nextTile];
     
@@ -374,9 +391,9 @@
     floatPiece.hidden = YES;
     floatPiece.layer.cornerRadius = 3.0;
     floatPiece.clipsToBounds = YES;
-    floatPiece.backgroundColor = [UIColor colorWithRed:tileColor.red green:tileColor.green blue:tileColor.blue alpha:1.0];
-    floatPiece.layer.borderWidth = 2.0f;
-    floatPiece.textColor = [UIColor whiteColor];
+    floatPiece.backgroundColor = nextTile.backgroundColor;
+  //  floatPiece.layer.borderWidth = 2.0f;
+    floatPiece.textColor = [UIColor clearColor];
     
     [floatPiece setTextAlignment:NSTextAlignmentCenter];
     [floatPiece setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
@@ -471,6 +488,9 @@
     
     self.view.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
     
+    p1Img = [UIImage imageNamed:@"blueSquare.png"];
+    p2Img = [UIImage imageNamed:@"redSquare.png"];
+    
     [self loadData];
     [self setUpColors];
     
@@ -526,7 +546,7 @@
     
     [self.view addSubview:bottomBar];
     
-    viewFrame.size.width *= 0.5;
+   // viewFrame.size.width *= 0.5;
     viewFrame.size.height = self.view.frame.size.height/2.0;
     viewFrame.origin.y = viewFrame.size.height;
     
@@ -542,6 +562,8 @@
     
     [self setUpBoard:lineThickness];
     [self setUpLabels];
+    
+    
 }
 
 - (void)setUpNewGame {
@@ -569,14 +591,12 @@
 
 - (void)changeNextTileForPlayer {
     
-    if(currentPlayer == player1) {
+    if(currentPlayer == player1)
         nextTile.text = [NSString stringWithFormat:@"%d",nextValueP1];
-        nextTile.backgroundColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
-    }
-    else {
+    else
         nextTile.text = [NSString stringWithFormat:@"%d",nextValueP2];
-        nextTile.backgroundColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
-    }
+
+    [self changeTileBackground:nextTile];
 }
 
 - (void)updateCurrentPlayer: (bool)isFloatPiece {
@@ -609,19 +629,47 @@
     return NO;
 }
 
+- (void)changeTileBackground: (UILabel*)tile {
+
+    UIImage *img;
+    
+    if(currentPlayer == player1)
+        img = p1Img;
+    else
+        img = p2Img;
+    
+    UIGraphicsBeginImageContext(imgSize);
+    [img drawInRect:CGRectMake(0,0,imgSize.width,imgSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    tile.backgroundColor = [UIColor colorWithPatternImage:newImage];
+
+}
+
 - (void)setUpColors {
     
     topColor.red = 0.8;
     topColor.green = 0.75;
     topColor.blue = 0.65;
     
-    botColor.red = 0.25;
-    botColor.green = 0.55;
-    botColor.blue = 0.8;
+ //   botColor.red = 0.25;
+ //   botColor.green = 0.55;
+ //   botColor.blue = 0.8;
+   
+ //   botColor.red = 0.6;
+ //   botColor.green = 0.5;
+ //   botColor.blue = 0.3;
     
-    p1Color.red = 0.5;
-    p1Color.green = 0.5;
-    p1Color.blue = 0.5;
+    
+     botColor.red = 0.7;
+     botColor.green = 0.7;
+     botColor.blue = 0.7;
+
+    
+    p1Color.red = 0.2;
+    p1Color.green = 0.3;
+    p1Color.blue = 0.8;
     
  //   p1Color.red = 0.8;
  //   p1Color.green = 0.65;

@@ -141,7 +141,7 @@
     
     space.player = plyr;
     
-    [space setColor:clr.red :clr.green :clr.blue :1.0f];
+  //  [space setColor:clr.red :clr.green :clr.blue :1.0f];
     [space configurePiece];
     
     space.piece.hidden = false;

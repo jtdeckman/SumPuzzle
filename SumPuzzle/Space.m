@@ -31,12 +31,16 @@
     piece.hidden = YES;
     piece.layer.cornerRadius = 5.0;
     piece.clipsToBounds = YES;
+    piece.opaque = NO;
     
     [piece setTextAlignment:NSTextAlignmentCenter];
     [piece setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*spaceFrame.size.width]];
     
     nearestNbrs = [[NSMutableSet alloc] initWithCapacity:4];
     neighbors = [[NSMutableSet alloc] initWithCapacity:10];
+    
+    p1Img = [UIImage imageNamed:@"blueSquare.png"];
+    p2Img = [UIImage imageNamed:@"redSquare.png"];
     
 }
 
@@ -49,11 +53,27 @@
 
 - (void)configurePiece {
     
+    UIImage *img;
+    
+    if(player == player1)
+        img = p1Img;
+    else
+        img = p2Img;
+    
+    CGSize imgSize = piece.frame.size;
+    UIGraphicsBeginImageContext(imgSize);
+    [img drawInRect:CGRectMake(0,0,imgSize.width,imgSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
     piece.text = [NSString stringWithFormat:@"%d", value];
-    piece.backgroundColor = [UIColor colorWithRed:color.red green:color.green blue:color.blue alpha:1.0];
+    piece.backgroundColor = [UIColor colorWithPatternImage:newImage];
+ 
+    // piece.backgroundColor = [UIColor colorWithRed:color.red green:color.green blue:color.blue alpha:1.0];
     piece.textColor = [UIColor whiteColor];
-    piece.layer.borderColor = [[UIColor colorWithRed:color.red green:color.green blue:color.blue alpha:1.0] CGColor];
-    piece.layer.borderWidth = 2.0f;
+    piece.layer.borderColor = [[UIColor clearColor] CGColor];
+   // piece.layer.borderColor = [[UIColor colorWithRed:color.red green:color.green blue:color.blue alpha:1.0] CGColor];
+  //  piece.layer.borderWidth = 2.0f;
 }
 
 - (void)highlightPiece {

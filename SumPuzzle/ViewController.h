@@ -51,6 +51,11 @@
     UILabel *player1PntsLabel;
     UILabel *player2PntsLabel;
     
+    UIImage *p1Img;
+    UIImage *p2Img;
+    
+    CGSize imgSize;
+    
     UIImageView *menuBar;
     
     NSTimer *timer;
