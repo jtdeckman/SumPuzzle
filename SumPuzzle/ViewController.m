@@ -320,12 +320,12 @@
             playerLabel.text = @"Computer";
         else
             playerLabel.text = @"Player 2";
-         playerLabel.textColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
+         playerLabel.backgroundColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
     }
     else {
         currentPlayer = player1;
         playerLabel.text = @"Player 1";
-        playerLabel.textColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
+        playerLabel.backgroundColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
     }
     
     [self upDatePoints];
@@ -373,9 +373,9 @@
     nextTile.clipsToBounds = YES;
  
     nextTile.backgroundColor = [UIColor colorWithPatternImage:p1Img];
- //   nextTile.layer.borderColor = [[UIColor clearColor] CGColor];
+    nextTile.layer.borderColor = [[UIColor whiteColor] CGColor];
   //  nextTile.layer.borderWidth = 2.0f;
-    nextTile.textColor = [UIColor whiteColor];
+    nextTile.textColor = [UIColor clearColor];
     
     [nextTile setTextAlignment:NSTextAlignmentCenter];
     [nextTile setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
@@ -427,7 +427,7 @@
     playerLabel.hidden = NO;
     playerLabel.layer.cornerRadius = 3.0;
     playerLabel.clipsToBounds = YES;
-    playerLabel.backgroundColor = [UIColor clearColor];
+    playerLabel.backgroundColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
     playerLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
     playerLabel.layer.borderWidth = 2.0f;
     playerLabel.textColor = [UIColor whiteColor];
@@ -667,9 +667,9 @@
      botColor.blue = 0.7;
 
     
-    p1Color.red = 0.2;
-    p1Color.green = 0.3;
-    p1Color.blue = 0.8;
+    p1Color.red = 0.25;
+    p1Color.green = 0.55;
+    p1Color.blue = 0.9;
     
  //   p1Color.red = 0.8;
  //   p1Color.green = 0.65;
