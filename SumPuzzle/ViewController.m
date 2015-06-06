@@ -159,7 +159,7 @@
         
             if(space != nil) {
             
-                if(!space.isOccupied && selectedPiece.value > 2 && [selectedPiece isNearestNearestNbrOf:space]) {
+                if(!space.isOccupied && selectedPiece.value > 2) { // && [selectedPiece isNearestNearestNbrOf:space]) {
                     int newVal = (int)((float)selectedPiece.value/2.0);
                     selectedPiece.value = newVal;
                     selectedPiece.piece.text = [NSString stringWithFormat:@"%d", newVal];
@@ -168,7 +168,7 @@
                     [self switchPlayers];
                 
                 }
-                else if(space.isOccupied && [selectedPiece isNearestNearestNbrOf:space]) {
+          /*      else if(space.isOccupied && [selectedPiece isNearestNearestNbrOf:space]) {
                     if(space.player == currentPlayer) {
                         space.value += selectedPiece.value;
                         [board removePiece:selectedPiece];
@@ -177,13 +177,35 @@
                         [self switchPlayers];
                     }
                     else if(space.player != currentPlayer && selectedPiece.value > space.value) {
-                        int newVal = selectedPiece.value - space.value;
+                        int newVal = selectedPiece.value ;//- space.value;
                         [board convertPiece:space :newVal :[self getColorForPlayer] :currentPlayer];
                         [board removePiece:selectedPiece];
                         [self updateCurrentPlayer:NO];
                         [self switchPlayers];
                     }
+                } */
+                else if(space.isOccupied && [selectedPiece isNearestNearestNbrOf:space]) {
+                    if(space.player == currentPlayer && selectedPiece.value > 2) {
+                        int newVal = (int)((float)selectedPiece.value/2.0);
+                        selectedPiece.value = newVal;
+                        space.value += newVal;
+                        selectedPiece.piece.text = [NSString stringWithFormat:@"%d", selectedPiece.value];
+                        space.piece.text = [NSString stringWithFormat:@"%d", space.value];
+                        [self updateCurrentPlayer:NO];
+                        [self switchPlayers];
+                    }
+                    else if(space.player != currentPlayer && selectedPiece.value > space.value) {
+                        if(selectedPiece.value > space.value) {
+                            int newVal = (int)((float)selectedPiece.value/2.0); //- space.value;
+                            [board convertPiece:space :newVal :[self getColorForPlayer] :currentPlayer];
+                            selectedPiece.value = newVal;
+                            selectedPiece.piece.text = [NSString stringWithFormat:@"%d", selectedPiece.value];
+                            [self updateCurrentPlayer:NO];
+                            [self switchPlayers];
+                        }
+                    }
                 }
+
             }
         
             placeMode = freeState;
@@ -373,9 +395,9 @@
     nextTile.clipsToBounds = YES;
  
     nextTile.backgroundColor = [UIColor colorWithPatternImage:p1Img];
-    nextTile.layer.borderColor = [[UIColor whiteColor] CGColor];
+   // nextTile.layer.borderColor = [[UIColor whiteColor] CGColor];
   //  nextTile.layer.borderWidth = 2.0f;
-    nextTile.textColor = [UIColor clearColor];
+    nextTile.textColor = [UIColor whiteColor];
     
     [nextTile setTextAlignment:NSTextAlignmentCenter];
     [nextTile setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
