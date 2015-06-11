@@ -10,7 +10,7 @@
 
 @implementation Board
 
-@synthesize selectedSpace;
+@synthesize selectedSpace, spaces, player1Spaces, player2Spaces;
 
 - (void)initBoard: (CGRect)bvFrame : (int)dx : (int)dy : (CGFloat)offset {
     

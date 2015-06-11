@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A81089831B25F77600FB880F /* AI.m in Sources */ = {isa = PBXBuildFile; fileRef = A81089821B25F77600FB880F /* AI.m */; };
+		A81089861B274F2300FB880F /* TempBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = A81089851B274F2300FB880F /* TempBoard.m */; };
+		A81089891B29E20000FB880F /* MinSpace.m in Sources */ = {isa = PBXBuildFile; fileRef = A81089881B29E20000FB880F /* MinSpace.m */; };
+		A810898C1B29F1D300FB880F /* Move.m in Sources */ = {isa = PBXBuildFile; fileRef = A810898B1B29F1D300FB880F /* Move.m */; };
 		A81902541B0C13EC00DCD8CB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A81902531B0C13EC00DCD8CB /* main.m */; };
 		A81902571B0C13EC00DCD8CB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A81902561B0C13EC00DCD8CB /* AppDelegate.m */; };
 		A819025A1B0C13EC00DCD8CB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A81902591B0C13EC00DCD8CB /* ViewController.m */; };
@@ -36,6 +40,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A81089811B25F77600FB880F /* AI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AI.h; sourceTree = "<group>"; };
+		A81089821B25F77600FB880F /* AI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AI.m; sourceTree = "<group>"; };
+		A81089841B274F2300FB880F /* TempBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TempBoard.h; sourceTree = "<group>"; };
+		A81089851B274F2300FB880F /* TempBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TempBoard.m; sourceTree = "<group>"; };
+		A81089871B29E20000FB880F /* MinSpace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinSpace.h; sourceTree = "<group>"; };
+		A81089881B29E20000FB880F /* MinSpace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinSpace.m; sourceTree = "<group>"; };
+		A810898A1B29F1D300FB880F /* Move.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Move.h; sourceTree = "<group>"; };
+		A810898B1B29F1D300FB880F /* Move.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Move.m; sourceTree = "<group>"; };
 		A819024E1B0C13EB00DCD8CB /* SumPuzzle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SumPuzzle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A81902521B0C13EC00DCD8CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A81902531B0C13EC00DCD8CB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -121,6 +133,14 @@
 				A81902891B0C19A000DCD8CB /* BoardView.m */,
 				A8A51E281B1A663100C90315 /* MenuView.h */,
 				A8A51E291B1A663100C90315 /* MenuView.m */,
+				A81089811B25F77600FB880F /* AI.h */,
+				A81089821B25F77600FB880F /* AI.m */,
+				A810898A1B29F1D300FB880F /* Move.h */,
+				A810898B1B29F1D300FB880F /* Move.m */,
+				A81089871B29E20000FB880F /* MinSpace.h */,
+				A81089881B29E20000FB880F /* MinSpace.m */,
+				A81089841B274F2300FB880F /* TempBoard.h */,
+				A81089851B274F2300FB880F /* TempBoard.m */,
 				A819025E1B0C13EC00DCD8CB /* Images.xcassets */,
 				A81902601B0C13EC00DCD8CB /* LaunchScreen.xib */,
 				A81902511B0C13EC00DCD8CB /* Supporting Files */,
@@ -262,13 +282,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A81089891B29E20000FB880F /* MinSpace.m in Sources */,
 				A81902811B0C177400DCD8CB /* Space.m in Sources */,
 				A81902791B0C148900DCD8CB /* BarView.m in Sources */,
 				A819025A1B0C13EC00DCD8CB /* ViewController.m in Sources */,
+				A810898C1B29F1D300FB880F /* Move.m in Sources */,
 				A81902571B0C13EC00DCD8CB /* AppDelegate.m in Sources */,
 				A81902541B0C13EC00DCD8CB /* main.m in Sources */,
 				A8A51E2A1B1A663100C90315 /* MenuView.m in Sources */,
 				A819027E1B0C16D900DCD8CB /* Board.m in Sources */,
+				A81089831B25F77600FB880F /* AI.m in Sources */,
+				A81089861B274F2300FB880F /* TempBoard.m in Sources */,
 				A819028A1B0C19A000DCD8CB /* BoardView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

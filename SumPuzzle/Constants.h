@@ -30,6 +30,14 @@
 
 #define MAX_NEARBY_NEIGHBORS 8
 
+#define N_ITER 0
+
+// Weighting Factors
+
+#define AVG_DIFF_FACT 10
+#define POINT_DIFF_FACT 1
+#define NUM_DIFF_FACT 25
+
 typedef struct {
     
     CGFloat red;
@@ -37,7 +45,6 @@ typedef struct {
     CGFloat blue;
     
 } JDColor;
-
 
 typedef enum : NSUInteger {
     
@@ -67,5 +74,15 @@ typedef enum : NSUInteger {
     player2
     
 } Player;
+
+typedef struct {
+    
+    int locx;
+    int locy;
+    int value;
+    
+    Player player;
+    
+} boardSpace;
 
 #endif

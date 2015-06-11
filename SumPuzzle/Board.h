@@ -28,6 +28,9 @@
 }
 
 @property (nonatomic, strong) Space* selectedSpace;
+@property (nonatomic, strong) NSMutableArray *spaces;
+@property (nonatomic, strong) NSMutableSet *player1Spaces;
+@property (nonatomic, strong) NSMutableSet *player2Spaces;
 
 - (void)initBoard: (CGRect)bvFrame : (int)dimx : (int)dimy : (CGFloat)offset;
 - (void)addPiece: (int)ii : (int)ji : (int)val : (Player)plyr : (JDColor)clr;
