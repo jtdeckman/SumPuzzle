@@ -11,6 +11,8 @@
 #import "Board.h"
 #import "BarView.h"
 #import "MenuView.h"
+#import "AI.h"
+#import "Move.h"
 
 @interface ViewController : UIViewController {
     
@@ -23,6 +25,8 @@
     Board *board;
     
     Space *selectedPiece;
+    
+    AI *computer;
     
     JDColor topColor;
     JDColor botColor;
@@ -68,6 +72,9 @@
     
     BOOL computerPlayer;
 }
+
+@property (nonatomic, strong) Board *board;
+@property (nonatomic, strong) AI *computer;
 
 - (void)runLoop;
 

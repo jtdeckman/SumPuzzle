@@ -7,12 +7,13 @@
 //
 
 #import "Board.h"
+#import "Move.h"
 
 @interface AI : Board {
     
 }
 
 - (void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy;
-- (void)findSpaces : (Space*)moveFrom : (Space*)moveTo : (int)pieceVal;
+- (void)findSpaces : (Move*)compMove : (int)p1FltPieceVal : (int)compFloatPieceVal;
 
 @end

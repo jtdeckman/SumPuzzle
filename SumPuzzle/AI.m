@@ -8,7 +8,6 @@
 
 #import "AI.h"
 #import "MinSpace.h"
-#import "Move.h"
 
 @implementation AI
 
@@ -18,12 +17,13 @@
     dimy = dy;
     
     spaces = spc;
+    
     player1Spaces = p1s;
     player2Spaces = p2s;
     
 }
 
-- (void)findSpaces : (Space*)moveFrom : (Space*)moveTo : (int)pieceVal {
+- (void)findSpaces : (Move*)compMove : (int)p1FltPieceVal : (int)compFltPieceVal {
     
     NSMutableArray *tempBoard;
     NSMutableArray *moves;
@@ -37,8 +37,8 @@
     
     tempBoard = [self newTempBoard];
     
-    moveFrom = nil;
-    moveTo = nil;
+    compMove.fromSpace = nil;
+    compMove.toSpace = nil;
     
     nmoves = 2*dimx*dimy*(int)[player1Spaces count];
     
@@ -50,11 +50,15 @@
         
         for(int i=0; i<dimx; i++) {
             for(int j=0; j<dimy; j++) {
-                currentMove = [[Move alloc] init];
-                currentMove.fromSpace = item;
+                
                 currSpace = tempBoard[item.iind][item.jind];
                 tempSpace = tempBoard[i][j];
-                if(tempSpace.player == notAssigned) {
+                
+                if(tempSpace.player == notAssigned && currSpace.value > 1) {
+             
+                    currentMove = [[Move alloc] init];
+                    currentMove.fromSpace = item;
+
                     value = (int)((float)item.value/2.0);
                     currSpace.value = value;
                     tempSpace.value = value;
@@ -69,17 +73,26 @@
         }
     }
     
-    NSArray *sortedMoves;
+    if([moves count] > 0) {
     
-    sortedMoves = [moves sortedArrayUsingComparator:^NSComparisonResult(id move1, id move2) {
+        NSArray *sortedMoves;
+    
+        sortedMoves = [moves sortedArrayUsingComparator:^NSComparisonResult(id move1, id move2) {
       
-        Move *m1 = (Move*)move1;
-        Move *m2 = (Move*)move2;
+            Move *m1 = (Move*)move1;
+            Move *m2 = (Move*)move2;
         
-        if(m1.rank >= m2.rank) return YES;
+            if(m1.rank <= m2.rank) return YES;
     
-        return NO;
-    }];
+            return NO;
+        }];
+    
+        Move* bestMove = sortedMoves[0];
+    
+        compMove.rank = bestMove.rank;
+        compMove.fromSpace = bestMove.fromSpace;
+        compMove.toSpace = bestMove.toSpace;
+    }
 }
 
 - (float)calcWeight: (NSMutableArray*) tempBoard : (uint)nIter {
@@ -87,23 +100,28 @@
     NSMutableSet *p1Spaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
     NSMutableSet *computerSpaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
     
-    MinSpace *currSpace;
-    
     float weight = 0.0f;
-    
-    for(int i=0; i<dimx; i++) {
-        for(int j=0; j<dimy; j++) {
-            currSpace = tempBoard[i][j];
-            if(currSpace.player == player1)
-                [p1Spaces addObject:currSpace];
-            else if(currSpace.player == player2)
-                [computerSpaces addObject:currSpace];
-        }
-    }
 
+    [self findTempNumbers:p1Spaces :computerSpaces :tempBoard];
+    
     weight = [self calcBoardMetric:p1Spaces :computerSpaces];
     
     return weight;
+}
+
+- (void)findTempNumbers: (NSMutableSet*)p1S : (NSMutableSet*)compSpace : (NSMutableArray*) tBoard {
+    
+    MinSpace *currSpace;
+    
+    for(int i=0; i<dimx; i++) {
+        for(int j=0; j<dimy; j++) {
+            currSpace = tBoard[i][j];
+            if(currSpace.player == player1)
+                [p1S addObject:currSpace];
+            else if(currSpace.player == player2)
+                [compSpace addObject:currSpace];
+        }
+    }
 }
 
 - (float)calcBoardMetric: (NSMutableSet*)p1Spaces : (NSMutableSet*)compSpaces {
@@ -119,7 +137,7 @@
     int scoreDiff = compTotal - p1Total;
     int pieceDiff = nCompSpaces - nP1Spaces;
     
-    float avgDiff = compTotal/nCompSpaces - p1Total/nP1Spaces;
+    float avgDiff = (float)compTotal/(float)nCompSpaces - (float)p1Total/(float)nP1Spaces;
     
     metric = (float)(POINT_DIFF_FACT*scoreDiff) + (float)(NUM_DIFF_FACT*pieceDiff) + AVG_DIFF_FACT*avgDiff;
     

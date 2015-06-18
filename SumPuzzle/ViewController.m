@@ -16,6 +16,8 @@
 
 @implementation ViewController
 
+@synthesize board, computer;
+
 - (void)viewDidLoad {
     
     [super viewDidLoad];
@@ -296,6 +298,10 @@
     
     player1PntsLabel.text = [NSString stringWithFormat:@"%d", p1PointsOnBoard];
     player2PntsLabel.text = [NSString stringWithFormat:@"%d", p2PointsOnBoard];
+    
+    computer = [[AI alloc] init];
+    
+    [computer setUpAI:board.spaces :board.player1Spaces :board.player2Spaces :dimx :dimy];
 }
 
 - (void)setUpBoard:(CGFloat)offset {
@@ -363,6 +369,41 @@
     
     if(winner != notAssigned) {
         NSLog(@"Winner is fart");
+    }
+    
+    if(computerPlayer && currentPlayer == player2)
+        [self AIMove];
+}
+
+- (void)AIMove {
+
+    Move *move = [[Move alloc] init];
+    Space *moveFrom, *moveTo;
+    
+    [computer findSpaces:move :nextValueP1 :nextValueP2];
+    
+    moveFrom = move.fromSpace;
+    moveTo = move.toSpace;
+    
+    if(moveTo == nil) {
+        
+    }
+    else {
+    
+        if(moveFrom == nil) {
+            
+        }
+        else if(moveTo.player == notAssigned) {
+            
+            int value = (int)((float)moveFrom.value/2.0);
+            moveFrom.value = value;
+            moveFrom.piece.text = [NSString stringWithFormat:@"%d", value];
+            [board addPiece:moveTo.iind :moveTo.jind : value : currentPlayer : [self getColorForPlayer]];
+            [self updateCurrentPlayer:NO];
+        }
+        
+        
+        [self switchPlayers];
     }
 }
 
