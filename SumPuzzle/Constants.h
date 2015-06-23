@@ -38,6 +38,8 @@
 #define POINT_DIFF_FACT 1
 #define NUM_DIFF_FACT 25
 
+#define DIST_WEIGHT 1.0
+
 typedef struct {
     
     CGFloat red;

@@ -391,19 +391,20 @@
     else {
     
         if(moveFrom == nil) {
-            
+            [self addPiece:moveTo];
         }
+        
         else if(moveTo.player == notAssigned) {
             
             int value = (int)((float)moveFrom.value/2.0);
+            
             moveFrom.value = value;
             moveFrom.piece.text = [NSString stringWithFormat:@"%d", value];
+            
             [board addPiece:moveTo.iind :moveTo.jind : value : currentPlayer : [self getColorForPlayer]];
             [self updateCurrentPlayer:NO];
+            [self switchPlayers];
         }
-        
-        
-        [self switchPlayers];
     }
 }
 
