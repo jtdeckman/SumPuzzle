@@ -46,29 +46,89 @@
     
     [self resetTempBoard:tempBoard];
     
+ // Free piece
+    
+    for(int i=0; i<dimx; i++) {
+        for(int j=0; j<dimy; j++) {
+    
+            tempSpace = tempBoard[i][j];
+            
+            if(tempSpace.player == notAssigned) {
+                
+                tempSpace.player = player2;
+                tempSpace.value = p1FltPieceVal;
+                
+                currentMove = [[Move alloc] init];
+                currentMove.fromSpace = nil;
+                currentMove.toSpace = [self getSpaceForIndices:i :j];
+                currentMove.rank = [self calcWeight:tempBoard :N_ITER];
+                [moves addObject:currentMove];
+                [self resetTempBoard:tempBoard];
+            }
+        }
+    }
+    
     for(Space* item in player2Spaces) {
         
         for(int i=0; i<dimx; i++) {
             for(int j=0; j<dimy; j++) {
                 
-                currSpace = tempBoard[item.iind][item.jind];
-                tempSpace = tempBoard[i][j];
+                if(item.iind != i && item.jind != j) {
+                    
+                    currSpace = tempBoard[item.iind][item.jind];
+                    tempSpace = tempBoard[i][j];
                 
-                if(tempSpace.player == notAssigned && currSpace.value > 1) {
+                    if(tempSpace.player == notAssigned && currSpace.value > 1) {
              
-                    currentMove = [[Move alloc] init];
-                    currentMove.fromSpace = item;
+                        currentMove = [[Move alloc] init];
+                        currentMove.fromSpace = item;
 
-                    value = (int)((float)item.value/2.0);
-                    currSpace.value = value;
-                    tempSpace.value = value;
-                    tempSpace.player = player2;
-                    currentMove.toSpace = [self getSpaceForIndices:i :j];
-                    currentMove.rank = [self calcWeight:tempBoard :N_ITER];
-                    [moves addObject:currentMove];
+                        value = (int)((float)item.value/2.0);
+                        currSpace.value = value;
+                        tempSpace.value = value;
+                        tempSpace.player = player2;
+                        currentMove.toSpace = [self getSpaceForIndices:i :j];
+                        currentMove.rank = [self calcWeight:tempBoard :N_ITER];
+                        [moves addObject:currentMove];
+                    }
+                    
+                    else if(tempSpace.player != notAssigned && [item isNearestNearestNbrOf:[self getSpaceForIndices:i :j]]){
+                        
+                        currentMove = [[Move alloc] init];
+                        currentMove.fromSpace = item;
+                        currentMove.toSpace = [self getSpaceForIndices:i :j];
+                        
+                        if(tempSpace.player == player1) {
+                            
+                            if(item.value > tempSpace.value) {
+                                
+                                value = (int)((float)item.value/2.0);
+                                currSpace.value = value;
+                                tempSpace.value = value;
+                                tempSpace.player = player2;
+                        
+                                currentMove.rank = [self calcWeight:tempBoard :N_ITER];
+                                
+                                [moves addObject:currentMove];
+                            }
+                            
+                            else {
+                                
+                                value = (int)((float)item.value/2.0);
+                                
+                                currSpace.value = value;
+                                tempSpace.value = value;
+                                tempSpace.player = player2;
+                                
+                                currentMove.rank = [self calcWeight:tempBoard :N_ITER];
+                                
+                                [moves addObject:currentMove];
+                            }
+                        }
+                    }
+                    
+                    [self resetTempBoard:tempBoard];
                 }
-                
-                [self resetTempBoard:tempBoard];
             }
         }
     }
