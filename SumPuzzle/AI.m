@@ -88,7 +88,7 @@
                     currSpace = tempBoard[item.iind][item.jind];
                     tempSpace = tempBoard[i][j];
                 
-                    if(tempSpace.player == notAssigned && currSpace.value > 1) {
+                    if(tempSpace.player == notAssigned && currSpace.value > 1 && [item isNearestNearestNbrOf:[self getSpaceForIndices:i :j]]) {
              
                         currentMove = [[Move alloc] init];
                         currentMove.fromSpace = item;
@@ -115,9 +115,10 @@
                             
                             if(item.value > tempSpace.value) {
                                 
-                                value = (int)((float)item.value/2.0);
-                                currSpace.value = value;
-                                tempSpace.value = value;
+                              //  value = (int)((float)item.value/2.0);
+                              //  currSpace.value = value;
+                                currSpace.player = notAssigned;
+                                tempSpace.value = currSpace.value;
                                 tempSpace.player = player2;
                         
                                 currentMove.rank = [self calcWeight:tempBoard :N_ITER :i];
@@ -127,10 +128,12 @@
                         }
                         else {
                                 
-                                value = (int)((float)item.value/2.0);
+                               // value = (int)((float)item.value/2.0);
                                 
-                                currSpace.value = value;
-                                tempSpace.value = value;
+                             //   currSpace.value = value;
+                            
+                                currSpace.player = notAssigned;
+                                tempSpace.value += value;
                                 tempSpace.player = player2;
                                 
                                 currentMove.rank = [self calcWeight:tempBoard :N_ITER :i];

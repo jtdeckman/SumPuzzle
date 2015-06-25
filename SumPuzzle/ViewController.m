@@ -161,7 +161,7 @@
         
             if(space != nil) {
             
-                if(!space.isOccupied && selectedPiece.value > 2) { // && [selectedPiece isNearestNearestNbrOf:space]) {
+                if(!space.isOccupied && selectedPiece.value > 2 && [selectedPiece isNearestNearestNbrOf:space]) {
                     int newVal = (int)((float)selectedPiece.value/2.0);
                     selectedPiece.value = newVal;
                     selectedPiece.piece.text = [NSString stringWithFormat:@"%d", newVal];
@@ -170,7 +170,7 @@
                     [self switchPlayers];
                 
                 }
-          /*      else if(space.isOccupied && [selectedPiece isNearestNearestNbrOf:space]) {
+                else if(space.isOccupied && [selectedPiece isNearestNearestNbrOf:space]) {
                     if(space.player == currentPlayer) {
                         space.value += selectedPiece.value;
                         [board removePiece:selectedPiece];
@@ -185,8 +185,8 @@
                         [self updateCurrentPlayer:NO];
                         [self switchPlayers];
                     }
-                } */
-                else if(space.isOccupied && [selectedPiece isNearestNearestNbrOf:space]) {
+                }
+         /*       else if(space.isOccupied && [selectedPiece isNearestNearestNbrOf:space]) {
                     if(space.player == currentPlayer && selectedPiece.value > 2) {
                         int newVal = (int)((float)selectedPiece.value/2.0);
                         selectedPiece.value = newVal;
@@ -206,7 +206,7 @@
                             [self switchPlayers];
                         }
                     }
-                }
+                } */
 
             }
         
@@ -410,12 +410,13 @@
             
             if(moveTo.player == player1) {
                 
-                int newVal = (int)((float)moveFrom.value/2.0); //- space.value;
+                int newVal = (int)((float)moveFrom.value);///2.0); //- space.value;
                 
-                moveFrom.value = newVal;
-                moveFrom.piece.text = [NSString stringWithFormat:@"%d", newVal];
+            //    moveFrom.value = newVal;
+            //    moveFrom.piece.text = [NSString stringWithFormat:@"%d", newVal];
                 
                 [board convertPiece:moveTo :newVal :[self getColorForPlayer] :player2];
+                [board removePiece:moveFrom];
                 
                 moveTo.piece.text = [NSString stringWithFormat:@"%d", newVal];
                 
@@ -424,10 +425,12 @@
             }
             else {
                 
-                int newVal = (int)((float)moveFrom.value/2.0); //- space.value;
+                int newVal = (int)((float)moveFrom.value);///2.0); //- space.value;
                 
-                moveFrom.value = newVal;
-                moveFrom.piece.text = [NSString stringWithFormat:@"%d", newVal];
+             //   moveFrom.value = newVal;
+             //   moveFrom.piece.text = [NSString stringWithFormat:@"%d", newVal];
+                
+                [board removePiece:moveFrom];
                 
                 moveTo.value += newVal;
                 moveTo.piece.text = [NSString stringWithFormat:@"%d", moveTo.value];

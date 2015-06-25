@@ -34,11 +34,11 @@
 
 // Weighting Factors
 
-#define AVG_DIFF_FACT 5
+#define AVG_DIFF_FACT 0
 #define POINT_DIFF_FACT 10
-#define NUM_DIFF_FACT 5
+#define NUM_DIFF_FACT 25
 
-#define DIST_WEIGHT 1.0
+#define DIST_WEIGHT 10.0
 
 typedef struct {
     
