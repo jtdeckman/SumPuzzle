@@ -62,7 +62,7 @@
                     if([item isNearestNearestNbrOf:space]) {
                         
                         tempSpace.player = player2;
-                        tempSpace.value = p1FltPieceVal;
+                        tempSpace.value = compFltPieceVal;
                 
                         currentMove = [[Move alloc] init];
                         currentMove.fromSpace = nil;
@@ -124,8 +124,8 @@
                                 
                                 [moves addObject:currentMove];
                             }
-                            
-                            else {
+                        }
+                        else {
                                 
                                 value = (int)((float)item.value/2.0);
                                 
@@ -138,7 +138,6 @@
                                 [moves addObject:currentMove];
                                 
                                 currentMove = nil;
-                            }
                         }
                     }
                     
@@ -232,6 +231,7 @@
     float avgDiff = (float)compTotal/(float)nCompSpaces - (float)p1Total/(float)nP1Spaces;
     
     metric = (float)(POINT_DIFF_FACT*scoreDiff) + (float)(NUM_DIFF_FACT*pieceDiff) + AVG_DIFF_FACT*avgDiff;
+   // metric = (float)(POINT_DIFF_FACT*scoreDiff) + AVG_DIFF_FACT*avgDiff;
     
     return metric;
 }

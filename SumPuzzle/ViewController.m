@@ -402,8 +402,39 @@
             moveFrom.piece.text = [NSString stringWithFormat:@"%d", value];
             
             [board addPiece:moveTo.iind :moveTo.jind : value : currentPlayer : [self getColorForPlayer]];
+            
             [self updateCurrentPlayer:NO];
             [self switchPlayers];
+        }
+        else {
+            
+            if(moveTo.player == player1) {
+                
+                int newVal = (int)((float)moveFrom.value/2.0); //- space.value;
+                
+                moveFrom.value = newVal;
+                moveFrom.piece.text = [NSString stringWithFormat:@"%d", newVal];
+                
+                [board convertPiece:moveTo :newVal :[self getColorForPlayer] :player2];
+                
+                moveTo.piece.text = [NSString stringWithFormat:@"%d", newVal];
+                
+                [self updateCurrentPlayer:NO];
+                [self switchPlayers];
+            }
+            else {
+                
+                int newVal = (int)((float)moveFrom.value/2.0); //- space.value;
+                
+                moveFrom.value = newVal;
+                moveFrom.piece.text = [NSString stringWithFormat:@"%d", newVal];
+                
+                moveTo.value += newVal;
+                moveTo.piece.text = [NSString stringWithFormat:@"%d", moveTo.value];
+                
+                [self updateCurrentPlayer:NO];
+                [self switchPlayers];
+            }
         }
     }
 }

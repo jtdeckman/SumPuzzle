@@ -34,9 +34,9 @@
 
 // Weighting Factors
 
-#define AVG_DIFF_FACT 10
-#define POINT_DIFF_FACT 1
-#define NUM_DIFF_FACT 25
+#define AVG_DIFF_FACT 5
+#define POINT_DIFF_FACT 10
+#define NUM_DIFF_FACT 5
 
 #define DIST_WEIGHT 1.0
 
