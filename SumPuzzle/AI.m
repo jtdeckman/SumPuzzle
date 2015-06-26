@@ -28,6 +28,8 @@
     NSMutableArray *tempBoard;
     NSMutableArray *moves;
     
+    Space *tSpace;
+    
     MinSpace *tempSpace, *currSpace;
     
     Move *currentMove;
@@ -67,7 +69,7 @@
                         currentMove = [[Move alloc] init];
                         currentMove.fromSpace = nil;
                         currentMove.toSpace = [self getSpaceForIndices:i :j];
-                        currentMove.rank = [self calcWeight:tempBoard :N_ITER :i];
+                        currentMove.rank = [self calcWeight:tempBoard :N_ITER :i :p1FltPieceVal :YES];
                         
                         [moves addObject:currentMove];
                         
@@ -83,12 +85,14 @@
         for(int i=0; i<dimx; i++) {
             for(int j=0; j<dimy; j++) {
                 
-                if(!(item.iind == i && item.jind == j)) {
+                tSpace = [self getSpaceForIndices:i :j];
+                
+                if(!(item.iind == i && item.jind == j) && [item isNearestNearestNbrOf:tSpace]) {
                     
                     currSpace = tempBoard[item.iind][item.jind];
                     tempSpace = tempBoard[i][j];
                 
-                    if(tempSpace.player == notAssigned && currSpace.value > 1 && [item isNearestNearestNbrOf:[self getSpaceForIndices:i :j]]) {
+                    if(tempSpace.player == notAssigned && currSpace.value > 1 ) {
              
                         currentMove = [[Move alloc] init];
                         currentMove.fromSpace = item;
@@ -98,14 +102,14 @@
                         tempSpace.value = value;
                         tempSpace.player = player2;
                         currentMove.toSpace = [self getSpaceForIndices:i :j];
-                        currentMove.rank = [self calcWeight:tempBoard :N_ITER :i];
+                        currentMove.rank = [self calcWeight:tempBoard :N_ITER :i :p1FltPieceVal :YES];
                         
                         [moves addObject:currentMove];
                         
                         currentMove = nil;
                     }
                     
-                    else if(tempSpace.player != notAssigned && [item isNearestNearestNbrOf:[self getSpaceForIndices:i :j]]){
+                    else if(tempSpace.player != notAssigned ) {
                         
                         currentMove = [[Move alloc] init];
                         currentMove.fromSpace = item;
@@ -115,29 +119,22 @@
                             
                             if(item.value > tempSpace.value) {
                                 
-                              //  value = (int)((float)item.value/2.0);
-                              //  currSpace.value = value;
                                 currSpace.player = notAssigned;
                                 tempSpace.value = currSpace.value;
                                 tempSpace.player = player2;
                         
-                                currentMove.rank = [self calcWeight:tempBoard :N_ITER :i];
+                                currentMove.rank = [self calcWeight:tempBoard :N_ITER :i :p1FltPieceVal :YES];
                                 
                                 [moves addObject:currentMove];
                             }
                         }
                         else {
-                                
-                               // value = (int)((float)item.value/2.0);
-                                
-                             //   currSpace.value = value;
-                            
                                 currSpace.player = notAssigned;
                                 tempSpace.value += value;
                                 tempSpace.player = player2;
                                 
-                                currentMove.rank = [self calcWeight:tempBoard :N_ITER :i];
-                                
+                                currentMove.rank = [self calcWeight:tempBoard :N_ITER :i :p1FltPieceVal :YES];
+                            
                                 [moves addObject:currentMove];
                                 
                                 currentMove = nil;
@@ -187,7 +184,7 @@
     }
 }
 
-- (float)calcWeight: (NSMutableArray*) tempBoard : (uint)nIter : (int)jval {
+- (float)calcWeight: (NSMutableArray*) tempBoard : (uint)nIter : (int)jval : (int)p1FpVal : (bool)calcP1Weight {
 
     NSMutableSet *p1Spaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
     NSMutableSet *computerSpaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
@@ -200,6 +197,121 @@
     
     weight += (dimy-jval)*DIST_WEIGHT;
     
+    if(calcP1Weight)
+        weight += [self player1Moves:tempBoard :p1FpVal];
+    
+    return weight;
+}
+
+- (float)player1Moves: (NSMutableArray*) currBoard : (int)p1Val {
+
+    NSMutableArray *tempBoard = [self newTempBoard];
+    
+    NSMutableSet *p1Spaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
+    NSMutableSet *computerSpaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
+
+    float tempWeight, weight = 0;
+    
+    MinSpace *tempSpace, *currSpace;
+    
+    int value;
+
+    Space *tSpace, *pSpace;
+    
+    [self copyTempBoard:tempBoard :currBoard];
+    [self findTempNumbers:p1Spaces :computerSpaces :tempBoard];
+    
+    for(int i=0; i<dimx; i++) {
+        for(int j=0; j<dimy; j++) {
+            
+            tempSpace = tempBoard[i][j];
+            
+            if(tempSpace.player == notAssigned) {
+                
+                tSpace = [self getSpaceForIndices:i :j];
+                
+                for(MinSpace* item in p1Spaces) {
+                    
+                    pSpace = [self getSpaceForIndices:item.locx :item.locy];
+                    
+                    if([pSpace isNearestNearestNbrOf:tSpace]) {
+                        
+                        tempSpace.player = player1;
+                        tempSpace.value = p1Val;
+                        
+                        tempWeight = [self calcWeight:tempBoard :0 :i :0 :NO];
+                        
+                        if(tempWeight > weight) weight = tempWeight;
+                        
+                        [self copyTempBoard:tempBoard :currBoard];
+                    }
+                }
+            }
+        }
+    }
+
+    for(MinSpace* item in p1Spaces) {
+        
+        for(int i=0; i<dimx; i++) {
+            for(int j=0; j<dimy; j++) {
+                
+                pSpace = [self getSpaceForIndices:item.locx :item.locy];
+                tSpace = [self getSpaceForIndices:i :j];
+
+                if(!(item.locx == i && item.locy == j) && [tSpace isNearestNearestNbrOf:pSpace]) {
+                    
+                    currSpace = tempBoard[item.locx][item.locy];
+                    tempSpace = tempBoard[i][j];
+                    
+                    if(tempSpace.player == notAssigned && currSpace.value > 1) {
+                        
+                        value = (int)((float)item.value/2.0);
+                        currSpace.value = value;
+                        tempSpace.value = value;
+                        tempSpace.player = player1;
+                       
+                        tempWeight = [self calcWeight:tempBoard :0 :i :0 :NO];
+                        
+                        if(tempWeight > weight) weight = tempWeight;
+                        
+                        [self copyTempBoard:tempBoard :currBoard];
+                    }
+                    
+                    else if(tempSpace.player != notAssigned) {
+                        
+                        if(tempSpace.player == player2) {
+                            
+                            if(item.value > tempSpace.value) {
+                                
+                                currSpace.player = notAssigned;
+                                tempSpace.value = currSpace.value;
+                                tempSpace.player = player1;
+                                
+                                tempWeight = [self calcWeight:tempBoard :N_ITER :i :0 :NO];
+                                
+                                if(tempWeight > weight) weight = tempWeight;
+                                
+                                [self copyTempBoard:tempBoard :currBoard];
+                            }
+                        }
+                        else {
+                            
+                            currSpace.player = notAssigned;
+                            tempSpace.value += value;
+                            tempSpace.player = player1;
+                            
+                            tempWeight = [self calcWeight:tempBoard :N_ITER :i :0 :NO];
+                            
+                            if(tempWeight > weight) weight = tempWeight;
+                            
+                            [self copyTempBoard:tempBoard :currBoard];
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     return weight;
 }
 
@@ -258,10 +370,24 @@
         for(int j=0; j<dimy; j++) {
             space = spaces[i][j];
             tempSpace = tempBoard[i][j];
-            tempSpace.locx = i;
-            tempSpace.locy = j;
+          //  tempSpace.locx = i;
+          //  tempSpace.locy = j;
             tempSpace.value = space.value;
             tempSpace.player = space.player;
+        }
+    }
+}
+
+- (void)copyTempBoard : (NSMutableArray*)tempBoard : (NSMutableArray*)referenceBoard {
+
+    MinSpace *tempSpace, *refSpace;
+    
+    for(int i=0; i<dimx; i++) {
+        for(int j=0; j<dimy; j++) {
+            refSpace = referenceBoard[i][j];
+            tempSpace = tempBoard[i][j];
+            tempSpace.value = refSpace.value;
+            tempSpace.player = refSpace.player;
         }
     }
 }
@@ -281,6 +407,8 @@
         
         for(int j=0; j<dimy; j++) {
             newSpace = [[MinSpace alloc] init];
+            newSpace.locx = i;
+            newSpace.locy = j;
             [row addObject:newSpace];
         }
         

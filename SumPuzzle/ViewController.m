@@ -279,11 +279,11 @@
     currentPlayer = player1;
     
     [board addPiece:0 :0 :startValue : player1 : p1Color];
-    [board addPiece:0 :3 :startValue : player1 : p1Color];
+ //   [board addPiece:0 :dimy/2-1 :startValue : player1 : p1Color];
     [board addPiece:0 :dimy-1 :startValue : player1 : p1Color];
     
     [board addPiece:dimx-1 :0 :startValue : player2 : p2Color];
-    [board addPiece:dimx-1 :3 :startValue : player2 : p2Color];
+  //  [board addPiece:dimx-1 :dimy/2 :startValue : player2 : p2Color];
     [board addPiece:dimx-1 :dimy-1 :startValue : player2 : p2Color];
     
     nextValueP1 = tileValue;
