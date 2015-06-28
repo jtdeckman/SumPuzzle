@@ -179,7 +179,7 @@
                         [self switchPlayers];
                     }
                     else if(space.player != currentPlayer && selectedPiece.value > space.value) {
-                        int newVal = selectedPiece.value ;//- space.value;
+                        int newVal = selectedPiece.value - space.value;//- space.value;
                         [board convertPiece:space :newVal :[self getColorForPlayer] :currentPlayer];
                         [board removePiece:selectedPiece];
                         [self updateCurrentPlayer:NO];
@@ -409,8 +409,9 @@
         else {
             
             if(moveTo.player == player1) {
-                
-                int newVal = (int)((float)moveFrom.value);///2.0); //- space.value;
+               
+                int newVal = moveFrom.value - moveTo.value;
+             //   int newVal = (int)((float)moveFrom.value);///2.0); //- space.value;
                 
             //    moveFrom.value = newVal;
             //    moveFrom.piece.text = [NSString stringWithFormat:@"%d", newVal];

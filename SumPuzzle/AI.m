@@ -122,7 +122,7 @@
                             if(item.value > tempSpace.value) {
                                 
                                 currSpace.player = notAssigned;
-                                tempSpace.value = currSpace.value;
+                                tempSpace.value = currSpace.value - tempSpace.value;
                                 tempSpace.player = player2;
                         
                                 currentMove.rank = [self calcWeight:tempBoard :N_ITER :i :p1FltPieceVal :YES];
@@ -216,7 +216,7 @@
     
     weight = [self calcBoardMetric:p1Spaces :computerSpaces];
     
-    weight += jval*DIST_WEIGHT;
+    weight += jval*DIST_WEIGHT*10;
     
     return weight;
 }
@@ -304,7 +304,7 @@
                             if(item.value > tempSpace.value) {
                                 
                                 currSpace.player = notAssigned;
-                                tempSpace.value = currSpace.value;
+                                tempSpace.value = currSpace.value - tempSpace.value;
                                 tempSpace.player = player1;
                                 
                                 tempWeight = [self calcP1Weight:tempBoard :N_ITER :i :0 :NO];
@@ -367,7 +367,7 @@
     
     metric = (float)(POINT_DIFF_FACT*scoreDiff) + ([self stdDev:p1Spaces] - [self stdDev:compSpaces])*SD_FACT + (float)(NUM_DIFF_FACT*pieceDiff); // + AVG_DIFF_FACT*avgDiff;
     
-    if(fabs(metric) > 10000) {
+    if(fabs(metric) > 20000) {
         NSLog(@"Shit");
     }
    // metric = (float)(POINT_DIFF_FACT*scoreDiff) + AVG_DIFF_FACT*avgDiff;
