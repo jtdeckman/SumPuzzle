@@ -13,6 +13,6 @@
 
 @property (nonatomic) Space* fromSpace;
 @property (nonatomic) Space* toSpace;
-@property (nonatomic) float rank;
+@property (nonatomic) double rank;
 
 @end

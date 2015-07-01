@@ -11,7 +11,7 @@
 
 @implementation AI
 
--(void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy {
+-(void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy : (int)pInc {
 
     dimx = dx;
     dimy = dy;
@@ -21,6 +21,7 @@
     player1Spaces = p1s;
     player2Spaces = p2s;
     
+    pieceInc = pInc;
 }
 
 - (void)findSpaces : (Move*)compMove : (int)p1FltPieceVal : (int)compFltPieceVal {
@@ -69,7 +70,7 @@
                         currentMove = [[Move alloc] init];
                         currentMove.fromSpace = nil;
                         currentMove.toSpace = [self getSpaceForIndices:i :j];
-                        currentMove.rank = [self calcWeight:tempBoard :N_ITER :i :p1FltPieceVal :YES];
+                        currentMove.rank = [self calcWeight:tempBoard :N_ITER :i :p1FltPieceVal : compFltPieceVal :YES];
                         
                         currentMove.rank -= (1.0/compFltPieceVal)*FLOAT_FACT;
                         
@@ -104,7 +105,7 @@
                         tempSpace.value = value;
                         tempSpace.player = player2;
                         currentMove.toSpace = [self getSpaceForIndices:i :j];
-                        currentMove.rank = [self calcWeight:tempBoard :N_ITER :i :p1FltPieceVal :YES];
+                        currentMove.rank = [self calcWeight:tempBoard :N_ITER :i :p1FltPieceVal : compFltPieceVal : YES];
                         
                         [moves addObject:currentMove];
                         
@@ -122,10 +123,10 @@
                             if(item.value > tempSpace.value) {
                                 
                                 currSpace.player = notAssigned;
-                                tempSpace.value = currSpace.value - tempSpace.value;
+                                tempSpace.value = currSpace.value;// - tempSpace.value;
                                 tempSpace.player = player2;
                         
-                                currentMove.rank = [self calcWeight:tempBoard :N_ITER :i :p1FltPieceVal :YES];
+                                currentMove.rank = [self calcWeight:tempBoard :N_ITER :i :p1FltPieceVal : compFltPieceVal :YES];
                                 
                                 [moves addObject:currentMove];
                             }
@@ -135,7 +136,7 @@
                                 tempSpace.value += currSpace.value;
                                 tempSpace.player = player2;
                                 
-                                currentMove.rank = [self calcWeight:tempBoard :N_ITER :i :p1FltPieceVal :YES];
+                                currentMove.rank = [self calcWeight:tempBoard :N_ITER :i :p1FltPieceVal : compFltPieceVal :YES];
                             
                                 [moves addObject:currentMove];
                                 
@@ -186,49 +187,227 @@
     }
 }
 
-- (float)calcWeight: (NSMutableArray*) tempBoard : (uint)nIter : (int)jval : (int)p1FpVal : (bool)calcP1Weight {
+- (double)calcWeight: (NSMutableArray*) tempBoard : (uint)nIter : (int)jval : (int)p1FpVal : (int)p2FpVal : (bool)calcP1Weight {
 
     NSMutableSet *p1Spaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
     NSMutableSet *computerSpaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
     
-    float weight = 0.0f;
+    double weight = 0.0f;
 
     [self findTempNumbers:p1Spaces :computerSpaces :tempBoard];
     
     weight = [self calcBoardMetric:p1Spaces :computerSpaces];
     
-    weight += (dimy-jval)*DIST_WEIGHT;
+    if(nIter > 0)
+       weight += [self iteratePlayer2:tempBoard : p2FpVal : p1FpVal : nIter];
     
     if(calcP1Weight)
-        weight += [self player1Moves:tempBoard :p1FpVal];
+       weight -= [self player1Moves:tempBoard :p1FpVal];
     
     return weight;
 }
 
-- (float)calcP1Weight: (NSMutableArray*) tempBoard : (uint)nIter : (int)jval : (int)p1FpVal : (bool)calcP1Weight {
+- (double)calcP1Weight: (NSMutableArray*) tempBoard : (int)p1FpVal {
     
     NSMutableSet *p1Spaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
     NSMutableSet *computerSpaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
     
-    float weight = 0.0f;
+    double weight = 0.0f;
     
     [self findTempNumbers:p1Spaces :computerSpaces :tempBoard];
     
-    weight = [self calcBoardMetric:p1Spaces :computerSpaces];
-    
-    weight += jval*DIST_WEIGHT*10;
+    weight = [self calcP1BoardMetric:p1Spaces :computerSpaces];
     
     return weight;
 }
 
-- (float)player1Moves: (NSMutableArray*) currBoard : (int)p1Val {
+- (double)calcP2Weight : (NSMutableArray*) tempBoard : (int)p1Val {
+
+    NSMutableSet *p1Spaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
+    NSMutableSet *computerSpaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
+    
+    double weight = 0.0f;
+    
+    [self findTempNumbers:p1Spaces :computerSpaces :tempBoard];
+
+    weight = [self calcBoardMetric:p1Spaces :computerSpaces];
+    
+    weight -= [self player1Moves:tempBoard :p1Val];
+    
+    return weight;
+}
+
+- (float)calcBoardMetric: (NSMutableSet*)p1Spaces : (NSMutableSet*)compSpaces {
+    
+    float metric = 0;
+    
+    // uint nP1Spaces = (uint)[p1Spaces count];
+    // uint nCompSpaces = (uint)[compSpaces count];
+    
+    int p1Total = [self scoreOfMinSpaceSet:p1Spaces];
+    int compTotal = [self scoreOfMinSpaceSet:compSpaces];
+    
+    int scoreDiff = compTotal - p1Total;
+    
+    metric = (float)(POINT_DIFF_FACT*scoreDiff) + ([self stdDev:p1Spaces] - [self stdDev:compSpaces])*SD_FACT + [self distWeight:compSpaces :player2]*DIST_WEIGHT*5.0;
+    
+    return metric;
+}
+
+- (float)calcP1BoardMetric: (NSMutableSet*)p1Spaces : (NSMutableSet*)compSpaces {
+    
+    float metric = 0;
+    
+    //  uint nP1Spaces = (uint)[p1Spaces count];
+    //  uint nCompSpaces = (uint)[compSpaces count];
+    
+    int p1Total = [self scoreOfMinSpaceSet:p1Spaces];
+    int compTotal = [self scoreOfMinSpaceSet:compSpaces];
+    
+    int scoreDiff = p1Total -  compTotal;
+    
+    metric = (float)(POINT_DIFF_FACT*scoreDiff) + ([self stdDev:compSpaces] - [self stdDev:p1Spaces])*SD_FACT + [self distWeight:p1Spaces :player1]*DIST_WEIGHT;
+    
+    return metric;
+}
+
+- (double)iteratePlayer2: (NSMutableArray*) currBoard : (int)p2Val : (int)p1Val : (int)niter {
+    
+    NSMutableArray *tempBoard = [self newTempBoard];
+    
+    NSMutableSet *p1Spaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
+    NSMutableSet *computerSpaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
+    
+    double tempWeight=0, weight=0;
+    
+    MinSpace *tempSpace, *currSpace;
+    
+    int value;
+    
+    Space *tSpace, *pSpace;
+    
+    [self copyTempBoard:tempBoard :currBoard];
+    [self findTempNumbers:p1Spaces :computerSpaces :tempBoard];
+    
+    for(int i=0; i<dimx; i++) {
+        for(int j=0; j<dimy; j++) {
+            
+            tempSpace = tempBoard[i][j];
+            
+            if(tempSpace.player == notAssigned) {
+                
+                tSpace = [self getSpaceForIndices:i :j];
+                
+                for(MinSpace* item in p1Spaces) {
+                    
+                    pSpace = [self getSpaceForIndices:item.locx :item.locy];
+                    
+                    if([pSpace isNearestNearestNbrOf:tSpace]) {
+                        
+                        tempSpace.player = player2;
+                        tempSpace.value = p2Val;
+                        
+                        tempWeight = [self calcP2Weight:tempBoard : p1Val];
+                        
+                        if(niter > 0)
+                          tempWeight += [self iteratePlayer2:tempBoard :p2Val :p1Val+pieceInc :niter-1];
+                        
+                        tempWeight += (1.0/p2Val)*FLOAT_FACT;
+                        
+                        if(tempWeight > weight) weight = tempWeight;
+                        
+                        [self copyTempBoard:tempBoard :currBoard];
+                    }
+                }
+            }
+        }
+    }
+    
+    for(MinSpace* item in computerSpaces) {
+        
+        for(int i=0; i<dimx; i++) {
+            for(int j=0; j<dimy; j++) {
+                
+                pSpace = [self getSpaceForIndices:item.locx :item.locy];
+                tSpace = [self getSpaceForIndices:i :j];
+                
+                if(!(item.locx == i && item.locy == j) && [tSpace isNearestNearestNbrOf:pSpace]) {
+                    
+                    currSpace = tempBoard[item.locx][item.locy];
+                    tempSpace = tempBoard[i][j];
+                    
+                    if(tempSpace.player == notAssigned && currSpace.value > 1) {
+                        
+                        value = (int)((float)item.value/2.0);
+                        
+                        currSpace.value = value;
+                        tempSpace.value = value;
+                        tempSpace.player = player2;
+                        
+                        tempWeight = [self calcP2Weight:tempBoard : p1Val];
+
+                        if(niter > 0)
+                            tempWeight += [self iteratePlayer2:tempBoard :p2Val+pieceInc :p1Val+pieceInc :niter-1];
+
+                        if(tempWeight > weight) weight = tempWeight;
+                        
+                        [self copyTempBoard:tempBoard :currBoard];
+                    }
+                    
+                    else if(tempSpace.player != notAssigned) {
+                        
+                        if(tempSpace.player == player1) {
+                            
+                            if(item.value > tempSpace.value) {
+                                
+                                currSpace.player = notAssigned;
+                                tempSpace.value = currSpace.value;// - tempSpace.value;
+                                tempSpace.player = player2;
+                                
+                                tempWeight = 0;
+                                
+                                tempWeight = [self calcP2Weight:tempBoard : p1Val];
+                                
+                                if(niter > 0)
+                                    tempWeight += [self iteratePlayer2:tempBoard :p2Val+pieceInc :p1Val+pieceInc :niter-1];
+                                
+                                if(tempWeight > weight) weight = tempWeight;
+                                
+                                [self copyTempBoard:tempBoard :currBoard];
+                            }
+                        }
+                        else {
+                            
+                            currSpace.player = notAssigned;
+                            tempSpace.value += currSpace.value;
+                            tempSpace.player = player2;
+                            
+                            tempWeight = [self calcP2Weight:tempBoard : p1Val];
+                            
+                            if(niter > 0)
+                                tempWeight += [self iteratePlayer2:tempBoard :p2Val+pieceInc :p1Val+pieceInc :niter-1];
+                
+                            if(tempWeight > weight) weight = tempWeight;
+                            
+                            [self copyTempBoard:tempBoard :currBoard];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    return weight;
+}
+
+- (double)player1Moves: (NSMutableArray*) currBoard : (int)p1Val {
 
     NSMutableArray *tempBoard = [self newTempBoard];
     
     NSMutableSet *p1Spaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
     NSMutableSet *computerSpaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy];
 
-    float tempWeight, weight = 0;
+    double tempWeight, weight = 1.0e-10;
     
     MinSpace *tempSpace, *currSpace;
     
@@ -257,11 +436,11 @@
                         tempSpace.player = player1;
                         tempSpace.value = p1Val;
                         
-                        tempWeight = [self calcP1Weight:tempBoard :0 :i :0 :NO];
+                        tempWeight = [self calcP1Weight:tempBoard :p1Val];
                
-                        tempWeight += (1.0/p1Val)*FLOAT_FACT;
+                        tempWeight -= (1.0/p1Val)*FLOAT_FACT;
                         
-                        if(tempWeight < weight) weight = tempWeight;
+                        if(tempWeight > weight) weight = tempWeight;
                         
                         [self copyTempBoard:tempBoard :currBoard];
                     }
@@ -286,13 +465,14 @@
                     if(tempSpace.player == notAssigned && currSpace.value > 1) {
                         
                         value = (int)((float)item.value/2.0);
+                        
                         currSpace.value = value;
                         tempSpace.value = value;
                         tempSpace.player = player1;
                        
-                        tempWeight = [self calcP1Weight:tempBoard :0 :i :0 :NO];
+                        tempWeight = [self calcP1Weight:tempBoard :p1Val];
                         
-                        if(tempWeight < weight) weight = tempWeight;
+                        if(tempWeight > weight) weight = tempWeight;
                         
                         [self copyTempBoard:tempBoard :currBoard];
                     }
@@ -304,12 +484,12 @@
                             if(item.value > tempSpace.value) {
                                 
                                 currSpace.player = notAssigned;
-                                tempSpace.value = currSpace.value - tempSpace.value;
+                                tempSpace.value = currSpace.value;// - tempSpace.value;
                                 tempSpace.player = player1;
                                 
-                                tempWeight = [self calcP1Weight:tempBoard :N_ITER :i :0 :NO];
+                                tempWeight = [self calcP1Weight:tempBoard :p1Val];
                                 
-                                if(tempWeight < weight) weight = tempWeight;
+                                if(tempWeight > weight) weight = tempWeight;
                                 
                                 [self copyTempBoard:tempBoard :currBoard];
                             }
@@ -320,9 +500,9 @@
                             tempSpace.value += currSpace.value;
                             tempSpace.player = player1;
                             
-                            tempWeight = [self calcP1Weight:tempBoard :N_ITER :i :0 :NO];
+                            tempWeight = [self calcP1Weight:tempBoard :p1Val];
                             
-                            if(tempWeight < weight) weight = tempWeight;
+                            if(tempWeight > weight) weight = tempWeight;
                             
                             [self copyTempBoard:tempBoard :currBoard];
                         }
@@ -350,31 +530,6 @@
     }
 }
 
-- (float)calcBoardMetric: (NSMutableSet*)p1Spaces : (NSMutableSet*)compSpaces {
-
-    float metric = 0;
-    
-    uint nP1Spaces = (uint)[p1Spaces count];
-    uint nCompSpaces = (uint)[compSpaces count];
-    
-    int p1Total = [self scoreOfMinSpaceSet:p1Spaces];
-    int compTotal = [self scoreOfMinSpaceSet:compSpaces];
-    
-    int scoreDiff = compTotal - p1Total;
-    int pieceDiff = nCompSpaces - nP1Spaces;
-    
-   // float avgDiff = (float)compTotal/(float)nCompSpaces - (float)p1Total/(float)nP1Spaces;
-    
-    metric = (float)(POINT_DIFF_FACT*scoreDiff) + ([self stdDev:p1Spaces] - [self stdDev:compSpaces])*SD_FACT + (float)(NUM_DIFF_FACT*pieceDiff); // + AVG_DIFF_FACT*avgDiff;
-    
-    if(fabs(metric) > 20000) {
-        NSLog(@"Shit");
-    }
-   // metric = (float)(POINT_DIFF_FACT*scoreDiff) + AVG_DIFF_FACT*avgDiff;
-    
-    return metric;
-}
-
 - (float)stdDev: (NSMutableSet*)pSpaces {
  
     float val, xsq=0, xave=0;
@@ -390,6 +545,23 @@
     xave /= nspaces;
     
     return sqrt(xsq/(float)nspaces + xave*xave);
+}
+
+- (float)distWeight : (NSMutableSet*)playerSpaces : (Player)player {
+
+    float weight = 0;
+    
+    if(player == player1) {
+        
+        for(MinSpace* item in playerSpaces)
+            weight += item.locx*item.value;
+    }
+    else {
+        for(MinSpace* item in playerSpaces)
+            weight += (dimx - 1 - item.locx)*item.value;
+    }
+    
+    return weight;
 }
 
 - (int)scoreOfMinSpaceSet: (NSMutableSet*)minSet {

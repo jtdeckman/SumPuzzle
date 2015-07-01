@@ -430,5 +430,11 @@
     return -1;
 }
 
+- (void)deconstruct {
+
+    spaces = nil;
+    player1Spaces = nil;
+    player2Spaces = nil;
+}
 
 @end

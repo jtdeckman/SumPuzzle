@@ -80,6 +80,7 @@
             }
         }
     }
+    
     else if(gameState == gameMenu) {
         
         if(touch.view != menu) {
@@ -93,7 +94,14 @@
             }
             else if([self isMenuBarItem:location :menu.nwGameLabel.frame]) {
                 menu.hidden = YES;
-                [board clearBoard];
+              
+                [board deconstruct];
+                [computer deconstruct];
+                
+                board = nil;
+                computer = nil;
+                
+                [self setUpViewController];
                 [self setUpGamePlay];
             }
         }
@@ -179,7 +187,7 @@
                         [self switchPlayers];
                     }
                     else if(space.player != currentPlayer && selectedPiece.value > space.value) {
-                        int newVal = selectedPiece.value - space.value;//- space.value;
+                        int newVal = selectedPiece.value;// - space.value;
                         [board convertPiece:space :newVal :[self getColorForPlayer] :currentPlayer];
                         [board removePiece:selectedPiece];
                         [self updateCurrentPlayer:NO];
@@ -267,7 +275,6 @@
     [self changeTileBackground:floatPiece];
     
     [floatPiece setFrame:frm];
-    
 }
 
 - (void)setUpGamePlay {
@@ -279,11 +286,9 @@
     currentPlayer = player1;
     
     [board addPiece:0 :0 :startValue : player1 : p1Color];
- //   [board addPiece:0 :dimy/2-1 :startValue : player1 : p1Color];
     [board addPiece:0 :dimy-1 :startValue : player1 : p1Color];
     
     [board addPiece:dimx-1 :0 :startValue : player2 : p2Color];
-  //  [board addPiece:dimx-1 :dimy/2 :startValue : player2 : p2Color];
     [board addPiece:dimx-1 :dimy-1 :startValue : player2 : p2Color];
     
     nextValueP1 = tileValue;
@@ -301,7 +306,7 @@
     
     computer = [[AI alloc] init];
     
-    [computer setUpAI:board.spaces :board.player1Spaces :board.player2Spaces :dimx :dimy];
+    [computer setUpAI:board.spaces :board.player1Spaces :board.player2Spaces :dimx :dimy : tileInc];
 }
 
 - (void)setUpBoard:(CGFloat)offset {
@@ -410,7 +415,7 @@
             
             if(moveTo.player == player1) {
                
-                int newVal = moveFrom.value - moveTo.value;
+                int newVal = moveFrom.value;// - moveTo.value;
              //   int newVal = (int)((float)moveFrom.value);///2.0); //- space.value;
                 
             //    moveFrom.value = newVal;

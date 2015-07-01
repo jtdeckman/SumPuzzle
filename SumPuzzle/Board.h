@@ -61,5 +61,7 @@
 
 - (int)pointsForPlayer: (Player)player;
 
+- (void)deconstruct;
+
 @end
 

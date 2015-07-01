@@ -73,7 +73,7 @@
     BOOL computerPlayer;
 }
 
-@property (nonatomic, strong) Board *board;
+@property (nonatomic) Board *board;
 @property (nonatomic, strong) AI *computer;
 
 - (void)runLoop;

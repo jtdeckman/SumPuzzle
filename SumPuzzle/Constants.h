@@ -38,7 +38,7 @@
 #define POINT_DIFF_FACT 10
 #define NUM_DIFF_FACT 25
 #define FLOAT_FACT 5000
-#define DIST_WEIGHT 10.0
+#define DIST_WEIGHT 1.0
 #define SD_FACT 25
 
 typedef struct {
