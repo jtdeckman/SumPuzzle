@@ -187,7 +187,11 @@
                         [self switchPlayers];
                     }
                     else if(space.player != currentPlayer && selectedPiece.value > space.value) {
-                        int newVal = selectedPiece.value;// - space.value;
+#ifdef DIFF_MODE
+                        int newVal = selectedPiece.value - space.value/2.0;
+#else
+                        int newVal = selectedPiece.value;
+#endif
                         [board convertPiece:space :newVal :[self getColorForPlayer] :currentPlayer];
                         [board removePiece:selectedPiece];
                         [self updateCurrentPlayer:NO];
@@ -414,12 +418,12 @@
         else {
             
             if(moveTo.player == player1) {
-               
-                int newVal = moveFrom.value;// - moveTo.value;
-             //   int newVal = (int)((float)moveFrom.value);///2.0); //- space.value;
-                
-            //    moveFrom.value = newVal;
-            //    moveFrom.piece.text = [NSString stringWithFormat:@"%d", newVal];
+
+#ifdef DIFF_MODE
+                int newVal = moveFrom.value - moveTo.value/2.0;
+#else
+                int newVal = moveFrom.value;
+#endif
                 
                 [board convertPiece:moveTo :newVal :[self getColorForPlayer] :player2];
                 [board removePiece:moveFrom];
@@ -431,10 +435,7 @@
             }
             else {
                 
-                int newVal = (int)((float)moveFrom.value);///2.0); //- space.value;
-                
-             //   moveFrom.value = newVal;
-             //   moveFrom.piece.text = [NSString stringWithFormat:@"%d", newVal];
+                int newVal = (int)((float)moveFrom.value);
                 
                 [board removePiece:moveFrom];
                 
@@ -593,7 +594,7 @@
     self.view.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
     
     p1Img = [UIImage imageNamed:@"blueSquare.png"];
-    p2Img = [UIImage imageNamed:@"redSquare.png"];
+    p2Img = [UIImage imageNamed:@"orangeSquare.png"];
     
     [self loadData];
     [self setUpColors];
@@ -753,9 +754,13 @@
 
 - (void)setUpColors {
     
-    topColor.red = 0.8;
-    topColor.green = 0.75;
-    topColor.blue = 0.65;
+  //  topColor.red = 0.8;
+  //  topColor.green = 0.75;
+  //  topColor.blue = 0.65;
+    
+    topColor.red = 0.2;
+    topColor.green = 0.4;
+    topColor.blue = 0.5;
     
  //   botColor.red = 0.25;
  //   botColor.green = 0.55;
@@ -783,9 +788,9 @@
     //  p1Color.green = 0.3;
     //  p1Color.blue = 0.8;
     
-    p2Color.red = 0.8;
-    p2Color.green = 0.2;
-    p2Color.blue = 0.2;
+    p2Color.red = 1.0;
+    p2Color.green = 0.6;
+    p2Color.blue = 0.0;
     
     tileColor.red = 0.4;
     tileColor.green = 0.4;

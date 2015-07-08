@@ -123,10 +123,16 @@
                             if(item.value > tempSpace.value) {
                                 
                                 currSpace.player = notAssigned;
-                                tempSpace.value = currSpace.value;// - tempSpace.value;
+#ifdef DIFF_MODE
+                                tempSpace.value = currSpace.value - tempSpace.value/2.0;
+#else
+                                tempSpace.value = currSpace.value;
+#endif
                                 tempSpace.player = player2;
                         
                                 currentMove.rank = [self calcWeight:tempBoard :N_ITER :i :p1FltPieceVal : compFltPieceVal :YES];
+                                
+                                currentMove.rank += tempSpace.value*OVERTAKE_FACT;
                                 
                                 [moves addObject:currentMove];
                             }
@@ -266,7 +272,7 @@
     
     int scoreDiff = p1Total -  compTotal;
     
-    metric = (float)(POINT_DIFF_FACT*scoreDiff) + ([self stdDev:compSpaces] - [self stdDev:p1Spaces])*SD_FACT + [self distWeight:p1Spaces :player1]*DIST_WEIGHT;
+    metric = (float)(POINT_DIFF_FACT*scoreDiff) + ([self stdDev:compSpaces] - [self stdDev:p1Spaces])*SD_FACT + [self distWeight:p1Spaces :player1]*DIST_WEIGHT*10;
     
     return metric;
 }
@@ -361,12 +367,18 @@
                             if(item.value > tempSpace.value) {
                                 
                                 currSpace.player = notAssigned;
-                                tempSpace.value = currSpace.value;// - tempSpace.value;
+#ifdef DIFF_MODE
+                                tempSpace.value = currSpace.value - tempSpace.value/2.0;
+#else
+                                tempSpace.value = currSpace.value;
+#endif
                                 tempSpace.player = player2;
                                 
                                 tempWeight = 0;
                                 
                                 tempWeight = [self calcP2Weight:tempBoard : p1Val];
+                                
+                                tempWeight += tempSpace.value*OVERTAKE_FACT;
                                 
                                 if(niter > 0)
                                     tempWeight += [self iteratePlayer2:tempBoard :p2Val+pieceInc :p1Val+pieceInc :niter-1];
@@ -484,10 +496,16 @@
                             if(item.value > tempSpace.value) {
                                 
                                 currSpace.player = notAssigned;
-                                tempSpace.value = currSpace.value;// - tempSpace.value;
+#ifdef DIFF_MODE
+                                tempSpace.value = currSpace.value - tempSpace.value/2.0;
+#else
+                                tempSpace.value = currSpace.value;
+#endif
                                 tempSpace.player = player1;
                                 
                                 tempWeight = [self calcP1Weight:tempBoard :p1Val];
+                                
+                                tempWeight += tempSpace.value*OVERTAKE_FACT;
                                 
                                 if(tempWeight > weight) weight = tempWeight;
                                 

@@ -40,7 +40,7 @@
     neighbors = [[NSMutableSet alloc] initWithCapacity:10];
     
     p1Img = [UIImage imageNamed:@"blueSquare.png"];
-    p2Img = [UIImage imageNamed:@"redSquare.png"];
+    p2Img = [UIImage imageNamed:@"orangeSquare.png"];
     
 }
 
