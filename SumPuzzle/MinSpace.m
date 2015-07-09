@@ -10,6 +10,25 @@
 
 @implementation MinSpace
 
-@synthesize locx, locy, value, player;
+@synthesize iind, jind, value, player;
 
+@synthesize nbrs;
+
+- (void)addNeighborsFromSpaces: (NSMutableSet*)spaces {
+
+    nbrs = [[NSMutableSet alloc] initWithCapacity:4];
+    
+    for(Space* item in spaces) {
+        
+        SubSpace* newSpc = [[SubSpace alloc] init];
+        
+        newSpc.iind = item.iind;
+        newSpc.jind = item.jind;
+        newSpc.value = item.value;
+        newSpc.player = item.player;
+        
+        [nbrs addObject:newSpc];
+    }
+}
+   
 @end

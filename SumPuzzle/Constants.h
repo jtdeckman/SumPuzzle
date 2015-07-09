@@ -74,6 +74,15 @@ typedef enum : NSUInteger {
 } PlaceMode;
 
 typedef enum : NSUInteger {
+  
+    placeMove,
+    splitMove,
+    addMove,
+    overtakeMove
+    
+} MoveType;
+
+typedef enum : NSUInteger {
     
     notAssigned,
     player1,
@@ -89,6 +98,6 @@ typedef struct {
     
     Player player;
     
-} boardSpace;
+} boardSpace; 
 
 #endif

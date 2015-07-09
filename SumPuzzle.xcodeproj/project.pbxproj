@@ -28,6 +28,8 @@
 		A8A51E381B2219D500C90315 /* blueSquare.png in Resources */ = {isa = PBXBuildFile; fileRef = A8A51E371B2219D500C90315 /* blueSquare.png */; };
 		A8A51E3A1B2219DA00C90315 /* redSquare.png in Resources */ = {isa = PBXBuildFile; fileRef = A8A51E391B2219DA00C90315 /* redSquare.png */; };
 		A8A51E3C1B221BCE00C90315 /* p1square.png in Resources */ = {isa = PBXBuildFile; fileRef = A8A51E3B1B221BCE00C90315 /* p1square.png */; };
+		A8DCF10E1B4EC15D0042885D /* AINew.m in Sources */ = {isa = PBXBuildFile; fileRef = A8DCF10D1B4EC15D0042885D /* AINew.m */; };
+		A8DCF1111B4EC55F0042885D /* SubSpace.m in Sources */ = {isa = PBXBuildFile; fileRef = A8DCF1101B4EC55F0042885D /* SubSpace.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +80,10 @@
 		A8A51E371B2219D500C90315 /* blueSquare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueSquare.png; sourceTree = "<group>"; };
 		A8A51E391B2219DA00C90315 /* redSquare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redSquare.png; sourceTree = "<group>"; };
 		A8A51E3B1B221BCE00C90315 /* p1square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = p1square.png; sourceTree = "<group>"; };
+		A8DCF10C1B4EC15D0042885D /* AINew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AINew.h; sourceTree = "<group>"; };
+		A8DCF10D1B4EC15D0042885D /* AINew.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AINew.m; sourceTree = "<group>"; };
+		A8DCF10F1B4EC55F0042885D /* SubSpace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubSpace.h; sourceTree = "<group>"; };
+		A8DCF1101B4EC55F0042885D /* SubSpace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubSpace.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +131,8 @@
 				A81902591B0C13EC00DCD8CB /* ViewController.m */,
 				A819025B1B0C13EC00DCD8CB /* Main.storyboard */,
 				A819027B1B0C159700DCD8CB /* Constants.h */,
+				A8DCF10F1B4EC55F0042885D /* SubSpace.h */,
+				A8DCF1101B4EC55F0042885D /* SubSpace.m */,
 				A81902771B0C148900DCD8CB /* BarView.h */,
 				A81902781B0C148900DCD8CB /* BarView.m */,
 				A819027C1B0C16D900DCD8CB /* Board.h */,
@@ -135,6 +143,8 @@
 				A81902891B0C19A000DCD8CB /* BoardView.m */,
 				A8A51E281B1A663100C90315 /* MenuView.h */,
 				A8A51E291B1A663100C90315 /* MenuView.m */,
+				A8DCF10C1B4EC15D0042885D /* AINew.h */,
+				A8DCF10D1B4EC15D0042885D /* AINew.m */,
 				A81089811B25F77600FB880F /* AI.h */,
 				A81089821B25F77600FB880F /* AI.m */,
 				A810898A1B29F1D300FB880F /* Move.h */,
@@ -287,6 +297,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A81089891B29E20000FB880F /* MinSpace.m in Sources */,
+				A8DCF1111B4EC55F0042885D /* SubSpace.m in Sources */,
 				A81902811B0C177400DCD8CB /* Space.m in Sources */,
 				A81902791B0C148900DCD8CB /* BarView.m in Sources */,
 				A819025A1B0C13EC00DCD8CB /* ViewController.m in Sources */,
@@ -298,6 +309,7 @@
 				A81089831B25F77600FB880F /* AI.m in Sources */,
 				A81089861B274F2300FB880F /* TempBoard.m in Sources */,
 				A819028A1B0C19A000DCD8CB /* BoardView.m in Sources */,
+				A8DCF10E1B4EC15D0042885D /* AINew.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

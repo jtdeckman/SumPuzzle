@@ -11,7 +11,7 @@
 
 @implementation AI
 
--(void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy : (int)pInc {
+/*-(void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy : (int)pInc {
 
     dimx = dx;
     dimy = dy;
@@ -647,6 +647,6 @@
     }
     
     return newBoard;
-}
+} */
 
 @end

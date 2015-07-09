@@ -308,7 +308,7 @@
     player1PntsLabel.text = [NSString stringWithFormat:@"%d", p1PointsOnBoard];
     player2PntsLabel.text = [NSString stringWithFormat:@"%d", p2PointsOnBoard];
     
-    computer = [[AI alloc] init];
+    computer = [[AINew alloc] init];
     
     [computer setUpAI:board.spaces :board.player1Spaces :board.player2Spaces :dimx :dimy : tileInc];
 }
