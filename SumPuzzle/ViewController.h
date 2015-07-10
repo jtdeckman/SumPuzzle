@@ -50,8 +50,10 @@
     int p2PointsOnBoard;
     
     UILabel *nextTile;
+    UILabel *p2NextTile;
     UILabel *playerLabel;
     UILabel *floatPiece;
+    
     UILabel *player1PntsLabel;
     UILabel *player2PntsLabel;
     
@@ -69,6 +71,7 @@
     Player currentPlayer;
     
     CGRect nextTileLoc;
+    CGRect p2NextTileLoc;
     
     BOOL computerPlayer;
 }

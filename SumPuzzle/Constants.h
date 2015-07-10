@@ -37,7 +37,7 @@
 #define AVG_DIFF_FACT 0
 #define POINT_DIFF_FACT 10
 #define NUM_DIFF_FACT 25
-#define FLOAT_FACT 5000
+#define FLOAT_FACT 100
 #define DIST_WEIGHT 1.0
 #define SD_FACT 1.0
 #define OVERTAKE_FACT 50

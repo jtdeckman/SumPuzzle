@@ -131,8 +131,14 @@
             frm.origin.x = location.x;
             frm.origin.y = location.y + boardView.frame.origin.y;
             
-            frm.size = nextTile.frame.size;
-            [nextTile setFrame:frm];
+            if(currentPlayer == player1) {
+                frm.size = nextTile.frame.size;
+                [nextTile setFrame:frm];
+            }
+            else {
+                frm.size = p2NextTile.frame.size;
+                [p2NextTile setFrame:frm];
+            }
         }
     }
 }
@@ -150,8 +156,14 @@
         
             if(!space.isOccupied && [board nbrNearestOccupied:space : currentPlayer] > 0)
                 [self addPiece:space];
+            
             else {
-                [nextTile setFrame:nextTileLoc];
+                
+                if(currentPlayer == player1)
+                    [nextTile setFrame:nextTileLoc];
+                else
+                    [p2NextTile setFrame:p2NextTileLoc];
+                
                 placeMode = freeState;
             }
         
@@ -214,6 +226,7 @@
     [self updateCurrentPlayer:YES];
     
     [nextTile setFrame:nextTileLoc];
+    [p2NextTile setFrame:p2NextTileLoc];
     
     [self switchPlayers];
 }
@@ -233,9 +246,19 @@
 
 - (bool)didTouchAddPiece: (CGPoint)crd {
     
-    if(crd.x >= nextTile.frame.origin.x && crd.x <= (nextTile.frame.origin.x + nextTile.frame.size.width)) {
+    if(currentPlayer == player1) {
+        if(crd.x >= nextTile.frame.origin.x && crd.x <= (nextTile.frame.origin.x + nextTile.frame.size.width)) {
     
-        if((crd.y + bottomBar.frame.origin.y) >= nextTile.frame.origin.y && (crd.y + bottomBar.frame.origin.y) <= (nextTile.frame.origin.y + nextTile.frame.size.height)) return YES;
+            if((crd.y + bottomBar.frame.origin.y) >= nextTile.frame.origin.y && (crd.y + bottomBar.frame.origin.y) <= (nextTile.frame.origin.y + nextTile.frame.size.height)) return YES;
+        }
+    }
+    
+    else {
+        if(crd.x >= p2NextTile.frame.origin.x && crd.x <= (p2NextTile.frame.origin.x + p2NextTile.frame.size.width)) {
+            
+            if((crd.y + bottomBar.frame.origin.y) >= p2NextTile.frame.origin.y && (crd.y + bottomBar.frame.origin.y) <= (p2NextTile.frame.origin.y + p2NextTile.frame.size.height)) return YES;
+        }
+
     }
     
     return NO;
@@ -276,7 +299,9 @@
     nextValueP1 = tileValue;
     nextValueP2 = tileValue;
     
-    [self changeNextTileForPlayer];
+   // [self changeNextTileForPlayer];
+    
+    [self upDateNextTiles];
     
     playerLabel.text = [NSString stringWithFormat:@"Player 1"];
     
@@ -344,7 +369,8 @@
     }
     
     [self upDatePoints];
-    [self changeNextTileForPlayer];
+  //  [self changeNextTileForPlayer];
+    [self upDateNextTiles];
     
     selectedPiece = nil;
     
@@ -442,8 +468,8 @@
     
     Space *space = [board getSpaceForIndices:0 :0];
     
-    viewFrame.origin.x = 0.5*self.view.frame.size.width - space.spaceFrame.size.width/2.0;
-   // viewFrame.origin.y = 0.85*self.view.frame.size.height;
+   // viewFrame.origin.x = 0.5*self.view.frame.size.width - space.spaceFrame.size.width/2.0;
+    viewFrame.origin.x = 0.1*bottomBar.frame.size.width;// - space.spaceFrame.size.width/2.0;
     viewFrame.size.width = space.spaceFrame.size.width;
     viewFrame.size.height = space.spaceFrame.size.height;
     viewFrame.origin.y = bottomBar.frame.origin.y + bottomBar.frame.size.height/2.0 -viewFrame.size.height/2.0;
@@ -456,17 +482,49 @@
     nextTile.clipsToBounds = YES;
  
     nextTile.backgroundColor = [UIColor colorWithPatternImage:p1Img];
-   // nextTile.layer.borderColor = [[UIColor whiteColor] CGColor];
-  //  nextTile.layer.borderWidth = 2.0f;
     nextTile.textColor = [UIColor whiteColor];
     
     [nextTile setTextAlignment:NSTextAlignmentCenter];
     [nextTile setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
  
-    [self changeTileBackground:nextTile];
+    UIImage *img = p1Img;
+    
+    UIGraphicsBeginImageContext(imgSize);
+    [img drawInRect:CGRectMake(0,0,imgSize.width,imgSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    nextTile.backgroundColor = [UIColor colorWithPatternImage:newImage];
     
     [self.view addSubview:nextTile];
     
+ // Player 2 next tile
+    
+    viewFrame.origin.x = bottomBar.frame.size.width - (nextTileLoc.origin.x + nextTileLoc.size.width);
+    
+    p2NextTileLoc = viewFrame;
+    
+    p2NextTile = [[UILabel alloc] initWithFrame:viewFrame];
+    p2NextTile.hidden = NO;
+    p2NextTile.layer.cornerRadius = 3.0;
+    p2NextTile.clipsToBounds = YES;
+    
+    p2NextTile.backgroundColor = [UIColor colorWithPatternImage:p2Img];
+    p2NextTile.textColor = [UIColor whiteColor];
+    
+    [p2NextTile setTextAlignment:NSTextAlignmentCenter];
+    [p2NextTile setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
+   
+    img = p2Img;
+    
+    UIGraphicsBeginImageContext(imgSize);
+    [img drawInRect:CGRectMake(0,0,imgSize.width,imgSize.height)];
+    newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    p2NextTile.backgroundColor = [UIColor colorWithPatternImage:newImage];
+    
+    [self.view addSubview:p2NextTile];
     
     // Movable (floating) piece
     
@@ -483,11 +541,10 @@
     
     [self.view addSubview:floatPiece];
     
-    
     // Menu bar
     
-    viewFrame.origin.x = 0.1*bottomBar.frame.size.width;
     viewFrame.size.width = 0.65*viewFrame.size.width;
+    viewFrame.origin.x = bottomBar.frame.size.width/2.0 - viewFrame.size.width/2.0;
     viewFrame.size.height = 0.65*viewFrame.size.height;
     
     viewFrame.origin.y = bottomBar.frame.origin.y + bottomBar.frame.size.height/2.0 -viewFrame.size.height/2.0;
@@ -672,7 +729,15 @@
         nextValueP2 = tileValue;
 }
 
+- (void)upDateNextTiles {
+
+    nextTile.text = [NSString stringWithFormat:@"%d",nextValueP1];
+    p2NextTile.text = [NSString stringWithFormat:@"%d",nextValueP2];
+
+}
+
 - (void)changeNextTileForPlayer {
+    
     
     if(currentPlayer == player1)
         nextTile.text = [NSString stringWithFormat:@"%d",nextValueP1];
@@ -727,7 +792,6 @@
     UIGraphicsEndImageContext();
     
     tile.backgroundColor = [UIColor colorWithPatternImage:newImage];
-
 }
 
 - (void)setUpColors {
