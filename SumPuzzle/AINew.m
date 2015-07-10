@@ -11,7 +11,9 @@
 
 @implementation AINew
 
--(void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy : (int)pInc {
+@synthesize captureFlagMode;
+
+-(void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy : (int)pInc : (BOOL)cfm {
     
     dimx = dx;
     dimy = dy;
@@ -22,12 +24,16 @@
     player2Spaces = p2s;
     
     pieceInc = pInc;
+    
+    captureFlagMode = cfm;
 }
 
 - (void)findSpaces : (Move*)compMove : (int)p1FltPieceVal : (int)compFltPieceVal {
     
+    NSMutableSet *tempP2Spaces = [[NSMutableSet alloc] initWithSet:player2Spaces];
+    
     Move *bestMove = [[Move alloc] init];
-
+    
     SubSpace *origSpace = [[SubSpace alloc] init];
    
     compMove.fromSpace = nil;
@@ -35,7 +41,7 @@
     
     bestMove.fromSpace = nil;
     bestMove.toSpace = nil;
-    bestMove.rank = -1.0e-30;
+    bestMove.rank = -1.0e30;
     
     double rank;
     
@@ -50,9 +56,9 @@
                 nbr.value = compFltPieceVal;
                 nbr.player = player2;
                 
-                [player2Spaces addObject:nbr];
+                [tempP2Spaces addObject:nbr];
                 
-                rank = [self calcWeight :N_ITER :nbr.iind :p1FltPieceVal : compFltPieceVal];
+                rank = [self calcWeight: tempP2Spaces :N_ITER :nbr.iind :p1FltPieceVal : compFltPieceVal];
                 
                 if(rank > bestMove.rank) {
                     bestMove.toSpace = nbr;
@@ -62,16 +68,19 @@
                 nbr.player = notAssigned;
                 nbr.value = 0;
                 
-                [player2Spaces removeObject:nbr];
+                [tempP2Spaces removeObject:nbr];
             }
         }
     }
-    
+ 
+    compMove.fromSpace = bestMove.fromSpace;
+    compMove.toSpace = bestMove.toSpace;
 }
 
-- (double)calcWeight: (uint)niter : (uint)ival : (int)p1Val : (int)p2Val {
+- (double)calcWeight: (NSMutableSet*) p2spaces : (uint)niter : (uint)ival : (int)p1Val : (int)p2Val {
     
-    double weight = [self calcP2BoardMetric];
+    
+    double weight = [self calcP2BoardMetric: p2spaces : player1Spaces];
     
     if(niter > 0) {
         
@@ -80,18 +89,21 @@
     return weight;
 }
 
-- (double)calcP2BoardMetric {
+- (double)calcP2BoardMetric : (NSMutableSet*)p2spcs : (NSMutableSet*)p1spcs {
     
     double metric = 0;
     
-    int p1Total = [self scoreOfMinSpaceSet:player1Spaces];
-    int compTotal = [self scoreOfMinSpaceSet:player2Spaces];
+    int p1Total = [self scoreOfMinSpaceSet:p1spcs];
+    int compTotal = [self scoreOfMinSpaceSet:p2spcs];
     
     int scoreDiff = compTotal - p1Total;
     
-    double sd = [self stdDev:player2Spaces]*SD_FACT;
+    double sd = [self stdDev:p2spcs]*SD_FACT;
     
-    metric = (double)(POINT_DIFF_FACT*scoreDiff) - sd; //[self stdDev:player2Spaces]*SD_FACT;
+    metric = (double)(POINT_DIFF_FACT*scoreDiff) - sd;
+    
+    if(captureFlagMode)
+        metric += [self distWeight:p2spcs :player2]*DIST_WEIGHT;
     
     return metric;
 }
@@ -120,8 +132,26 @@
     }
     
     xave /= nspaces;
+    xsq /= nspaces;
     
-    return sqrt(xsq/(double)nspaces + xave*xave);
+    return sqrt(xsq - xave*xave);
+}
+
+- (double)distWeight : (NSMutableSet*)playerSpaces : (Player)player {
+    
+    float weight = 0;
+    
+    if(player == player1) {
+        
+        for(Space* item in playerSpaces)
+            weight += item.iind*item.value;
+    }
+    else {
+        for(Space* item in playerSpaces)
+            weight += (dimx - 1 - item.iind)*item.value;
+    }
+    
+    return weight;
 }
 
 @end

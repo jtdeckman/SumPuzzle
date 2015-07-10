@@ -198,28 +198,6 @@
                         [self switchPlayers];
                     }
                 }
-         /*       else if(space.isOccupied && [selectedPiece isNearestNearestNbrOf:space]) {
-                    if(space.player == currentPlayer && selectedPiece.value > 2) {
-                        int newVal = (int)((float)selectedPiece.value/2.0);
-                        selectedPiece.value = newVal;
-                        space.value += newVal;
-                        selectedPiece.piece.text = [NSString stringWithFormat:@"%d", selectedPiece.value];
-                        space.piece.text = [NSString stringWithFormat:@"%d", space.value];
-                        [self updateCurrentPlayer:NO];
-                        [self switchPlayers];
-                    }
-                    else if(space.player != currentPlayer && selectedPiece.value > space.value) {
-                        if(selectedPiece.value > space.value) {
-                            int newVal = (int)((float)selectedPiece.value/2.0); //- space.value;
-                            [board convertPiece:space :newVal :[self getColorForPlayer] :currentPlayer];
-                            selectedPiece.value = newVal;
-                            selectedPiece.piece.text = [NSString stringWithFormat:@"%d", selectedPiece.value];
-                            [self updateCurrentPlayer:NO];
-                            [self switchPlayers];
-                        }
-                    }
-                } */
-
             }
         
             placeMode = freeState;
@@ -310,7 +288,7 @@
     
     computer = [[AINew alloc] init];
     
-    [computer setUpAI:board.spaces :board.player1Spaces :board.player2Spaces :dimx :dimy : tileInc];
+    [computer setUpAI:board.spaces :board.player1Spaces :board.player2Spaces :dimx :dimy : tileInc : YES];
 }
 
 - (void)setUpBoard:(CGFloat)offset {
