@@ -45,31 +45,66 @@
     
     double rank;
     
- // Free Moves
-    
     for(Space* item in player2Spaces) {
         
         for(Space* nbr in item.nearestNbrs) {
         
+            [tempP2Spaces addObject:nbr];
+            
             if(nbr.player == notAssigned) {
-       
+                
+             // Free move
+                
                 nbr.value = compFltPieceVal;
                 nbr.player = player2;
                 
-                [tempP2Spaces addObject:nbr];
-                
                 rank = [self calcWeight: tempP2Spaces :N_ITER :nbr.iind :p1FltPieceVal : compFltPieceVal];
+                
+                NSLog(@"%f",rank);
                 
                 if(rank > bestMove.rank) {
                     bestMove.toSpace = nbr;
                     bestMove.rank = rank;
                 }
                 
+                
+             // Split move
+                
+                origSpace.value = item.value;
+                item.value = (int)(item.value/2.0);
+                
+                nbr.value = item.value;
+                nbr.player = player2;
+                
+                rank = [self calcWeight: tempP2Spaces :N_ITER :nbr.iind :p1FltPieceVal : compFltPieceVal];
+                
+                NSLog(@"%f",rank);
+                
+                if(rank > bestMove.rank) {
+                    bestMove.fromSpace = item;
+                    bestMove.toSpace = nbr;
+                    bestMove.rank = rank;
+                }
+
+                item.value = origSpace.value;
+                
                 nbr.player = notAssigned;
                 nbr.value = 0;
-                
-                [tempP2Spaces removeObject:nbr];
             }
+            
+            else if(nbr.player == player2) {
+                
+            }
+            
+            else if(nbr.player == player1) {
+                
+            }
+            
+            else {
+                
+            }
+            
+            [tempP2Spaces removeObject:nbr];
         }
     }
  
