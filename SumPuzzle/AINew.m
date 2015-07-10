@@ -26,129 +26,52 @@
 
 - (void)findSpaces : (Move*)compMove : (int)p1FltPieceVal : (int)compFltPieceVal {
     
-    NSMutableSet *p1Spaces, *p2Spaces;
-    NSMutableArray *moves;
-    
-    uint nspaces = dimx*dimy;
-    
-    Move *currentMove;
-    
-    uint nmoves = 2*dimx*dimy*(int)[player1Spaces count];;
+    Move *bestMove = [[Move alloc] init];
+
+    SubSpace *origSpace = [[SubSpace alloc] init];
    
     compMove.fromSpace = nil;
     compMove.toSpace = nil;
     
-    p1Spaces = [[NSMutableSet alloc] initWithCapacity:nspaces];
-    p2Spaces = [[NSMutableSet alloc] initWithCapacity:nspaces];
+    bestMove.fromSpace = nil;
+    bestMove.toSpace = nil;
+    bestMove.rank = -1.0e-30;
     
-    moves = [[NSMutableArray alloc] initWithCapacity:nmoves];
+    double rank;
     
-    for(Space* item in player1Spaces) {
-        
-        MinSpace* p1Spc = [[MinSpace alloc] init];
-        
-        p1Spc.iind = item.iind;
-        p1Spc.jind = item.jind;
-        
-        p1Spc.value = item.value;
-        p1Spc.player = item.player;
-        
-        [p1Spc addNeighborsFromSpaces:item.nearestNbrs];
-        
-        [p1Spaces addObject: p1Spc];
-    }
+ // Free Moves
     
     for(Space* item in player2Spaces) {
         
-        MinSpace* p2Spc = [[MinSpace alloc] init];
+        for(Space* nbr in item.nearestNbrs) {
         
-        p2Spc.iind = item.iind;
-        p2Spc.jind = item.jind;
-        
-        p2Spc.value = item.value;
-        p2Spc.player = item.player;
-        
-        [p2Spc addNeighborsFromSpaces:item.nearestNbrs];
-        
-        [p2Spaces addObject: p2Spc];
-    }
-
- // Free moves
-    
-    for(MinSpace* item in p2Spaces) {
-    
-        for(SubSpace* nbr in item.nbrs) {
-            
             if(nbr.player == notAssigned) {
+       
+                nbr.value = compFltPieceVal;
+                nbr.player = player2;
                 
-                MinSpace* minSpace = [[MinSpace alloc] init];
+                [player2Spaces addObject:nbr];
                 
-                minSpace.iind = nbr.iind;
-                minSpace.jind = nbr.jind;
+                rank = [self calcWeight :N_ITER :nbr.iind :p1FltPieceVal : compFltPieceVal];
                 
-                minSpace.value = compFltPieceVal;
+                if(rank > bestMove.rank) {
+                    bestMove.toSpace = nbr;
+                    bestMove.rank = rank;
+                }
                 
-                minSpace.player = player2;
+                nbr.player = notAssigned;
+                nbr.value = 0;
                 
-                [self createEmptyNeighborsForMinSpace:minSpace];
-                
-                [self findNeighborsNearMinSpace:p1Spaces :p2Spaces :minSpace];
-                
-                [p2Spaces addObject:minSpace];
-                
-                currentMove = [[Move alloc] init];
-                currentMove.fromSpace = nil;
-                currentMove.toSpace = [self getSpaceForIndices:minSpace.iind : minSpace.jind];
-                currentMove.rank = [self calcWeight:p1Spaces : p2Spaces :N_ITER :minSpace.iind :p1FltPieceVal : compFltPieceVal];
-                
-                [moves addObject:currentMove];
-                
-                [p2Spaces removeObject:minSpace];
-                
+                [player2Spaces removeObject:nbr];
             }
         }
     }
     
-    if([moves count] > 0) {
-        
-        NSArray *sortedMoves;
-        
-        sortedMoves = [moves sortedArrayUsingComparator:^NSComparisonResult(id move1, id move2) {
-            
-            Move *m1 = (Move*)move1;
-            Move *m2 = (Move*)move2;
-            
-            if(m1.rank <= m2.rank) return YES;
-            
-            return NO;
-        }];
-        
-        int cnt = 1;
-        
-        Move *tempMove, *bestMove = sortedMoves[0];
-        
-        for(int i=1; i < [sortedMoves count]; i++) {
-            
-            tempMove = sortedMoves[i];
-            
-            if(tempMove.rank != bestMove.rank)
-                break;
-            else
-                ++cnt;
-        }
-        
-        if(cnt > 1)
-            bestMove = sortedMoves[rand() % cnt];
-        
-        compMove.rank = bestMove.rank;
-        compMove.fromSpace = bestMove.fromSpace;
-        compMove.toSpace = bestMove.toSpace;
-    }
 }
 
-- (double)calcWeight: (NSMutableSet*)p1Spcs : (NSMutableSet*)p2Spcs : (uint)niter : (uint)ival : (int)p1Val : (int)p2Val {
+- (double)calcWeight: (uint)niter : (uint)ival : (int)p1Val : (int)p2Val {
     
-    double weight = [self calcP2BoardMetric:p1Spcs :p2Spcs];
+    double weight = [self calcP2BoardMetric];
     
     if(niter > 0) {
         
@@ -157,137 +80,99 @@
     return weight;
 }
 
-- (double)calcP2BoardMetric: (NSMutableSet*)p1Spaces : (NSMutableSet*)compSpaces {
+- (double)calcP2BoardMetric {
     
     double metric = 0;
     
-    int p1Total = [self scoreOfMinSpaceSet:p1Spaces];
-    int compTotal = [self scoreOfMinSpaceSet:compSpaces];
+    int p1Total = [self scoreOfMinSpaceSet:player1Spaces];
+    int compTotal = [self scoreOfMinSpaceSet:player2Spaces];
     
     int scoreDiff = compTotal - p1Total;
     
-    metric = (float)(POINT_DIFF_FACT*scoreDiff);// + ([self stdDev:p1Spaces] - [self stdDev:compSpaces])*SD_FACT + [self distWeight:compSpaces :player2]*DIST_WEIGHT*5.0;
+    double sd = [self stdDev:player2Spaces]*SD_FACT;
+    
+    metric = (double)(POINT_DIFF_FACT*scoreDiff) - sd; //[self stdDev:player2Spaces]*SD_FACT;
     
     return metric;
 }
 
-- (void)findNeighborsNearMinSpace: (NSMutableSet*)p1Spcs : (NSMutableSet*)p2Spcs : (MinSpace*)minSpace {
-    
-    for(SubSpace* item in minSpace.nbrs) {
-        
-        for(MinSpace* nbrSpc in p1Spcs) {
-            
-            if((item.iind == nbrSpc.iind) && (item.jind == nbrSpc.jind)) {
-                item.value = nbrSpc.value;
-                item.player = nbrSpc.player;
-                
-                for(SubSpace* nbr in nbrSpc.nbrs) {
-                    
-                    if((nbr.iind == minSpace.iind) && (nbr.jind == minSpace.jind)) {
-                        
-                        nbr.value = minSpace.value;
-                        nbr.player = minSpace.player;
-                        break;
-                    }
-                }
-            }
-        }
-        
-        for(MinSpace* nbrSpc in p2Spcs) {
-            
-            if((item.iind == nbrSpc.iind) && (item.jind == nbrSpc.jind)) {
-                item.value = nbrSpc.value;
-                item.player = nbrSpc.player;
-                
-                for(SubSpace* nbr in nbrSpc.nbrs) {
-                    
-                    if((nbr.iind == minSpace.iind) && (nbr.jind == minSpace.jind)) {
-                        
-                        nbr.value = minSpace.value;
-                        nbr.player = minSpace.player;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-}
-
-- (void)createEmptyNeighborsForMinSpace: (MinSpace*)minSpace {
-
-    minSpace.nbrs = [[NSMutableSet alloc] initWithCapacity:4];
-    
-    int iind = minSpace.iind;
-    int jind = minSpace.jind;
-    
-    int inbr = iind-1;
-    int jnbr = jind;
-    
-    if(inbr > -1) {
-        SubSpace* newSpc = [[SubSpace alloc] init];
-        newSpc.iind = inbr;
-        newSpc.jind = jnbr;
-        newSpc.value = -10000;
-        newSpc.player = notAssigned;
-        
-        [minSpace.nbrs addObject:newSpc];
-    }
-    
-    inbr = iind+1;
-    
-    if(inbr < dimy) {
-        
-        SubSpace* newSpc = [[SubSpace alloc] init];
-        newSpc.iind = inbr;
-        newSpc.jind = jnbr;
-        newSpc.value = -10000;
-        newSpc.player = notAssigned;
-        
-        [minSpace.nbrs addObject:newSpc];
-    }
-   
-    
-    inbr = iind;
-    jnbr = jind-1;
-   
-    if(jnbr > -1) {
-        
-        SubSpace* newSpc = [[SubSpace alloc] init];
-        newSpc.iind = inbr;
-        newSpc.jind = jnbr;
-        newSpc.value = -10000;
-        newSpc.player = notAssigned;
-        
-        [minSpace.nbrs addObject:newSpc];
-    }
-    
-    jnbr = jind+1;
-    
-    if(jnbr < dimx) {
-        
-        SubSpace* newSpc = [[SubSpace alloc] init];
-        newSpc.iind = inbr;
-        newSpc.jind = jnbr;
-        newSpc.value = -10000;
-        newSpc.player = notAssigned;
-        
-        [minSpace.nbrs addObject:newSpc];
-    }
-}
 
 - (int)scoreOfMinSpaceSet: (NSMutableSet*)minSet {
     
     int score = 0;
     
-    for(MinSpace* item in minSet)
+    for(Space* item in minSet)
         score += item.value;
     
     return score;
 }
 
-- (void)copySets : (NSMutableSet*)p1Set : (NSMutableSet*)p2Set : (NSMutableSet*)newP1Set : (NSMutableSet*)newP2Set {
+- (double)stdDev: (NSMutableSet*)pSpaces {
     
+    double val, xsq=0, xave=0;
     
+    uint nspaces = (uint)[pSpaces count];
+    
+    for(Space* item in pSpaces) {
+        val = item.value;
+        xsq += val*val;
+        xave += val;
+    }
+    
+    xave /= nspaces;
+    
+    return sqrt(xsq/(double)nspaces + xave*xave);
 }
 
 @end
+
+
+
+
+
+
+
+
+
+/*   
+ // NSMutableArray *moves;
+ // uint nmoves = 2*dimx*dimy*(int)[player1Spaces count];
+ // moves = [[NSMutableArray alloc] initWithCapacity:nmoves];
+ 
+ 
+ if([moves count] > 0) {
+ 
+ NSArray *sortedMoves;
+ 
+ sortedMoves = [moves sortedArrayUsingComparator:^NSComparisonResult(id move1, id move2) {
+ 
+ Move *m1 = (Move*)move1;
+ Move *m2 = (Move*)move2;
+ 
+ if(m1.rank <= m2.rank) return YES;
+ 
+ return NO;
+ }];
+ 
+ int cnt = 1;
+ 
+ Move *tempMove, *bestMove = sortedMoves[0];
+ 
+ for(int i=1; i < [sortedMoves count]; i++) {
+ 
+ tempMove = sortedMoves[i];
+ 
+ if(tempMove.rank != bestMove.rank)
+ break;
+ else
+ ++cnt;
+ }
+ 
+ if(cnt > 1)
+ bestMove = sortedMoves[rand() % cnt];
+ 
+ compMove.rank = bestMove.rank;
+ compMove.fromSpace = bestMove.fromSpace;
+ compMove.toSpace = bestMove.toSpace;
+ } */
+
