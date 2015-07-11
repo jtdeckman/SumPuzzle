@@ -178,11 +178,18 @@
 
 - (double)calcWeight: (NSMutableSet*) p2spaces : (NSMutableSet*) p1Spaces : (uint)niter : (uint)ival : (int)p1Val : (int)p2Val {
     
+    SubSpace *moveFrom = [[SubSpace alloc] init];
+    SubSpace *moveTo = [[SubSpace alloc] init];
+    
     double weight = [self calcP2BoardMetric: p2spaces : p1Spaces];
+    
+    weight -= [self calcP1Weight:p1Spaces :p2spaces :moveFrom :moveTo :p1Val :p2Val];
     
     if(niter > 0) {
         
     }
+    
+    [self resetP1Spaces:p1Spaces :p2spaces :moveFrom :moveTo];
     
     return weight;
 }
@@ -206,6 +213,289 @@
     return metric;
 }
 
+- (double)calcP1BoardMetric : (NSMutableSet*)p2spcs : (NSMutableSet*)p1spcs {
+    
+    double metric = 0;
+    
+    int p1Total = [self scoreOfMinSpaceSet:p1spcs];
+    int compTotal = [self scoreOfMinSpaceSet:p2spcs];
+    
+    int scoreDiff = p1Total - compTotal;
+    
+    double sd = [self stdDev:p1spcs]*SD_FACT;
+    
+    metric = (double)(POINT_DIFF_FACT*scoreDiff) - sd;
+    
+    if(captureFlagMode)
+        metric += [self distWeight:p1spcs :player1]*DIST_WEIGHT;
+    
+    return metric;
+}
+
+- (double)calcP1Weight: (NSMutableSet*)p1Spaces : (NSMutableSet*)p2Spaces : (SubSpace*)moveFrom : (SubSpace*)moveTo : (int)p1Val : (int)p2Val {
+
+    NSMutableSet *newP1Spaces = [[NSMutableSet alloc] initWithSet:p1Spaces];
+    NSMutableSet *newP2Spaces = [[NSMutableSet alloc] initWithSet:p2Spaces];
+    
+    SubSpace *origSpace = [[SubSpace alloc] init];
+    SubSpace *nbrSpace = [[SubSpace alloc] init];
+    
+    double value, rank, weight = -1e30;
+    
+    moveFrom.space = nil;
+    moveTo.space = nil;
+    
+    moveFrom.player = player1;
+    
+    for(Space* item in p1Spaces) {
+        
+        for(Space* nbr in item.nearestNbrs) {
+            
+            if(nbr.player == notAssigned) {
+                
+                [newP1Spaces addObject:nbr];
+                
+                // Free move
+                
+                nbr.value = p1Val;
+                nbr.player = player1;
+                
+                rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
+                
+                rank -= (1.0/p1Val)*FLOAT_FACT;
+                
+                NSLog(@"%f",rank);
+                
+                if(rank > weight) {
+                    moveFrom.space = nil;
+                    moveTo.space = nbr;
+                    weight = rank;
+                }
+                
+                
+                // Split move
+                
+                origSpace.value = item.value;
+                item.value = (int)(item.value/2.0);
+                
+                nbr.value = item.value;
+                nbr.player = player1;
+                
+                rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
+                
+                NSLog(@"%f",rank);
+                
+                if(rank > weight) {
+                    moveFrom.space = item;
+                    moveTo.space = nbr;
+                    weight = rank;
+                }
+
+                item.value = origSpace.value;
+                
+                nbr.player = notAssigned;
+                nbr.value = 0;
+                
+                [newP1Spaces removeObject:nbr];
+            }
+            
+            else if(nbr.player == player1) {
+                
+                nbrSpace.value = nbr.value;
+                origSpace.value = item.value;
+                
+                nbr.value += item.value;
+                
+                item.value = 0;
+                item.player = notAssigned;
+                
+                [newP1Spaces removeObject:item];
+                
+                rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
+                
+                NSLog(@"%f",rank);
+                
+                if(rank > weight) {
+                    moveFrom.space = item;
+                    moveTo.space = nbr;
+                    weight = rank;
+                }
+                
+                item.value = origSpace.value;
+                item.player = player1;
+                
+                nbr.value = nbrSpace.value;
+                
+                [newP1Spaces addObject:item];
+            }
+            
+            else if(nbr.player == player2 && ((item.value - nbr.value) >= 2)) {
+                
+                nbrSpace.value = nbr.value;
+                origSpace.value = item.value;
+                
+                nbr.value = item.value - (float)(nbr.value)/2.0;
+                nbr.player = player1;
+                
+                item.value = 0;
+                item.player = notAssigned;
+                
+                [newP1Spaces addObject:nbr];
+                [newP1Spaces removeObject:item];
+                
+                [newP2Spaces removeObject:nbr];
+                
+                rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
+                
+                NSLog(@"%f",rank);
+                
+                if(rank > weight) {
+                    moveFrom.space = item;
+                    moveTo.space = nbr;
+                    weight = rank;
+                }
+                
+                nbr.value = nbrSpace.value;
+                nbr.player = player1;
+                
+                item.value = origSpace.value;
+                item.player = player2;
+                
+                [newP1Spaces addObject:item];
+                [newP1Spaces removeObject:nbr];
+                
+                [newP2Spaces addObject:nbr];
+            }
+            
+            else {
+                
+                
+            }
+        }
+    }
+
+ // Change board to reflect best move
+    
+    if(moveTo.space != nil) {
+        
+        if(moveFrom.space == nil) {
+            
+            moveTo.value = 0;
+            moveTo.player = notAssigned;
+            moveTo.space.value = p1Val;
+            moveTo.space.player = player1;
+            
+            [p1Spaces addObject:moveTo.space];
+        }
+        
+        else {
+        
+            moveFrom.value = moveFrom.space.value;
+            moveFrom.player = player1;
+            
+            if(moveTo.space.player == notAssigned) {
+                
+                moveTo.player = notAssigned;
+                moveTo.value = 0;
+                
+                value = (float)(moveFrom.space.value)/2.0;
+             
+                moveFrom.space.value = value;
+                moveTo.space.value = value;
+                
+                moveTo.space.player = player2;
+                
+                [p1Spaces addObject:moveTo.space];
+            }
+            
+            else if(moveTo.space.player == player1) {
+                
+                moveTo.value = moveTo.space.value;
+                moveTo.player = player1;
+                
+                moveTo.space.value += moveFrom.space.value;
+                
+                moveFrom.space.value = 0;
+                moveFrom.space.player = notAssigned;
+                
+                [p1Spaces removeObject:moveFrom.space];
+            }
+            
+            else if(moveTo.space.player == player2) {
+                
+                moveTo.value = moveTo.space.value;
+                moveTo.player = player2;
+                
+                moveTo.space.value = moveFrom.space.value - moveTo.space.value/2.0;
+                moveTo.space.player = player1;
+                
+                moveFrom.space.value = 0;
+                moveFrom.space.player = notAssigned;
+                
+                [p1Spaces removeObject:moveFrom.space];
+                [p1Spaces addObject:moveTo.space];
+                
+                [p2Spaces removeObject:moveTo.space];
+                
+            }
+            
+            else {
+                
+            }
+        }
+    }
+    
+    return weight;
+}
+
+- (void)resetP1Spaces : (NSMutableSet*)p1Spaces : (NSMutableSet*)p2Spaces : (SubSpace*)fromSpace : (SubSpace*)toSpace {
+    
+    if(toSpace.space != nil) {
+        
+        if(fromSpace.space == nil) {
+            
+            toSpace.space.value = 0;
+            toSpace.space.player = notAssigned;
+            
+            [p1Spaces removeObject:toSpace.space];
+        }
+        
+        else if(toSpace.player == notAssigned) {
+         
+            fromSpace.space.value = fromSpace.value;
+            fromSpace.space.player = player1;
+            
+            toSpace.space.value = 0;
+            toSpace.space.player = notAssigned;
+            
+            [p1Spaces removeObject:toSpace.space];
+        }
+        
+        else if(toSpace.player == player1) {
+            
+            fromSpace.space.value = fromSpace.value;
+            fromSpace.space.player = player1;
+            
+            [p1Spaces addObject:fromSpace.space];
+            
+            toSpace.space.value = toSpace.value;
+        }
+        
+        else if(toSpace.player == player2) {
+            
+            fromSpace.space.value = fromSpace.value;
+            fromSpace.space.player = player1;
+            
+            toSpace.space.value = toSpace.value;
+            toSpace.space.player = player2;
+            
+            [p1Spaces addObject:fromSpace.space];
+            [p1Spaces removeObject:toSpace.space];
+            
+            [p2Spaces addObject:toSpace.space];
+        }
+    }
+}
 
 - (int)scoreOfMinSpaceSet: (NSMutableSet*)minSet {
     

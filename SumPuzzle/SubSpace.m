@@ -11,5 +11,6 @@
 @implementation SubSpace
 
 @synthesize iind, jind, value, player;
+@synthesize space;
 
 @end
