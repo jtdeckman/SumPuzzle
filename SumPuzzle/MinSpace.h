@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "Constants.h"
-#import "Space.h"
-#import "SubSpace.h"
 
 @interface MinSpace : NSObject
 
@@ -22,7 +20,7 @@
 
 @property (nonatomic) NSMutableSet* nbrs;
 
-- (void)addNeighborsFromSpaces: (NSMutableSet*)spaces;
+- (void)initMinSpace;
 
 
 @end

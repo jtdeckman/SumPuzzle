@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Constants.h"
-#import "Space.h"
+#import "MinSpace.h"
 
 @interface SubSpace : NSObject {
      
@@ -27,6 +27,6 @@
 
 @property (nonatomic) Player player;
 
-@property (nonatomic) Space* space;
+@property (nonatomic) MinSpace* space;
 
 @end
