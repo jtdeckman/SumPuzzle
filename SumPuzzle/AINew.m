@@ -211,10 +211,10 @@
     
     [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val];
     
-    for(int i=0; i<3; i++) {
+    for(int i=0; i<4; i++) {
         
-        [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p2Val];
-        [self makeBestP2Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val];
+        [self makeBestP2Move:tempBoard :tempP1Spaces :tempP2Spaces :&p2Val];
+        [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val];
     }
     
     return [self calcP2BoardMetric: tempP1Spaces : tempP2Spaces];
@@ -230,9 +230,9 @@
     int scoreDiff = compTotal - p1Total;
     
     double sd = [self stdDev:p2spcs]*SD_FACT;
-    double wd = [self weightedDistance:p2spcs :p1spcs]*WD_FACT;
+   // double wd = [self weightedDistance:p2spcs :p1spcs]*WD_FACT;
     
-    metric = (double)(POINT_DIFF_FACT*scoreDiff) - sd + wd;
+    metric = (double)(POINT_DIFF_FACT*scoreDiff) - sd;// + wd;
     
     if(captureFlagMode)
         metric += [self distWeight:p2spcs :player2]*DIST_WEIGHT;
