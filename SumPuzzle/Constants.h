@@ -38,16 +38,16 @@
 // Weighting Factors
 
 #define AVG_DIFF_FACT 0
-#define POINT_DIFF_FACT 20
+#define POINT_DIFF_FACT 10
 #define NUM_DIFF_FACT 25
-#define FLOAT_FACT 100
+#define FLOAT_FACT 1000
 
 #define DIST_WEIGHT 0.1
 
-#define WD_FACT 1.0
+#define WD_FACT 0.1
 #define SD_FACT 1.0
 
-#define OVERTAKE_FACT 50
+#define OVERTAKE_FACT 0.1
 
 #define DIFF_MODE 1
 
