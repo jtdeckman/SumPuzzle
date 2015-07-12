@@ -46,11 +46,14 @@
     bestMove.toSpace = nil;
     bestMove.rank = -1.0e30;
     
+    int cnt = (int)[tempP1Spaces count];
+    
     double rank;
     
     for(Space* item in player2Spaces) {
         
         for(Space* nbr in item.nearestNbrs) {
+            
             
             if(nbr.player == notAssigned) {
                 
@@ -68,14 +71,18 @@
                 NSLog(@"%f",rank);
                 
                 if(rank > bestMove.rank) {
-                    bestMove.toSpace = nbr;
+                    bestMove.fromSpace = NULL;
+                    bestMove.toSpace = [self getSpaceForIndices:nbr.iind :nbr.jind];
                     bestMove.rank = rank;
                 }
                 
-                
+                if([tempP1Spaces count] != cnt) {
+                    NSLog(@"Fuck");
+                }
+
              // Split move
                 
-                if(item.value > 2) {
+                if(item.value > 1) {
                     
                     origSpace.value = item.value;
                     item.value = (int)(item.value/2.0);
@@ -83,13 +90,13 @@
                     nbr.value = item.value;
                     nbr.player = player2;
                 
-                    rank = [self calcWeight: tempP2Spaces :tempP1Spaces :N_ITER :p1FltPieceVal : compFltPieceVal];
+                    rank = [self calcWeight: tempP2Spaces :tempP1Spaces :N_ITER :p1FltPieceVal : compFltPieceVal+TILE_INC];
                 
                     NSLog(@"%f",rank);
                 
                     if(rank > bestMove.rank) {
-                        bestMove.fromSpace = item;
-                        bestMove.toSpace = nbr;
+                        bestMove.fromSpace = [self getSpaceForIndices:item.iind :item.jind];
+                        bestMove.toSpace = [self getSpaceForIndices:nbr.iind :nbr.jind];
                         bestMove.rank = rank;
                     }
 
@@ -99,6 +106,11 @@
                     nbr.value = 0;
                 
                     [tempP2Spaces removeObject:nbr];
+                    
+                    if([tempP1Spaces count] != cnt) {
+                        NSLog(@"Fuck");
+                    }
+
                 }
             }
             
@@ -114,13 +126,13 @@
                 
                 [tempP2Spaces removeObject:item];
                 
-                rank = [self calcWeight: tempP2Spaces :tempP1Spaces :N_ITER :p1FltPieceVal : compFltPieceVal];
+                rank = [self calcWeight: tempP2Spaces :tempP1Spaces :N_ITER :p1FltPieceVal : compFltPieceVal+TILE_INC];
                 
                 NSLog(@"%f",rank);
                 
                 if(rank > bestMove.rank) {
-                    bestMove.fromSpace = item;
-                    bestMove.toSpace = nbr;
+                    bestMove.fromSpace = [self getSpaceForIndices:item.iind :item.jind];
+                    bestMove.toSpace = [self getSpaceForIndices:nbr.iind :nbr.jind];
                     bestMove.rank = rank;
                 }
                 
@@ -130,6 +142,11 @@
                 nbr.value = nbrSpace.value;
                 
                 [tempP2Spaces addObject:item];
+                
+                if([tempP1Spaces count] != cnt) {
+                    NSLog(@"Fuck");
+                }
+
             }
             
             else if(nbr.player == player1 && ((item.value - nbr.value) >= 2)) {
@@ -148,13 +165,13 @@
                 
                 [tempP1Spaces removeObject:nbr];
                 
-                rank = [self calcWeight: tempP2Spaces :tempP1Spaces :N_ITER :p1FltPieceVal : compFltPieceVal];
+                rank = [self calcWeight: tempP2Spaces :tempP1Spaces :N_ITER :p1FltPieceVal : compFltPieceVal+TILE_INC];
                 
                 NSLog(@"%f",rank);
                 
                 if(rank > bestMove.rank) {
-                    bestMove.fromSpace = item;
-                    bestMove.toSpace = nbr;
+                    bestMove.fromSpace = [self getSpaceForIndices:item.iind :item.jind];
+                    bestMove.toSpace = [self getSpaceForIndices:nbr.iind :nbr.jind];
                     bestMove.rank = rank;
                 }
 
@@ -168,6 +185,11 @@
                 [tempP2Spaces removeObject:nbr];
                 
                 [tempP1Spaces addObject:nbr];
+                
+                if([tempP1Spaces count] != cnt) {
+                    NSLog(@"Fuck");
+                }
+
             }
             
             else {
@@ -187,16 +209,18 @@
     NSMutableSet *tempP1Spaces = [self setUpTempBoardAndPlayerSpaces:tempBoard :p1Spaces];
     NSMutableSet *tempP2Spaces = [self setUpTempBoardAndPlayerSpaces:tempBoard :p2Spaces];
     
+    [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val];
     
-    
-    if(niter > 0) {
+    for(int i=0; i<3; i++) {
         
+        [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p2Val];
+        [self makeBestP2Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val];
     }
     
-    return [self calcP2BoardMetric: tempP2Spaces : tempP1Spaces];
+    return [self calcP2BoardMetric: tempP1Spaces : tempP2Spaces];
 }
 
-- (double)calcP2BoardMetric : (NSMutableSet*)p2spcs : (NSMutableSet*)p1spcs {
+- (double)calcP2BoardMetric : (NSMutableSet*)p1spcs : (NSMutableSet*)p2spcs {
     
     double metric = 0;
     
@@ -206,8 +230,9 @@
     int scoreDiff = compTotal - p1Total;
     
     double sd = [self stdDev:p2spcs]*SD_FACT;
+    double wd = [self weightedDistance:p2spcs :p1spcs]*WD_FACT;
     
-    metric = (double)(POINT_DIFF_FACT*scoreDiff) - sd;
+    metric = (double)(POINT_DIFF_FACT*scoreDiff) - sd + wd;
     
     if(captureFlagMode)
         metric += [self distWeight:p2spcs :player2]*DIST_WEIGHT;
@@ -215,7 +240,7 @@
     return metric;
 }
 
-- (double)calcP1BoardMetric : (NSMutableSet*)p2spcs : (NSMutableSet*)p1spcs {
+- (double)calcP1BoardMetric : (NSMutableSet*)p1spcs : (NSMutableSet*)p2spcs {
     
     double metric = 0;
     
@@ -225,8 +250,9 @@
     int scoreDiff = p1Total - compTotal;
     
     double sd = [self stdDev:p1spcs]*SD_FACT;
+    double wd = [self weightedDistance:p1spcs :p2spcs]*WD_FACT;
     
-    metric = (double)(POINT_DIFF_FACT*scoreDiff) - sd;
+    metric = (double)(POINT_DIFF_FACT*scoreDiff) - sd + wd;
     
     if(captureFlagMode)
         metric += [self distWeight:p1spcs :player1]*DIST_WEIGHT;
@@ -234,7 +260,7 @@
     return metric;
 }
 
-- (BOOL)makeBestP1Move: (NSMutableSet*)p1Spaces : (NSMutableSet*)p2Spaces : (int*)origP1Val {
+- (BOOL)makeBestP1Move: (NSMutableArray*)tmpBoard :(NSMutableSet*)p1Spaces : (NSMutableSet*)p2Spaces : (int*)origP1Val {
 
     NSMutableSet *newP1Spaces = [[NSMutableSet alloc] initWithSet:p1Spaces];
     NSMutableSet *newP2Spaces = [[NSMutableSet alloc] initWithSet:p2Spaces];
@@ -249,8 +275,8 @@
     
     int p1Val = *origP1Val;
     
-    moveFrom.space = nil;
-    moveTo.space = nil;
+    moveFrom.space = NULL;
+    moveTo.space = NULL;
     
     moveFrom.player = player1;
     
@@ -274,8 +300,8 @@
                 NSLog(@"%f",rank);
                 
                 if(rank > weight) {
-                    moveFrom.space = nil;
-                    moveTo.space = nbr;
+                    moveFrom.space = NULL;
+                    moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
                     weight = rank;
                 }
                 
@@ -295,8 +321,8 @@
                     NSLog(@"%f",rank);
                 
                     if(rank > weight) {
-                        moveFrom.space = item;
-                        moveTo.space = nbr;
+                        moveFrom.space = [self getMinSpaceForIndices: tmpBoard:item.iind :item.jind];
+                        moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
                         weight = rank;
                     }
 
@@ -326,8 +352,8 @@
                 NSLog(@"%f",rank);
                 
                 if(rank > weight) {
-                    moveFrom.space = item;
-                    moveTo.space = nbr;
+                    moveFrom.space = [self getMinSpaceForIndices: tmpBoard:item.iind :item.jind];
+                    moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
                     weight = rank;
                 }
                 
@@ -360,16 +386,16 @@
                 NSLog(@"%f",rank);
                 
                 if(rank > weight) {
-                    moveFrom.space = item;
-                    moveTo.space = nbr;
+                    moveFrom.space = [self getMinSpaceForIndices: tmpBoard:item.iind :item.jind];
+                    moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
                     weight = rank;
                 }
                 
                 nbr.value = nbrSpace.value;
-                nbr.player = player1;
+                nbr.player = player2;
                 
                 item.value = origSpace.value;
-                item.player = player2;
+                item.player = player1;
                 
                 [newP1Spaces addObject:item];
                 [newP1Spaces removeObject:nbr];
@@ -396,11 +422,13 @@
         moveTo.space.player = player1;
             
         [p1Spaces addObject:moveTo.space];
+        
+        *origP1Val = TILE_INIT;
     }
         
     else {
         
-        *origP1Val += 10;
+        *origP1Val += TILE_INC;
         
         moveFrom.value = moveFrom.space.value;
         moveFrom.player = player1;
@@ -415,7 +443,7 @@
             moveFrom.space.value = value;
             moveTo.space.value = value;
                 
-            moveTo.space.player = player2;
+            moveTo.space.player = player1;
                 
             [p1Spaces addObject:moveTo.space];
         }
@@ -453,6 +481,233 @@
             
         else {
                 
+        }
+    }
+    
+    return YES;
+}
+
+- (BOOL)makeBestP2Move: (NSMutableArray*)tmpBoard :(NSMutableSet*)p1Spaces : (NSMutableSet*)p2Spaces : (int*)origP2Val {
+    
+    NSMutableSet *newP1Spaces = [[NSMutableSet alloc] initWithSet:p1Spaces];
+    NSMutableSet *newP2Spaces = [[NSMutableSet alloc] initWithSet:p2Spaces];
+    
+    SubSpace *origSpace = [[SubSpace alloc] init];
+    SubSpace *nbrSpace = [[SubSpace alloc] init];
+    
+    SubSpace *moveFrom = [[SubSpace alloc] init];
+    SubSpace *moveTo = [[SubSpace alloc] init];
+    
+    double value, rank, weight = -1e30;
+    
+    int p2Val = *origP2Val;
+    
+    moveFrom.space = NULL;
+    moveTo.space = NULL;
+    
+    moveFrom.player = player1;
+    
+    for(MinSpace* item in p2Spaces) {
+        
+        for(MinSpace* nbr in item.nbrs) {
+            
+            if(nbr.player == notAssigned) {
+                
+                [newP2Spaces addObject:nbr];
+                
+                // Free move
+                
+                nbr.value = p2Val;
+                nbr.player = player2;
+                
+                rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
+                
+                rank -= (1.0/p2Val)*FLOAT_FACT;
+                
+                NSLog(@"%f",rank);
+                
+                if(rank > weight) {
+                    moveFrom.space = NULL;
+                    moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
+                    weight = rank;
+                }
+                
+                
+                // Split move
+                
+                if(item.value > 1) {
+                    
+                    origSpace.value = item.value;
+                    item.value = (int)(item.value/2.0);
+                    
+                    nbr.value = item.value;
+                    nbr.player = player2;
+                    
+                    rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
+                    
+                    NSLog(@"%f",rank);
+                    
+                    if(rank > weight) {
+                        moveFrom.space = [self getMinSpaceForIndices: tmpBoard:item.iind :item.jind];
+                        moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
+                        weight = rank;
+                    }
+                    
+                    item.value = origSpace.value;
+                    
+                    nbr.player = notAssigned;
+                    nbr.value = 0;
+                    
+                    [newP2Spaces removeObject:nbr];
+                }
+            }
+            
+            else if(nbr.player == player2) {
+                
+                nbrSpace.value = nbr.value;
+                origSpace.value = item.value;
+                
+                nbr.value += item.value;
+                
+                item.value = 0;
+                item.player = notAssigned;
+                
+                [newP2Spaces removeObject:item];
+                
+                rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
+                
+                NSLog(@"%f",rank);
+                
+                if(rank > weight) {
+                    moveFrom.space = [self getMinSpaceForIndices: tmpBoard:item.iind :item.jind];
+                    moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
+                    weight = rank;
+                }
+                
+                item.value = origSpace.value;
+                item.player = player2;
+                
+                nbr.value = nbrSpace.value;
+                
+                [newP2Spaces addObject:item];
+            }
+            
+            else if(nbr.player == player1 && ((item.value - nbr.value) >= 2)) {
+                
+                nbrSpace.value = nbr.value;
+                origSpace.value = item.value;
+                
+                nbr.value = item.value - (float)(nbr.value)/2.0;
+                nbr.player = player2;
+                
+                item.value = 0;
+                item.player = notAssigned;
+                
+                [newP2Spaces addObject:nbr];
+                [newP2Spaces removeObject:item];
+                
+                [newP1Spaces removeObject:nbr];
+                
+                rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
+                
+                NSLog(@"%f",rank);
+                
+                if(rank > weight) {
+                    moveFrom.space = [self getMinSpaceForIndices: tmpBoard:item.iind :item.jind];
+                    moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
+                    weight = rank;
+                }
+                
+                nbr.value = nbrSpace.value;
+                nbr.player = player1;
+                
+                item.value = origSpace.value;
+                item.player = player2;
+                
+                [newP1Spaces addObject:item];
+                [newP1Spaces removeObject:nbr];
+                
+                [newP2Spaces addObject:nbr];
+            }
+            
+            else {
+                
+                
+            }
+        }
+    }
+    
+    // Change board to reflect best move
+    
+    if(moveTo.space == nil) return NO;
+    
+    if(moveFrom.space == nil) {
+        
+        moveTo.value = 0;
+        moveTo.player = notAssigned;
+        moveTo.space.value = p2Val;
+        moveTo.space.player = player2;
+        
+        [p1Spaces addObject:moveTo.space];
+        
+        *origP2Val = TILE_INIT;
+    }
+    
+    else {
+        
+        *origP2Val += TILE_INC;
+        
+        moveFrom.value = moveFrom.space.value;
+        moveFrom.player = player2;
+        
+        if(moveTo.space.player == notAssigned) {
+            
+            moveTo.player = notAssigned;
+            moveTo.value = 0;
+            
+            value = (float)(moveFrom.space.value)/2.0;
+            
+            moveFrom.space.value = value;
+            moveTo.space.value = value;
+            
+            moveTo.space.player = player2;
+            
+            [p1Spaces addObject:moveTo.space];
+        }
+        
+        else if(moveTo.space.player == player2) {
+            
+            moveTo.value = moveTo.space.value;
+            moveTo.player = player2;
+            
+            moveTo.space.value += moveFrom.space.value;
+            
+            moveFrom.space.value = 0;
+            moveFrom.space.player = notAssigned;
+            
+            [p1Spaces removeObject:moveFrom.space];
+        }
+        
+        else if(moveTo.space.player == player1) {
+            
+            moveTo.value = moveTo.space.value;
+            moveTo.player = player1;
+            
+            moveTo.space.value = moveFrom.space.value - moveTo.space.value/2.0;
+            moveTo.space.player = player2;
+            
+            moveFrom.space.value = 0;
+            moveFrom.space.player = notAssigned;
+            
+            [p2Spaces removeObject:moveFrom.space];
+            [p2Spaces addObject:moveTo.space];
+            
+            [p1Spaces removeObject:moveTo.space];
+            
+        }
+        
+        else {
+            
         }
     }
     
@@ -602,6 +857,36 @@
     }
     
     return newPlayerSpaces;
+}
+
+- (double)weightedDistance : (NSMutableSet*)paSpaces : (NSMutableSet*)pbSpaces {
+
+    double val, dist, diff, weight = 0;
+    
+    int x, y;
+    
+    for(MinSpace* item in paSpaces) {
+        
+        for(MinSpace* nbr in pbSpaces) {
+            
+            x = item.iind - nbr.iind;
+            y = item.jind - nbr.jind;
+            
+            dist = sqrt(x*x + y*y);
+            
+            diff = (item.value - nbr.value);
+            val = diff/(dist*dist);
+            
+            weight += val;
+        }
+    }
+    
+    return  weight;
+}
+
+- (MinSpace*)getMinSpaceForIndices: (NSMutableArray*)tmpBoard :(int)ii : (int)ji {
+    
+    return tmpBoard[ii][ji];
 }
 
 @end
