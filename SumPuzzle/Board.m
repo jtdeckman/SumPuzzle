@@ -432,6 +432,19 @@
 
 - (void)deconstruct {
 
+    Space* space;
+    
+    [player1Spaces removeAllObjects];
+    [player2Spaces removeAllObjects];
+    
+    for(int i=0; i<dimx; i++)
+        for(int j=0; j<dimy; j++) {
+            space = spaces[i][j];
+            [space deconstruct];
+        }
+    
+    [spaces removeAllObjects];
+    
     spaces = nil;
     player1Spaces = nil;
     player2Spaces = nil;

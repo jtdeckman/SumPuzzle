@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
 
 @interface AppDelegate ()
 
@@ -43,6 +44,17 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)resetApp {
+    
+    _window.rootViewController = nil;
+    
+    ViewController *rootView = [[ViewController alloc] init];
+    
+    _window.rootViewController = rootView;
+    
+    [AppDelegate setUpDefaults];
 }
 
 + (void)setUpDefaults {

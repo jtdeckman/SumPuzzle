@@ -30,15 +30,17 @@
 
 #define MAX_NEARBY_NEIGHBORS 8
 
-#define N_ITER 0
+#define N_ITER 20
 
 #define TILE_INIT 10
 #define TILE_INC 10
 
+#define WIN_WEIGHT_FACT 1e10
+
 // Weighting Factors
 
 #define AVG_DIFF_FACT 0
-#define POINT_DIFF_FACT 10
+#define POINT_DIFF_FACT 25
 #define NUM_DIFF_FACT 25
 #define FLOAT_FACT 1000
 
@@ -46,6 +48,8 @@
 
 #define WD_FACT 0.1
 #define SD_FACT 1.0
+
+#define WAVG_FACT 0.1
 
 #define OVERTAKE_FACT 0.1
 

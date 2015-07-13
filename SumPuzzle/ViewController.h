@@ -73,6 +73,8 @@
     CGRect nextTileLoc;
     CGRect p2NextTileLoc;
     
+    CGFloat lineThickness;
+    
     BOOL computerPlayer;
 }
 

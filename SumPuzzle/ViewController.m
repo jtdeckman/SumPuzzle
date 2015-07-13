@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "BoardView.h"
 #import "Constants.h"
+#import "AppDelegate.h"
 
 @interface ViewController ()
 
@@ -94,15 +95,9 @@
             }
             else if([self isMenuBarItem:location :menu.nwGameLabel.frame]) {
                 menu.hidden = YES;
-              
-                [board deconstruct];
-                [computer deconstruct];
                 
-                board = nil;
-                computer = nil;
-                
-                [self setUpViewController];
-                [self setUpGamePlay];
+            //    [board clearBoard];
+                [self setUpNewGame];
             }
         }
     }
@@ -314,18 +309,6 @@
     computer = [[AINew alloc] init];
     
     [computer setUpAI:board.spaces :board.player1Spaces :board.player2Spaces :dimx :dimy : tileInc : YES];
-}
-
-- (void)setUpBoard:(CGFloat)offset {
-    
-    board = [[Board alloc] init];
-    [board initBoard:boardView.frame :dimx :dimy :offset];
-    
-    [self addPiecesToView];
-    
-    Space *tmpSpace = [board getSpaceForIndices:0 :0];
-    imgSize = tmpSpace.spaceFrame.size;
-
 }
 
 - (JDColor)getColorForPlayer {
@@ -638,10 +621,9 @@
     CGFloat height = self.view.frame.size.height*TOPBAR_V_FACT;
     CGFloat offset = self.view.frame.size.width*SPACING_FACT;
     
-    CGFloat lineThickness = width*LINE_THICK_FACT;
-    
     CGRect viewFrame;
     
+    lineThickness = width*LINE_THICK_FACT;
     
     // Top Bar Set-Up
     
@@ -706,11 +688,35 @@
     
 }
 
+- (void)setUpBoard:(CGFloat)offset {
+    
+    board = [[Board alloc] init];
+    [board initBoard:boardView.frame :dimx :dimy :offset];
+    
+    [self addPiecesToView];
+    
+    Space *tmpSpace = [board getSpaceForIndices:0 :0];
+    imgSize = tmpSpace.spaceFrame.size;
+    
+}
+
 - (void)setUpNewGame {
     
-    [board clearBoard];
+    [computer deconstructAI];
+    [board deconstruct];
+    
+    board = nil;
+    computer = nil;
+    
     [self loadData];
+    [self setUpBoard:lineThickness];
     [self setUpGamePlay];
+    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    [appDelegate resetApp];
+   
+
 }
 
 - (int)getNextValueForPlayer {

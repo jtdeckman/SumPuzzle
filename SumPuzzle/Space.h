@@ -61,4 +61,6 @@
 
 - (bool)isNearestNearestNbrOf: (Space*)space;
 
+- (void)deconstruct;
+
 @end

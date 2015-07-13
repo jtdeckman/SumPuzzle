@@ -105,4 +105,19 @@
     return NO;
 }
 
+- (void)deconstruct {
+
+    [piece removeFromSuperview];
+    piece = nil;
+    
+    [nearestNbrs removeAllObjects];
+    [neighbors removeAllObjects];
+    
+    nearestNbrs = nil;
+    neighbors = nil;
+    
+    p1Img = nil;
+    p2Img = nil;
+}
+
 @end
