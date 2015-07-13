@@ -26,7 +26,7 @@
     [self setUpViewController];
     [self setUpGamePlay];
     
-    // timer = [NSTimer timerWithTimeInterval:1/4 target:self selector:@selector(runLoop) userInfo:nil repeats:YES];
+     timer = [NSTimer timerWithTimeInterval:1/1 target:self selector:@selector(runLoop) userInfo:nil repeats:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -37,6 +37,10 @@
 
 - (void)runLoop {
     
+    if(gameState == gameRunning) {
+        
+        ++gameTimeCnt;
+    }
     
 }
 
@@ -285,6 +289,8 @@
     placeMode = freeState;
     currentPlayer = player1;
     
+    gameTimeCnt = 0;
+    
     [board addPiece:0 :0 :startValue : player1 : p1Color];
     [board addPiece:0 :dimy-1 :startValue : player1 : p1Color];
     
@@ -352,7 +358,7 @@
     }
     
     [self upDatePoints];
-  //  [self changeNextTileForPlayer];
+
     [self upDateNextTiles];
     
     selectedPiece = nil;
@@ -362,10 +368,6 @@
     Player winner;
     
     winner = [board checkForWinner];
-    
-    if(winner != notAssigned) {
-        NSLog(@"Winner is fart");
-    }
     
     if(computerPlayer && currentPlayer == player2)
         [self AIMove];
@@ -386,6 +388,8 @@
     }
     else {
     
+        moveToSpace = moveTo;
+        
         if(moveFrom == nil) {
             [self addPiece:moveTo];
         }
@@ -398,6 +402,8 @@
             moveFrom.piece.text = [NSString stringWithFormat:@"%d", value];
             
             [board addPiece:moveTo.iind :moveTo.jind : value : currentPlayer : [self getColorForPlayer]];
+            
+            [self animateComputerMove:moveFrom :value];
             
             [self updateCurrentPlayer:NO];
             [self switchPlayers];
@@ -412,6 +418,7 @@
                 int newVal = moveFrom.value;
 #endif
                 
+                [self animateComputerMove:moveFrom :newVal];
                 [board convertPiece:moveTo :newVal :[self getColorForPlayer] :player2];
                 [board removePiece:moveFrom];
                 
@@ -423,6 +430,8 @@
             else {
                 
                 int newVal = (int)((float)moveFrom.value);
+                
+                [self animateComputerMove:moveFrom :newVal];
                 
                 [board removePiece:moveFrom];
                 
@@ -517,7 +526,7 @@
     floatPiece.clipsToBounds = YES;
     floatPiece.backgroundColor = nextTile.backgroundColor;
   //  floatPiece.layer.borderWidth = 2.0f;
-    floatPiece.textColor = [UIColor clearColor];
+    floatPiece.textColor = [UIColor whiteColor];
     
     [floatPiece setTextAlignment:NSTextAlignmentCenter];
     [floatPiece setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
@@ -798,6 +807,59 @@
     UIGraphicsEndImageContext();
     
     tile.backgroundColor = [UIColor colorWithPatternImage:newImage];
+}
+
+- (void)animateComputerMove: (Space*)fromSpace : (int)value {
+    
+    CGPoint origin = fromSpace.piece.frame.origin;
+    
+    moveTimer = [NSTimer scheduledTimerWithTimeInterval:1/15 target:self selector:@selector(movePieceLoop) userInfo:nil repeats:YES];
+    
+    gameState = gamePaused;
+
+    moveXinc = (moveToSpace.piece.frame.origin.x - origin.x)/MOVE_NINC;
+    moveYinc = (moveToSpace.piece.frame.origin.y - origin.y)/MOVE_NINC;
+    
+    [self setUpFloatPiece:fromSpace];
+    
+    floatPiece.text  = [NSString stringWithFormat:@"%d", value];
+    
+    movePieceLoc.origin.x = fromSpace.piece.frame.origin.x + boardView.frame.origin.x;
+    movePieceLoc.origin.y = fromSpace.piece.frame.origin.y + boardView.frame.origin.y;
+    
+    movePieceLoc.size = fromSpace.piece.frame.size;
+    
+    moveTimeCnt = 0;
+    
+    moveToSpace.piece.hidden = YES;
+}
+
+- (void)movePieceLoop {
+
+    if(moveTimeCnt > MOVE_NINC) {
+        
+        [moveTimer invalidate];
+        moveTimer = nil;
+        
+        gameState = gameRunning;
+        
+        floatPiece.hidden = YES;
+        moveToSpace.piece.hidden = NO;
+    }
+    else {
+        
+        ++moveTimeCnt;
+        
+        movePieceLoc.origin.x += moveXinc;
+        movePieceLoc.origin.y += moveYinc;
+        
+        [floatPiece setFrame:movePieceLoc];
+        
+      //  [self.view setNeedsDisplay];
+        
+     //   NSLog(@"%f",floatPiece.frame.origin.x);
+     //   NSLog(@"%f",floatPiece.frame.origin.x);
+    }
 }
 
 - (void)setUpColors {

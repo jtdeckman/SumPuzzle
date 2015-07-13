@@ -25,6 +25,7 @@
     Board *board;
     
     Space *selectedPiece;
+    Space *moveToSpace;
     
     AINew *computer;
     
@@ -49,6 +50,9 @@
     int p1PointsOnBoard;
     int p2PointsOnBoard;
     
+    int gameTimeCnt;
+    int moveTimeCnt;
+    
     UILabel *nextTile;
     UILabel *p2NextTile;
     UILabel *playerLabel;
@@ -64,7 +68,7 @@
     
     UIImageView *menuBar;
     
-    NSTimer *timer;
+    NSTimer *timer, *moveTimer;
     
     GameState gameState;
     PlaceMode placeMode;
@@ -72,8 +76,11 @@
     
     CGRect nextTileLoc;
     CGRect p2NextTileLoc;
+    CGRect movePieceLoc;
     
     CGFloat lineThickness;
+    CGFloat moveXinc;
+    CGFloat moveYinc;
     
     BOOL computerPlayer;
 }
@@ -94,6 +101,8 @@
 
 - (bool)didTouchAddPiece: (CGPoint)crd;
 - (bool)isMenuBarItem: (CGPoint)crd  : (CGRect)viewFrame;
+
+- (void)movePieceLoop;
 
 @end
 

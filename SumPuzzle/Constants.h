@@ -50,10 +50,11 @@
 #define SD_FACT 1.0
 
 #define WAVG_FACT 0.1
-
 #define OVERTAKE_FACT 0.1
 
 #define DIFF_MODE 1
+
+#define MOVE_NINC 256
 
 typedef struct {
     
