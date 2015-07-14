@@ -52,6 +52,7 @@
     
     int gameTimeCnt;
     int moveTimeCnt;
+    int moveInc;
     
     UILabel *nextTile;
     UILabel *p2NextTile;
@@ -60,6 +61,8 @@
     
     UILabel *player1PntsLabel;
     UILabel *player2PntsLabel;
+    
+    UILabel *winLabel;
     
     UIImage *p1Img;
     UIImage *p2Img;
@@ -73,6 +76,7 @@
     GameState gameState;
     PlaceMode placeMode;
     Player currentPlayer;
+    Player winner;
     
     CGRect nextTileLoc;
     CGRect p2NextTileLoc;

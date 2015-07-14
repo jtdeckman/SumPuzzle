@@ -51,10 +51,11 @@
 
 #define WAVG_FACT 0.1
 #define OVERTAKE_FACT 0.1
-
+#define PPN_FACT 0.1
+#define PPN_O_FACT 100000
 #define DIFF_MODE 1
 
-#define MOVE_NINC 256
+#define MOVE_NINC 3500
 
 typedef struct {
     
@@ -70,6 +71,7 @@ typedef enum : NSUInteger {
     gamePaused,
     gameOver,
     gameMenu,
+    winState,
     newGame
     
 } GameState;

@@ -204,7 +204,7 @@
     NSMutableSet *tempP1Spaces = [self setUpTempBoardAndPlayerSpaces:tempBoard :p1Spaces];
     NSMutableSet *tempP2Spaces = [self setUpTempBoardAndPlayerSpaces:tempBoard :p2Spaces];
     
-    double weight, avgw=0;
+    double weight; //, avgw=0;
     
     int cnt = 1;
     
@@ -246,8 +246,13 @@
 
     double wavg = 0;
     
-    if(nP1Spc > 0 && nP2Spc > 0)
-        wavg = (compTotal*nP2Spc - p1Total*nP1Spc*nP1Spc)*WAVG_FACT;
+    if(nP2Spc > 0)
+        wavg += (compTotal/nP2Spc)*PPN_FACT;
+    
+    if(nP1Spc > 0)
+        wavg += PPN_O_FACT/(p1Total*nP1Spc);
+    
+      //  wavg = (compTotal*nP2Spc - p1Total*nP1Spc*nP1Spc)*WAVG_FACT;
     
   //  double sd = [self stdDev:p2spcs]*SD_FACT;
  //   double wd = [self weightedDistance:p2spcs :p1spcs]*WD_FACT;
@@ -276,8 +281,15 @@
     
     double wavg = 0;
     
-    if(nP1Spc > 0 && nP2Spc > 0)
-        wavg = (p1Total*nP1Spc - compTotal*nP2Spc*nP2Spc)*WAVG_FACT;
+    if(nP1Spc > 0)
+        wavg += (p1Total/nP1Spc)*PPN_FACT;
+    
+    if(nP1Spc > 0)
+        wavg += PPN_O_FACT/(compTotal*nP2Spc);
+    
+   // if(nP1Spc > 0 && nP2Spc > 0)
+    //    wavg = (compTotal/nP2Spc + p1Total/nP1Spc)*WAVG_FACT;
+     //   wavg = (p1Total*nP1Spc - compTotal*nP2Spc*nP2Spc)*WAVG_FACT;
     
    // double sd = [self stdDev:p1spcs]*SD_FACT;
    // double wd = [self weightedDistance:p1spcs :p2spcs]*WD_FACT;

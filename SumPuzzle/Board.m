@@ -397,11 +397,17 @@
     if(numPlyr2 == 0)
         return player1;
     
-    if([self farthestRowForPlayer:player1] == dimx-1)
+    if([self piecesBlocked:player1])
         return player1;
     
-    if([self farthestRowForPlayer:player2] == 0)
+    if([self piecesBlocked:player2])
         return player2;
+    
+ //   if([self farthestRowForPlayer:player1] == dimx-1)
+ //       return player1;
+    
+ //   if([self farthestRowForPlayer:player2] == 0)
+ //       return player2;
     
     return notAssigned;
 }
@@ -448,6 +454,30 @@
     spaces = nil;
     player1Spaces = nil;
     player2Spaces = nil;
+}
+
+- (BOOL)piecesBlocked: (Player)player {
+    
+    if(player == player1) {
+        
+        for(Space* item in player1Spaces) {
+            for(Space* nbr in item.nearestNbrs) {
+                if(nbr.player == notAssigned || nbr.player == player1)
+                    return NO;
+            }
+        }
+    }
+    else {
+        
+        for(Space* item in player2Spaces) {
+            for(Space* nbr in item.nearestNbrs) {
+                if(nbr.player == notAssigned || nbr.player == player2)
+                    return NO;
+            }
+        }
+
+    }
+    return YES;
 }
 
 @end

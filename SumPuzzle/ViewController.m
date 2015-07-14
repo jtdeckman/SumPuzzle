@@ -105,6 +105,15 @@
             }
         }
     }
+    
+    else if(gameState == winState) {
+        
+        if(touch.view == bottomBar && [self isMenuBarLocation:location]) {
+            gameState = gameMenu;
+            menu.hidden = NO;
+            [self.view bringSubviewToFront:menu];
+        }
+    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -263,6 +272,105 @@
     return NO;
 }
 
+- (void)AIMove {
+    
+    Move *move = [[Move alloc] init];
+    Space *moveFrom, *moveTo;
+    
+    [computer findSpaces:move :nextValueP1 :nextValueP2];
+    
+    moveFrom = move.fromSpace;
+    moveTo = move.toSpace;
+    
+    moveInc = MOVE_NINC;
+    
+    [board checkForWinner];
+    
+    if(winner != notAssigned) {
+    
+        gameState = winState;
+        [self gameWon];
+    }
+    
+    if(moveTo == nil) {
+    
+        winner = player1;
+        gameState = winState;
+        
+        [self gameWon];
+    }
+    
+    else {
+        
+        moveToSpace = moveTo;
+        
+        if(moveFrom == nil) {
+            
+            moveInc = 2*MOVE_NINC;
+            
+            Space *tmpSpace = [[Space alloc] init];
+            tmpSpace.piece = p2NextTile;
+            
+            p2NextTile.hidden = YES;
+            
+            [self animateComputerMove:tmpSpace :nextValueP2 :YES];
+            
+            [self addPiece:moveTo];
+            
+            moveTo.piece.hidden = YES;
+        }
+        
+        else if(moveTo.player == notAssigned) {
+            
+            int value = (int)((float)moveFrom.value/2.0);
+            
+            moveFrom.value = value;
+            moveFrom.piece.text = [NSString stringWithFormat:@"%d", value];
+            
+            [board addPiece:moveTo.iind :moveTo.jind : value : currentPlayer : [self getColorForPlayer]];
+            
+            [self animateComputerMove:moveFrom :value :NO];
+            
+            [self updateCurrentPlayer:NO];
+            [self switchPlayers];
+        }
+        else {
+            
+            if(moveTo.player == player1) {
+                
+#ifdef DIFF_MODE
+                int newVal = moveFrom.value - moveTo.value/2.0;
+#else
+                int newVal = moveFrom.value;
+#endif
+                
+                [self animateComputerMove:moveFrom :newVal :NO];
+                [board convertPiece:moveTo :newVal :[self getColorForPlayer] :player2];
+                [board removePiece:moveFrom];
+                
+                moveTo.piece.text = [NSString stringWithFormat:@"%d", newVal];
+                
+                [self updateCurrentPlayer:NO];
+                [self switchPlayers];
+            }
+            else {
+                
+                int newVal = (int)((float)moveFrom.value);
+                
+                [self animateComputerMove:moveFrom :newVal :NO];
+                
+                [board removePiece:moveFrom];
+                
+                moveTo.value += newVal;
+                moveTo.piece.text = [NSString stringWithFormat:@"%d", moveTo.value];
+                
+                [self updateCurrentPlayer:NO];
+                [self switchPlayers];
+            }
+        }
+    }
+}
+
 - (void)setUpFloatPiece: (Space*)space {
     
     CGRect frm;
@@ -290,6 +398,10 @@
     currentPlayer = player1;
     
     gameTimeCnt = 0;
+    
+    moveInc = MOVE_NINC;
+    
+    winLabel.hidden = YES;
     
     [board addPiece:0 :0 :startValue : player1 : p1Color];
     [board addPiece:0 :dimy-1 :startValue : player1 : p1Color];
@@ -365,84 +477,17 @@
     
     placeMode = freeState;
     
-    Player winner;
-    
     winner = [board checkForWinner];
     
+    if(winner != notAssigned) {
+        
+        gameState = winState;
+        
+        [self gameWon];
+    }
+         
     if(computerPlayer && currentPlayer == player2)
         [self AIMove];
-}
-
-- (void)AIMove {
-
-    Move *move = [[Move alloc] init];
-    Space *moveFrom, *moveTo;
-    
-    [computer findSpaces:move :nextValueP1 :nextValueP2];
-    
-    moveFrom = move.fromSpace;
-    moveTo = move.toSpace;
-    
-    if(moveTo == nil) {
-        
-    }
-    else {
-    
-        moveToSpace = moveTo;
-        
-        if(moveFrom == nil) {
-            [self addPiece:moveTo];
-        }
-        
-        else if(moveTo.player == notAssigned) {
-            
-            int value = (int)((float)moveFrom.value/2.0);
-            
-            moveFrom.value = value;
-            moveFrom.piece.text = [NSString stringWithFormat:@"%d", value];
-            
-            [board addPiece:moveTo.iind :moveTo.jind : value : currentPlayer : [self getColorForPlayer]];
-            
-            [self animateComputerMove:moveFrom :value];
-            
-            [self updateCurrentPlayer:NO];
-            [self switchPlayers];
-        }
-        else {
-            
-            if(moveTo.player == player1) {
-
-#ifdef DIFF_MODE
-                int newVal = moveFrom.value - moveTo.value/2.0;
-#else
-                int newVal = moveFrom.value;
-#endif
-                
-                [self animateComputerMove:moveFrom :newVal];
-                [board convertPiece:moveTo :newVal :[self getColorForPlayer] :player2];
-                [board removePiece:moveFrom];
-                
-                moveTo.piece.text = [NSString stringWithFormat:@"%d", newVal];
-                
-                [self updateCurrentPlayer:NO];
-                [self switchPlayers];
-            }
-            else {
-                
-                int newVal = (int)((float)moveFrom.value);
-                
-                [self animateComputerMove:moveFrom :newVal];
-                
-                [board removePiece:moveFrom];
-                
-                moveTo.value += newVal;
-                moveTo.piece.text = [NSString stringWithFormat:@"%d", moveTo.value];
-                
-                [self updateCurrentPlayer:NO];
-                [self switchPlayers];
-            }
-        }
-    }
 }
 
 - (void)upDatePoints {
@@ -452,249 +497,6 @@
     
     player1PntsLabel.text = [NSString stringWithFormat:@"%d", p1PointsOnBoard];
     player2PntsLabel.text = [NSString stringWithFormat:@"%d", p2PointsOnBoard];
-}
-
-- (void)setUpLabels {
-    
-    CGRect viewFrame;
-    
-    Space *space = [board getSpaceForIndices:0 :0];
-    
-   // viewFrame.origin.x = 0.5*self.view.frame.size.width - space.spaceFrame.size.width/2.0;
-    viewFrame.origin.x = 0.1*bottomBar.frame.size.width;// - space.spaceFrame.size.width/2.0;
-    viewFrame.size.width = space.spaceFrame.size.width;
-    viewFrame.size.height = space.spaceFrame.size.height;
-    viewFrame.origin.y = bottomBar.frame.origin.y + bottomBar.frame.size.height/2.0 -viewFrame.size.height/2.0;
-    
-    nextTileLoc = viewFrame;
-    
-    nextTile = [[UILabel alloc] initWithFrame:viewFrame];
-    nextTile.hidden = NO;
-    nextTile.layer.cornerRadius = 3.0;
-    nextTile.clipsToBounds = YES;
- 
-    nextTile.backgroundColor = [UIColor colorWithPatternImage:p1Img];
-    nextTile.textColor = [UIColor whiteColor];
-    
-    [nextTile setTextAlignment:NSTextAlignmentCenter];
-    [nextTile setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
- 
-    UIImage *img = p1Img;
-    
-    UIGraphicsBeginImageContext(imgSize);
-    [img drawInRect:CGRectMake(0,0,imgSize.width,imgSize.height)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    nextTile.backgroundColor = [UIColor colorWithPatternImage:newImage];
-    
-    [self.view addSubview:nextTile];
-    
- // Player 2 next tile
-    
-    viewFrame.origin.x = bottomBar.frame.size.width - (nextTileLoc.origin.x + nextTileLoc.size.width);
-    
-    p2NextTileLoc = viewFrame;
-    
-    p2NextTile = [[UILabel alloc] initWithFrame:viewFrame];
-    p2NextTile.hidden = NO;
-    p2NextTile.layer.cornerRadius = 3.0;
-    p2NextTile.clipsToBounds = YES;
-    
-    p2NextTile.backgroundColor = [UIColor colorWithPatternImage:p2Img];
-    p2NextTile.textColor = [UIColor whiteColor];
-    
-    [p2NextTile setTextAlignment:NSTextAlignmentCenter];
-    [p2NextTile setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
-   
-    img = p2Img;
-    
-    UIGraphicsBeginImageContext(imgSize);
-    [img drawInRect:CGRectMake(0,0,imgSize.width,imgSize.height)];
-    newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    p2NextTile.backgroundColor = [UIColor colorWithPatternImage:newImage];
-    
-    [self.view addSubview:p2NextTile];
-    
-    // Movable (floating) piece
-    
-    floatPiece = [[UILabel alloc] initWithFrame:viewFrame];
-    floatPiece.hidden = YES;
-    floatPiece.layer.cornerRadius = 3.0;
-    floatPiece.clipsToBounds = YES;
-    floatPiece.backgroundColor = nextTile.backgroundColor;
-  //  floatPiece.layer.borderWidth = 2.0f;
-    floatPiece.textColor = [UIColor whiteColor];
-    
-    [floatPiece setTextAlignment:NSTextAlignmentCenter];
-    [floatPiece setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
-    
-    [self.view addSubview:floatPiece];
-    
-    // Menu bar
-    
-    viewFrame.size.width = 0.65*viewFrame.size.width;
-    viewFrame.origin.x = bottomBar.frame.size.width/2.0 - viewFrame.size.width/2.0;
-    viewFrame.size.height = 0.65*viewFrame.size.height;
-    
-    viewFrame.origin.y = bottomBar.frame.origin.y + bottomBar.frame.size.height/2.0 -viewFrame.size.height/2.0;
-    
-    menuBar = [[UIImageView alloc] initWithFrame:viewFrame];
-    menuBar.image = [UIImage imageNamed:@"menuBars.png"];
-    menuBar.hidden = NO;
-    
-    [self.view addSubview:menuBar];
-    
-    // Player label:
-    
-    viewFrame.size.width = 0.4*self.view.frame.size.width;
-    viewFrame.size.height = 0.055*self.view.frame.size.height;
-    viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;
-    viewFrame.origin.y = 0.085*self.view.frame.size.height;
-    
-    playerLabel = [[UILabel alloc] initWithFrame:viewFrame];
-    
-    playerLabel.hidden = NO;
-    playerLabel.layer.cornerRadius = 3.0;
-    playerLabel.clipsToBounds = YES;
-    playerLabel.backgroundColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
-    playerLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
-    playerLabel.layer.borderWidth = 2.0f;
-    playerLabel.textColor = [UIColor whiteColor];
-    
-    [playerLabel setTextAlignment:NSTextAlignmentCenter];
-    [playerLabel setFont:[UIFont fontWithName:@"Arial" size:0.4*FONT_FACT*viewFrame.size.width]];
-    
-    [self.view addSubview:playerLabel];
-    
-    viewFrame.size.width /= 2.5;
-    
-    CGFloat crd = (topBar.frame.size.width - playerLabel.frame.size.width)/2.0;
-    
-    viewFrame.origin.x = crd/2.0 - viewFrame.size.width/2.0;
-    
-    JDColor clr;
-    clr.red = 0.4;
-    clr.green = 0.4;
-    clr.blue = 0.4;
-    
-    player1PntsLabel = [[UILabel alloc] initWithFrame:viewFrame];
-    
-    player1PntsLabel.hidden = NO;
-    player1PntsLabel.layer.cornerRadius = 3.0;
-    player1PntsLabel.clipsToBounds = YES;
-    player1PntsLabel.backgroundColor = [UIColor clearColor];
-   // player1PntsLabel.layer.borderColor = [[UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0] CGColor];
-    player1PntsLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
-    player1PntsLabel.layer.borderWidth = 2.0f;
-    player1PntsLabel.textColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
-    [player1PntsLabel setTextAlignment:NSTextAlignmentCenter];
-    [player1PntsLabel setFont:[UIFont fontWithName:@"Arial" size:0.85*FONT_FACT*viewFrame.size.width]];
-    
-    [self.view addSubview:player1PntsLabel];
-
-    crd = playerLabel.frame.origin.x - (player1PntsLabel.frame.origin.x + player1PntsLabel.frame.size.width);
-    viewFrame.origin.x = playerLabel.frame.origin.x + playerLabel.frame.size.width + crd;
-    
-    player2PntsLabel = [[UILabel alloc] initWithFrame:viewFrame];
-    
-    player2PntsLabel.hidden = NO;
-    player2PntsLabel.layer.cornerRadius = 3.0;
-    player2PntsLabel.clipsToBounds = YES;
-    player2PntsLabel.backgroundColor = [UIColor clearColor];
-  //  player2PntsLabel.layer.borderColor = [[UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0] CGColor];
-      player2PntsLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
-    player2PntsLabel.layer.borderWidth = 2.0f;
-    player2PntsLabel.textColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
-   
-    [player2PntsLabel setTextAlignment:NSTextAlignmentCenter];
-    [player2PntsLabel setFont:[UIFont fontWithName:@"Arial" size:0.85*FONT_FACT*viewFrame.size.width]];
-    
-    [self.view addSubview:player2PntsLabel];
-
-}
-
-- (void)setUpViewController {
-    
-    self.view.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
-    
-    p1Img = [UIImage imageNamed:@"blueSquare.png"];
-    p2Img = [UIImage imageNamed:@"orangeSquare.png"];
-    
-    [self loadData];
-    [self setUpColors];
-    
-    CGFloat width = self.view.frame.size.width*WIDTH_FACT;
-    CGFloat height = self.view.frame.size.height*TOPBAR_V_FACT;
-    CGFloat offset = self.view.frame.size.width*SPACING_FACT;
-    
-    CGRect viewFrame;
-    
-    lineThickness = width*LINE_THICK_FACT;
-    
-    // Top Bar Set-Up
-    
-    viewFrame.origin.x = 0.0;
-    viewFrame.origin.y = 0.0;
-    viewFrame.size.width = width;
-    viewFrame.size.height = height;
-    
-    topBar = [[BarView alloc] initWithFrame:viewFrame];
-    [topBar initView:&topColor];
-    topBar.clearsContextBeforeDrawing = true;
-    
-    [self.view addSubview:topBar];
-    
-    // BoardView Set-Up
-    
-    viewFrame.origin.x = offset;
-    viewFrame.origin.y = topBar.frame.origin.y + topBar.frame.size.height +  offset;//3.0*offset;
-    
-    viewFrame.size.width = width - 2.0*offset;
-    viewFrame.size.height = viewFrame.size.width*HEIGHT_FACT;
-    
-    boardView = [[BoardView alloc] initWithFrame:viewFrame];
-    [boardView initBoardView:dimx :dimy :lineThickness];
-    boardView.clearsContextBeforeDrawing = true;
-    
-    [self.view addSubview:boardView];
-    
-    [self.view bringSubviewToFront:boardView];
-    
-    // Bottom Bar Set-Up
-    
-    viewFrame.origin.x = 0;
-    viewFrame.origin.y = boardView.frame.origin.y + boardView.frame.size.height + offset;
-    
-    viewFrame.size.width = width;
-    viewFrame.size.height = self.view.frame.size.height - (topBar.frame.size.height + boardView.frame.size.height + 2.0*offset);
-    
-    bottomBar = [[BarView alloc] initWithFrame:viewFrame];
-    [bottomBar initView:&botColor];
-    bottomBar.clearsContextBeforeDrawing = true;
-    
-    [self.view addSubview:bottomBar];
-    
-   // viewFrame.size.width *= 0.5;
-    viewFrame.size.height = self.view.frame.size.height/2.0;
-    viewFrame.origin.y = viewFrame.size.height;
-    
-    menu = [[MenuView alloc] initWithFrame:viewFrame];
-    menu.backgroundColor = [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.9];
-    
-    menu.hidden = YES;
-    [menu setUpView];
-    
-    [self.view addSubview:menu];
-    
-    // Board set-up
-    
-    [self setUpBoard:lineThickness];
-    [self setUpLabels];
-    
-    
 }
 
 - (void)setUpBoard:(CGFloat)offset {
@@ -724,8 +526,6 @@
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
     [appDelegate resetApp];
-   
-
 }
 
 - (int)getNextValueForPlayer {
@@ -809,16 +609,16 @@
     tile.backgroundColor = [UIColor colorWithPatternImage:newImage];
 }
 
-- (void)animateComputerMove: (Space*)fromSpace : (int)value {
+- (void)animateComputerMove: (Space*)fromSpace : (int)value :(BOOL)nxtTileMv {
     
     CGPoint origin = fromSpace.piece.frame.origin;
     
-    moveTimer = [NSTimer scheduledTimerWithTimeInterval:1/15 target:self selector:@selector(movePieceLoop) userInfo:nil repeats:YES];
+    moveTimer = [NSTimer scheduledTimerWithTimeInterval:1/4 target:self selector:@selector(movePieceLoop) userInfo:nil repeats:YES];
     
     gameState = gamePaused;
 
-    moveXinc = (moveToSpace.piece.frame.origin.x - origin.x)/MOVE_NINC;
-    moveYinc = (moveToSpace.piece.frame.origin.y - origin.y)/MOVE_NINC;
+    moveXinc = (moveToSpace.piece.frame.origin.x - origin.x)/moveInc;
+    moveYinc = (moveToSpace.piece.frame.origin.y - origin.y)/moveInc;
     
     [self setUpFloatPiece:fromSpace];
     
@@ -836,7 +636,7 @@
 
 - (void)movePieceLoop {
 
-    if(moveTimeCnt > MOVE_NINC) {
+    if(moveTimeCnt > moveInc) {
         
         [moveTimer invalidate];
         moveTimer = nil;
@@ -845,7 +645,11 @@
         
         floatPiece.hidden = YES;
         moveToSpace.piece.hidden = NO;
+        
+        p2NextTile.hidden = NO;
+        
     }
+    
     else {
         
         ++moveTimeCnt;
@@ -854,12 +658,287 @@
         movePieceLoc.origin.y += moveYinc;
         
         [floatPiece setFrame:movePieceLoc];
-        
-      //  [self.view setNeedsDisplay];
-        
-     //   NSLog(@"%f",floatPiece.frame.origin.x);
-     //   NSLog(@"%f",floatPiece.frame.origin.x);
     }
+}
+
+- (void)gameWon {
+
+    if(winner == player1)
+        winLabel.text = [NSString stringWithFormat:@"You Win!"];
+    else {
+        if(computerPlayer)
+            winLabel.text = [NSString stringWithFormat:@"Computer Wins :("];
+        else
+            winLabel.text = [NSString stringWithFormat:@"Player 2 wins"];
+    }
+    
+    winLabel.hidden = NO;
+}
+
+- (void)setUpViewController {
+    
+    self.view.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    
+    p1Img = [UIImage imageNamed:@"blueSquare.png"];
+    p2Img = [UIImage imageNamed:@"orangeSquare.png"];
+    
+    [self loadData];
+    [self setUpColors];
+    
+    CGFloat width = self.view.frame.size.width*WIDTH_FACT;
+    CGFloat height = self.view.frame.size.height*TOPBAR_V_FACT;
+    CGFloat offset = self.view.frame.size.width*SPACING_FACT;
+    
+    CGRect viewFrame;
+    
+    lineThickness = width*LINE_THICK_FACT;
+    
+    // Top Bar Set-Up
+    
+    viewFrame.origin.x = 0.0;
+    viewFrame.origin.y = 0.0;
+    viewFrame.size.width = width;
+    viewFrame.size.height = height;
+    
+    topBar = [[BarView alloc] initWithFrame:viewFrame];
+    [topBar initView:&topColor];
+    topBar.clearsContextBeforeDrawing = true;
+    
+    [self.view addSubview:topBar];
+    
+    // BoardView Set-Up
+    
+    viewFrame.origin.x = offset;
+    viewFrame.origin.y = topBar.frame.origin.y + topBar.frame.size.height +  offset;//3.0*offset;
+    
+    viewFrame.size.width = width - 2.0*offset;
+    viewFrame.size.height = viewFrame.size.width*HEIGHT_FACT;
+    
+    boardView = [[BoardView alloc] initWithFrame:viewFrame];
+    [boardView initBoardView:dimx :dimy :lineThickness];
+    boardView.clearsContextBeforeDrawing = true;
+    
+    [self.view addSubview:boardView];
+    
+    [self.view bringSubviewToFront:boardView];
+    
+    // Bottom Bar Set-Up
+    
+    viewFrame.origin.x = 0;
+    viewFrame.origin.y = boardView.frame.origin.y + boardView.frame.size.height + offset;
+    
+    viewFrame.size.width = width;
+    viewFrame.size.height = self.view.frame.size.height - (topBar.frame.size.height + boardView.frame.size.height + 2.0*offset);
+    
+    bottomBar = [[BarView alloc] initWithFrame:viewFrame];
+    [bottomBar initView:&botColor];
+    bottomBar.clearsContextBeforeDrawing = true;
+    
+    [self.view addSubview:bottomBar];
+    
+    // viewFrame.size.width *= 0.5;
+    viewFrame.size.height = self.view.frame.size.height/2.0;
+    viewFrame.origin.y = viewFrame.size.height;
+    
+    menu = [[MenuView alloc] initWithFrame:viewFrame];
+    menu.backgroundColor = [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.9];
+    
+    menu.hidden = YES;
+    [menu setUpView];
+    
+    [self.view addSubview:menu];
+    
+    // Board set-up
+    
+    [self setUpBoard:lineThickness];
+    [self setUpLabels];
+}
+
+- (void)setUpLabels {
+    
+    CGRect viewFrame;
+    
+    Space *space = [board getSpaceForIndices:0 :0];
+    
+    // viewFrame.origin.x = 0.5*self.view.frame.size.width - space.spaceFrame.size.width/2.0;
+    viewFrame.origin.x = 0.1*bottomBar.frame.size.width;// - space.spaceFrame.size.width/2.0;
+    viewFrame.size.width = space.spaceFrame.size.width;
+    viewFrame.size.height = space.spaceFrame.size.height;
+    viewFrame.origin.y = bottomBar.frame.origin.y + bottomBar.frame.size.height/2.0 -viewFrame.size.height/2.0;
+    
+    nextTileLoc = viewFrame;
+    
+    nextTile = [[UILabel alloc] initWithFrame:viewFrame];
+    nextTile.hidden = NO;
+    nextTile.layer.cornerRadius = 3.0;
+    nextTile.clipsToBounds = YES;
+    
+    nextTile.backgroundColor = [UIColor colorWithPatternImage:p1Img];
+    nextTile.textColor = [UIColor whiteColor];
+    
+    [nextTile setTextAlignment:NSTextAlignmentCenter];
+    [nextTile setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
+    
+    UIImage *img = p1Img;
+    
+    UIGraphicsBeginImageContext(imgSize);
+    [img drawInRect:CGRectMake(0,0,imgSize.width,imgSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    nextTile.backgroundColor = [UIColor colorWithPatternImage:newImage];
+    
+    [self.view addSubview:nextTile];
+    
+    // Player 2 next tile
+    
+    viewFrame.origin.x = bottomBar.frame.size.width - (nextTileLoc.origin.x + nextTileLoc.size.width);
+    
+    p2NextTileLoc = viewFrame;
+    
+    p2NextTile = [[UILabel alloc] initWithFrame:viewFrame];
+    p2NextTile.hidden = NO;
+    p2NextTile.layer.cornerRadius = 3.0;
+    p2NextTile.clipsToBounds = YES;
+    
+    p2NextTile.backgroundColor = [UIColor colorWithPatternImage:p2Img];
+    p2NextTile.textColor = [UIColor whiteColor];
+    
+    [p2NextTile setTextAlignment:NSTextAlignmentCenter];
+    [p2NextTile setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
+    
+    img = p2Img;
+    
+    UIGraphicsBeginImageContext(imgSize);
+    [img drawInRect:CGRectMake(0,0,imgSize.width,imgSize.height)];
+    newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    p2NextTile.backgroundColor = [UIColor colorWithPatternImage:newImage];
+    
+    [self.view addSubview:p2NextTile];
+    
+    // Movable (floating) piece
+    
+    floatPiece = [[UILabel alloc] initWithFrame:viewFrame];
+    floatPiece.hidden = YES;
+    floatPiece.layer.cornerRadius = 3.0;
+    floatPiece.clipsToBounds = YES;
+    floatPiece.backgroundColor = nextTile.backgroundColor;
+    //  floatPiece.layer.borderWidth = 2.0f;
+    floatPiece.textColor = [UIColor whiteColor];
+    
+    [floatPiece setTextAlignment:NSTextAlignmentCenter];
+    [floatPiece setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
+    
+    [self.view addSubview:floatPiece];
+    
+    // Menu bar
+    
+    viewFrame.size.width = 0.65*viewFrame.size.width;
+    viewFrame.origin.x = bottomBar.frame.size.width/2.0 - viewFrame.size.width/2.0;
+    viewFrame.size.height = 0.65*viewFrame.size.height;
+    
+    viewFrame.origin.y = bottomBar.frame.origin.y + bottomBar.frame.size.height/2.0 -viewFrame.size.height/2.0;
+    
+    menuBar = [[UIImageView alloc] initWithFrame:viewFrame];
+    menuBar.image = [UIImage imageNamed:@"menuBars.png"];
+    menuBar.hidden = NO;
+    
+    [self.view addSubview:menuBar];
+    
+    // Player label:
+    
+    viewFrame.size.width = 0.4*self.view.frame.size.width;
+    viewFrame.size.height = 0.055*self.view.frame.size.height;
+    viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;
+    viewFrame.origin.y = 0.085*self.view.frame.size.height;
+    
+    playerLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    
+    playerLabel.hidden = NO;
+    playerLabel.layer.cornerRadius = 3.0;
+    playerLabel.clipsToBounds = YES;
+    playerLabel.backgroundColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
+    playerLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
+    playerLabel.layer.borderWidth = 2.0f;
+    playerLabel.textColor = [UIColor whiteColor];
+    
+    [playerLabel setTextAlignment:NSTextAlignmentCenter];
+    [playerLabel setFont:[UIFont fontWithName:@"Arial" size:0.4*FONT_FACT*viewFrame.size.width]];
+    
+    [self.view addSubview:playerLabel];
+    
+    viewFrame.size.width /= 2.5;
+    
+    CGFloat crd = (topBar.frame.size.width - playerLabel.frame.size.width)/2.0;
+    
+    viewFrame.origin.x = crd/2.0 - viewFrame.size.width/2.0;
+    
+    JDColor clr;
+    clr.red = 0.4;
+    clr.green = 0.4;
+    clr.blue = 0.4;
+    
+    player1PntsLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    
+    player1PntsLabel.hidden = NO;
+    player1PntsLabel.layer.cornerRadius = 3.0;
+    player1PntsLabel.clipsToBounds = YES;
+    player1PntsLabel.backgroundColor = [UIColor clearColor];
+    // player1PntsLabel.layer.borderColor = [[UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0] CGColor];
+    player1PntsLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
+    player1PntsLabel.layer.borderWidth = 2.0f;
+    player1PntsLabel.textColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
+    [player1PntsLabel setTextAlignment:NSTextAlignmentCenter];
+    [player1PntsLabel setFont:[UIFont fontWithName:@"Arial" size:0.85*FONT_FACT*viewFrame.size.width]];
+    
+    [self.view addSubview:player1PntsLabel];
+    
+    crd = playerLabel.frame.origin.x - (player1PntsLabel.frame.origin.x + player1PntsLabel.frame.size.width);
+    viewFrame.origin.x = playerLabel.frame.origin.x + playerLabel.frame.size.width + crd;
+    
+    player2PntsLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    
+    player2PntsLabel.hidden = NO;
+    player2PntsLabel.layer.cornerRadius = 3.0;
+    player2PntsLabel.clipsToBounds = YES;
+    player2PntsLabel.backgroundColor = [UIColor clearColor];
+    //  player2PntsLabel.layer.borderColor = [[UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0] CGColor];
+    player2PntsLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
+    player2PntsLabel.layer.borderWidth = 2.0f;
+    player2PntsLabel.textColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
+    
+    [player2PntsLabel setTextAlignment:NSTextAlignmentCenter];
+    [player2PntsLabel setFont:[UIFont fontWithName:@"Arial" size:0.85*FONT_FACT*viewFrame.size.width]];
+    
+    [self.view addSubview:player2PntsLabel];
+    
+    
+ // Win Label
+    
+    viewFrame = topBar.frame;
+    
+    viewFrame.size.width *= 0.75;
+    viewFrame.size.height *= 0.75;
+    
+    viewFrame.origin.x = self.view.frame.size.width/2.0 - 0.5*viewFrame.size.width;
+    viewFrame.origin.y = self.view.frame.size.height/2.0 - 0.5*viewFrame.size.height;
+    
+    winLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    winLabel.hidden = YES;
+    winLabel.clipsToBounds =YES;
+    winLabel.backgroundColor = [UIColor clearColor];
+    winLabel.textColor = [UIColor colorWithRed:0.9 green:0.1 blue:0.1 alpha:1.0];
+    [winLabel setTextAlignment:NSTextAlignmentCenter];
+    [winLabel setFont:[UIFont fontWithName:@"Arial" size:0.65*FONT_FACT*viewFrame.size.width]];
+    
+    winLabel.text = [NSString stringWithFormat:@"You Won!"];
+   // winLabel.hidden = NO;
+    
+    [self.view addSubview:winLabel];
+    
+
 }
 
 - (void)setUpColors {
