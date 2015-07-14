@@ -26,7 +26,7 @@
     CGPoint indices[4];
 }
 
-- (void)initBoardView: (int)nx : (int)ny : (CGFloat)bt;
-- (void)drawBars;
+- (void)initBoardView: (int)nx : (int)ny : (CGFloat)bt : (uint)dim;
+//- (void)drawBars;
 
 @end

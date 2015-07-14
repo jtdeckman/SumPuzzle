@@ -29,12 +29,12 @@
     
     piece = [[UILabel alloc] initWithFrame:labelframe];
     piece.hidden = YES;
-    piece.layer.cornerRadius = 5.0;
+    piece.layer.cornerRadius = 10.0;
     piece.clipsToBounds = YES;
     piece.opaque = NO;
     
     [piece setTextAlignment:NSTextAlignmentCenter];
-    [piece setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*spaceFrame.size.width]];
+    [piece setFont:[UIFont fontWithName:@"Arial" size:1.0*FONT_FACT*spaceFrame.size.width]];
     
     nearestNbrs = [[NSMutableSet alloc] initWithCapacity:4];
     neighbors = [[NSMutableSet alloc] initWithCapacity:10];

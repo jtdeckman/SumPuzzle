@@ -68,8 +68,8 @@
         [defaults setBool:YES forKey:@"computerPlayer"];
         [defaults setBool:NO forKey:@"newGame"];
     
-        [defaults setInteger:5 forKey:@"dimx"];
-        [defaults setInteger:5 forKey:@"dimy"];
+        [defaults setInteger:6 forKey:@"dimx"];
+        [defaults setInteger:6 forKey:@"dimy"];
         
         [defaults setObject:@"initialized" forKey:@"init"];
         

@@ -663,9 +663,14 @@
 
 - (void)gameWon {
 
+  //  [winLabel setFont:[UIFont fontWithName:@"Arial" size:0.65*FONT_FACT*winLabel.frame.size.width]];
+    
     if(winner == player1)
         winLabel.text = [NSString stringWithFormat:@"You Win!"];
     else {
+        
+       // [winLabel setFont:[UIFont fontWithName:@"Arial" size:0.45*FONT_FACT*winLabel.frame.size.width]];
+        
         if(computerPlayer)
             winLabel.text = [NSString stringWithFormat:@"Computer Wins :("];
         else
@@ -693,6 +698,9 @@
     
     lineThickness = width*LINE_THICK_FACT;
     
+    if(dimx == 6)
+        lineThickness *= 0.8;
+        
     // Top Bar Set-Up
     
     viewFrame.origin.x = 0.0;
@@ -715,7 +723,7 @@
     viewFrame.size.height = viewFrame.size.width*HEIGHT_FACT;
     
     boardView = [[BoardView alloc] initWithFrame:viewFrame];
-    [boardView initBoardView:dimx :dimy :lineThickness];
+    [boardView initBoardView:dimx :dimy :lineThickness :dimx];
     boardView.clearsContextBeforeDrawing = true;
     
     [self.view addSubview:boardView];
@@ -762,15 +770,15 @@
     
     // viewFrame.origin.x = 0.5*self.view.frame.size.width - space.spaceFrame.size.width/2.0;
     viewFrame.origin.x = 0.1*bottomBar.frame.size.width;// - space.spaceFrame.size.width/2.0;
-    viewFrame.size.width = space.spaceFrame.size.width;
-    viewFrame.size.height = space.spaceFrame.size.height;
+    viewFrame.size.width = 0.98*space.spaceFrame.size.width;
+    viewFrame.size.height = 0.98*space.spaceFrame.size.height;
     viewFrame.origin.y = bottomBar.frame.origin.y + bottomBar.frame.size.height/2.0 -viewFrame.size.height/2.0;
     
     nextTileLoc = viewFrame;
     
     nextTile = [[UILabel alloc] initWithFrame:viewFrame];
     nextTile.hidden = NO;
-    nextTile.layer.cornerRadius = 3.0;
+    nextTile.layer.cornerRadius = 10.0;
     nextTile.clipsToBounds = YES;
     
     nextTile.backgroundColor = [UIColor colorWithPatternImage:p1Img];
@@ -798,7 +806,7 @@
     
     p2NextTile = [[UILabel alloc] initWithFrame:viewFrame];
     p2NextTile.hidden = NO;
-    p2NextTile.layer.cornerRadius = 3.0;
+    p2NextTile.layer.cornerRadius = 10.0;
     p2NextTile.clipsToBounds = YES;
     
     p2NextTile.backgroundColor = [UIColor colorWithPatternImage:p2Img];
@@ -920,7 +928,7 @@
     viewFrame = topBar.frame;
     
     viewFrame.size.width *= 0.75;
-    viewFrame.size.height *= 0.75;
+   // viewFrame.size.height *= 0.75;
     
     viewFrame.origin.x = self.view.frame.size.width/2.0 - 0.5*viewFrame.size.width;
     viewFrame.origin.y = self.view.frame.size.height/2.0 - 0.5*viewFrame.size.height;
@@ -932,6 +940,9 @@
     winLabel.textColor = [UIColor colorWithRed:0.9 green:0.1 blue:0.1 alpha:1.0];
     [winLabel setTextAlignment:NSTextAlignmentCenter];
     [winLabel setFont:[UIFont fontWithName:@"Arial" size:0.65*FONT_FACT*viewFrame.size.width]];
+    
+    winLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    winLabel.numberOfLines = 2;
     
     winLabel.text = [NSString stringWithFormat:@"You Won!"];
    // winLabel.hidden = NO;

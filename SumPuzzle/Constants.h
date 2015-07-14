@@ -19,9 +19,9 @@
 #define BUTTON_HEIGHT_FACT 0.1
 #define BUTTON_SPACING_FACT 0.1
 
-#define SPACING_FACT 0.05
+#define SPACING_FACT 0.025
 
-#define LINE_THICK_FACT 0.0025
+#define LINE_THICK_FACT 0.015
 
 #define DIMX 10
 #define DIMY 10

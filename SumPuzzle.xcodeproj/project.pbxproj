@@ -30,6 +30,8 @@
 		A8A51E3C1B221BCE00C90315 /* p1square.png in Resources */ = {isa = PBXBuildFile; fileRef = A8A51E3B1B221BCE00C90315 /* p1square.png */; };
 		A8DCF10E1B4EC15D0042885D /* AINew.m in Sources */ = {isa = PBXBuildFile; fileRef = A8DCF10D1B4EC15D0042885D /* AINew.m */; };
 		A8DCF1111B4EC55F0042885D /* SubSpace.m in Sources */ = {isa = PBXBuildFile; fileRef = A8DCF1101B4EC55F0042885D /* SubSpace.m */; };
+		A8FDFA531B55806600AB37D3 /* fiveXfiveBoard.png in Resources */ = {isa = PBXBuildFile; fileRef = A8FDFA521B55806600AB37D3 /* fiveXfiveBoard.png */; };
+		A8FDFA551B558F5800AB37D3 /* sixXsixBoard.png in Resources */ = {isa = PBXBuildFile; fileRef = A8FDFA541B558F5800AB37D3 /* sixXsixBoard.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +86,8 @@
 		A8DCF10D1B4EC15D0042885D /* AINew.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AINew.m; sourceTree = "<group>"; };
 		A8DCF10F1B4EC55F0042885D /* SubSpace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubSpace.h; sourceTree = "<group>"; };
 		A8DCF1101B4EC55F0042885D /* SubSpace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubSpace.m; sourceTree = "<group>"; };
+		A8FDFA521B55806600AB37D3 /* fiveXfiveBoard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fiveXfiveBoard.png; sourceTree = "<group>"; };
+		A8FDFA541B558F5800AB37D3 /* sixXsixBoard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sixXsixBoard.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +167,8 @@
 		A81902511B0C13EC00DCD8CB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A8FDFA521B55806600AB37D3 /* fiveXfiveBoard.png */,
+				A8FDFA541B558F5800AB37D3 /* sixXsixBoard.png */,
 				A8A51E371B2219D500C90315 /* blueSquare.png */,
 				A8A51E391B2219DA00C90315 /* redSquare.png */,
 				A84A99901B4D6DE8004DDD8A /* orangeSquare.png */,
@@ -274,9 +280,11 @@
 				A84A99911B4D6DE8004DDD8A /* orangeSquare.png in Resources */,
 				A8A51E3C1B221BCE00C90315 /* p1square.png in Resources */,
 				A8A51E301B1A760100C90315 /* menuBars.png in Resources */,
+				A8FDFA531B55806600AB37D3 /* fiveXfiveBoard.png in Resources */,
 				A819025D1B0C13EC00DCD8CB /* Main.storyboard in Resources */,
 				A8A51E3A1B2219DA00C90315 /* redSquare.png in Resources */,
 				A81902621B0C13EC00DCD8CB /* LaunchScreen.xib in Resources */,
+				A8FDFA551B558F5800AB37D3 /* sixXsixBoard.png in Resources */,
 				A819025F1B0C13EC00DCD8CB /* Images.xcassets in Resources */,
 				A8A51E381B2219D500C90315 /* blueSquare.png in Resources */,
 			);

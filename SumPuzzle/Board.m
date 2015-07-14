@@ -55,7 +55,7 @@
             spcFrm.origin.y = yini + i*spaceHeight;
             
             pcFrm.origin.x = spcFrm.origin.x + os2;
-            pcFrm.origin.y = spcFrm.origin.y;// + os2;
+            pcFrm.origin.y = spcFrm.origin.y + os2;
             
             newSpace = [[Space alloc] init];
             

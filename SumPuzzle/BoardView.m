@@ -10,7 +10,7 @@
 
 @implementation BoardView
 
-- (void)initBoardView: (int)nx : (int)ny : (CGFloat)bt {
+- (void)initBoardView: (int)nx : (int)ny : (CGFloat)bt : (uint)dim {
     
     barThick = bt;
     bThick2 = barThick/2.0;
@@ -42,7 +42,25 @@
     
     indices[3].x = indices[0].x;
     indices[3].y = indices[2].y;
+
+    UIImage *img;
     
+    if(dim == 6)
+        img = [UIImage imageNamed:@"sixXsixBoard.png"];
+    else
+        img = [UIImage imageNamed:@"fiveXfiveBoard.png"];
+    
+    CGSize imgSize = self.frame.size;
+    
+    UIGraphicsBeginImageContext(imgSize);
+    [img drawInRect:CGRectMake(0,0,imgSize.width,imgSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    self.backgroundColor = [UIColor colorWithPatternImage:newImage];
+    
+   // self.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"sixXsixBoard.png"]];
+
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -59,7 +77,7 @@
      CGContextSetRGBStrokeColor(context, backColor.red, backColor.green, backColor.blue, 1.0);
      CGContextFillRect(context, rectangle); */
     
-    UIColor *clr = [UIColor colorWithRed:backColor.red green:backColor.green blue:backColor.blue alpha:1.0];
+   /* UIColor *clr = [UIColor colorWithRed:backColor.red green:backColor.green blue:backColor.blue alpha:1.0];
     UIBezierPath *path = [UIBezierPath bezierPath];
     
     [path moveToPoint:indices[0]];
@@ -232,7 +250,7 @@
         [path fill];
         
         path = NULL;
-    }
+    } */
 }
 
 @end
