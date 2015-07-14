@@ -32,6 +32,7 @@
 		A8DCF1111B4EC55F0042885D /* SubSpace.m in Sources */ = {isa = PBXBuildFile; fileRef = A8DCF1101B4EC55F0042885D /* SubSpace.m */; };
 		A8FDFA531B55806600AB37D3 /* fiveXfiveBoard.png in Resources */ = {isa = PBXBuildFile; fileRef = A8FDFA521B55806600AB37D3 /* fiveXfiveBoard.png */; };
 		A8FDFA551B558F5800AB37D3 /* sixXsixBoard.png in Resources */ = {isa = PBXBuildFile; fileRef = A8FDFA541B558F5800AB37D3 /* sixXsixBoard.png */; };
+		A8FDFA581B55CE0F00AB37D3 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8FDFA571B55CE0F00AB37D3 /* SettingsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,8 @@
 		A8DCF1101B4EC55F0042885D /* SubSpace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubSpace.m; sourceTree = "<group>"; };
 		A8FDFA521B55806600AB37D3 /* fiveXfiveBoard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fiveXfiveBoard.png; sourceTree = "<group>"; };
 		A8FDFA541B558F5800AB37D3 /* sixXsixBoard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sixXsixBoard.png; sourceTree = "<group>"; };
+		A8FDFA561B55CE0F00AB37D3 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		A8FDFA571B55CE0F00AB37D3 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +136,8 @@
 				A81902561B0C13EC00DCD8CB /* AppDelegate.m */,
 				A81902581B0C13EC00DCD8CB /* ViewController.h */,
 				A81902591B0C13EC00DCD8CB /* ViewController.m */,
+				A8FDFA561B55CE0F00AB37D3 /* SettingsViewController.h */,
+				A8FDFA571B55CE0F00AB37D3 /* SettingsViewController.m */,
 				A819025B1B0C13EC00DCD8CB /* Main.storyboard */,
 				A819027B1B0C159700DCD8CB /* Constants.h */,
 				A8DCF10F1B4EC55F0042885D /* SubSpace.h */,
@@ -316,6 +321,7 @@
 				A819027E1B0C16D900DCD8CB /* Board.m in Sources */,
 				A81089831B25F77600FB880F /* AI.m in Sources */,
 				A81089861B274F2300FB880F /* TempBoard.m in Sources */,
+				A8FDFA581B55CE0F00AB37D3 /* SettingsViewController.m in Sources */,
 				A819028A1B0C19A000DCD8CB /* BoardView.m in Sources */,
 				A8DCF10E1B4EC15D0042885D /* AINew.m in Sources */,
 			);

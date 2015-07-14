@@ -67,9 +67,10 @@
         
         [defaults setBool:YES forKey:@"computerPlayer"];
         [defaults setBool:NO forKey:@"newGame"];
-    
-        [defaults setInteger:6 forKey:@"dimx"];
-        [defaults setInteger:6 forKey:@"dimy"];
+        [defaults setBool:NO forKey:@"captureFlag"];
+        
+        [defaults setInteger:5 forKey:@"dimx"];
+        [defaults setInteger:5 forKey:@"dimy"];
         
         [defaults setObject:@"initialized" forKey:@"init"];
         
@@ -80,6 +81,8 @@
         
         [defaults setInteger:10 forKey:@"tileValue"];
         [defaults setInteger:10 forKey:@"tileInc"];
+        
+        [defaults setInteger:1 forKey:@"difficulty"];
         
         [defaults synchronize];
     }

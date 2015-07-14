@@ -632,11 +632,13 @@
     moveTimeCnt = 0;
     
     moveToSpace.piece.hidden = YES;
+    
+    playerLabel.hidden = NO;
 }
 
 - (void)movePieceLoop {
 
-    if(moveTimeCnt > moveInc) {
+   if(moveTimeCnt > moveInc) {
         
         [moveTimer invalidate];
         moveTimer = nil;
@@ -647,18 +649,23 @@
         moveToSpace.piece.hidden = NO;
         
         p2NextTile.hidden = NO;
-        
+       
+       playerLabel.text = @"Player 1";
+       playerLabel.backgroundColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
     }
     
     else {
         
+        playerLabel.text = @"Computer";
+        playerLabel.backgroundColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
+
         ++moveTimeCnt;
         
         movePieceLoc.origin.x += moveXinc;
         movePieceLoc.origin.y += moveYinc;
         
         [floatPiece setFrame:movePieceLoc];
-    }
+   }
 }
 
 - (void)gameWon {

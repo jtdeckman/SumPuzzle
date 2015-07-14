@@ -114,4 +114,12 @@ typedef struct {
     
 } boardSpace; 
 
+typedef enum : NSUInteger {
+    
+    easy,
+    standard,
+    hard
+    
+} Difficulty;
+
 #endif
