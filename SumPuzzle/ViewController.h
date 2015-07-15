@@ -91,6 +91,7 @@
     
     BOOL computerPlayer;
     BOOL captureFlag;
+    BOOL wentToSettingsView;
     
     Difficulty difficulty;
 }

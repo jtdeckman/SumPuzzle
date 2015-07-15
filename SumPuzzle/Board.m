@@ -114,22 +114,22 @@
                 [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
             }
             
-            inbr = i-1;
+      /*      inbr = i-1;
             jnbr = j-1;
             if(inbr > -1 && jnbr > -1)
                 [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
             
             jnbr = j+1;
-            if(inbr > -1 && jnbr < dimx)
+            if(inbr > -1 && jnbr < dimy)
                 [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
             
             inbr = i+1;
-            if(inbr < dimy && jnbr < dimx)
+            if(inbr < dimx && jnbr < dimy)
                 [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
             
             jnbr = j-1;
-            if(inbr < dimy && jnbr > -1)
-                [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
+            if(inbr < dimx && jnbr > -1)
+                [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]]; */
         }
     }
 }

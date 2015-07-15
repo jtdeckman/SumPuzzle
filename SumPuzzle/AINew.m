@@ -13,7 +13,7 @@
 
 @implementation AINew
 
-@synthesize captureFlagMode, nIter;
+@synthesize nIter;
 
 -(void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy : (int)pInc : (BOOL)cfm : (uint)nit {
     

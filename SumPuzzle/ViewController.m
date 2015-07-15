@@ -29,6 +29,35 @@
      timer = [NSTimer timerWithTimeInterval:1/1 target:self selector:@selector(runLoop) userInfo:nil repeats:YES];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+
+    if(wentToSettingsView) {
+   
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+        if(computerPlayer != [defaults boolForKey:@"computerPlayer"])
+            [self setUpNewGame];
+    
+        if(captureFlag != [defaults boolForKey:@"captureFlag"])
+            [self setUpNewGame];
+    
+        if(dimx != (int)[defaults integerForKey:@"dimx"] || dimy != (int)[defaults integerForKey:@"dimy"])
+            [self setUpNewGame];
+        
+        if(difficulty != [defaults integerForKey:@"difficulty"]) {
+            
+            difficulty = [defaults integerForKey:@"difficulty"];
+            
+            if(difficulty == 0)
+                niter = 10;
+            if(difficulty == 2)
+                niter = 35;
+            else
+                niter = 25;
+        }
+    }
+}
+
 - (void)didReceiveMemoryWarning {
     
     [super didReceiveMemoryWarning];
@@ -96,6 +125,7 @@
             location = [touch locationInView:menu];
             if([self isMenuBarItem:location :menu.settingsLabel.frame]) {
                 
+                wentToSettingsView = YES;
                 SettingsViewController *settingsView = [[SettingsViewController alloc] init];
                 
                 [self presentViewController:settingsView animated:NO completion:nil];
@@ -450,7 +480,7 @@
     
     computerPlayer = [defaults boolForKey:@"computerPlayer"];
     
-    niter = (uint)[defaults integerForKey:@"niter"];
+  //  niter = (uint)[defaults integerForKey:@"niter"];
     
     captureFlag = [defaults boolForKey:@"captureFlag"];
     difficulty = [defaults integerForKey:@"difficulty"];
@@ -458,6 +488,13 @@
     startValue = (int)[defaults integerForKey:@"startValue"];
     tileValue = (int)[defaults integerForKey:@"tileValue"];
     tileInc = (int)[defaults integerForKey:@"tileInc"];
+    
+    if(difficulty == 0)
+        niter = 10;
+    else if(difficulty == 2)
+        niter = 35;
+    else
+        niter = 25;
     
     [defaults synchronize];
 }
@@ -699,6 +736,8 @@
 }
 
 - (void)setUpViewController {
+    
+    wentToSettingsView = NO;
     
     self.view.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
     

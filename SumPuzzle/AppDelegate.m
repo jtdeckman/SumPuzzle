@@ -61,9 +61,11 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    NSString *init = [defaults objectForKey:@"init"];
+    //NSString *init = [defaults objectForKey:@"init"];
     
-    if([init isEqualToString:@"initialized"] || init == nil) {
+    BOOL init = [defaults boolForKey:@"initialized"];
+    
+    if(!init) {
         
         [defaults setBool:YES forKey:@"computerPlayer"];
         [defaults setBool:NO forKey:@"newGame"];
@@ -74,7 +76,7 @@
         
         [defaults setInteger:25 forKey:@"niter"];
 
-        [defaults setObject:@"initialized" forKey:@"init"];
+        [defaults setObject:@"YES" forKey:@"initialized"];
         
         [defaults setInteger:0 forKey:@"p1wins"];
         [defaults setInteger:0 forKey:@"p2wins"];

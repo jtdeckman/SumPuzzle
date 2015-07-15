@@ -52,7 +52,37 @@
 }
 
 - (void)segmentedControlValueDidChange : (UISegmentedControl*)controlItem {
+ 
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
+    if(controlItem == computerPlayerControl) {
+        if(controlItem.selectedSegmentIndex == 1)
+            [defaults setBool:NO forKey:@"computerPlayer"];
+        else
+            [defaults setBool:YES forKey:@"computerPlayer"];
+    }
+    
+    else if(controlItem == difficultyControl)
+        [defaults setInteger:controlItem.selectedSegmentIndex forKey:@"difficulty"];
+    
+    else if(controlItem == gameModeControl)
+        [defaults setBool:controlItem.selectedSegmentIndex forKey:@"captureFlag"];
+    
+    else if(controlItem == boardSizeControl) {
+        
+        if(controlItem.selectedSegmentIndex == 0) {
+            [defaults setInteger:5 forKey:@"dimx"];
+            [defaults setInteger:5 forKey:@"dimy"];
+        }
+        else{
+            [defaults setInteger:6 forKey:@"dimx"];
+            [defaults setInteger:6 forKey:@"dimy"];
+        }
+    }
+
+    else {
+    
+    }
 }
 
 - (void)buttonPressed: (UIButton*)button {
@@ -93,7 +123,6 @@
  //   viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;
    
 
-    
     UIFont *font = [UIFont fontWithName:@"Arial" size:1.5*FONT_FACT*viewFrame.size.height];
     NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
                                                            forKey:NSFontAttributeName];
