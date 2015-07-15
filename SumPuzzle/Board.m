@@ -412,10 +412,10 @@
             return player1;
     
         if([self piecesBlocked:player1])
-            return player1;
+            return player2;
     
         if([self piecesBlocked:player2])
-            return player2;
+            return player1;
     }
     
         return notAssigned;
