@@ -31,7 +31,7 @@
     
     UILabel *playerLabel;
     UILabel *difficultyLabel;
-    UILabel *winModeLabel;
+    UILabel *gameModeLabel;
     UILabel *boardSizeLabel;
 }
 

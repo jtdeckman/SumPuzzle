@@ -55,6 +55,8 @@
     int moveTimeCnt;
     int moveInc;
     
+    uint niter;
+    
     UILabel *nextTile;
     UILabel *p2NextTile;
     UILabel *playerLabel;
@@ -88,6 +90,9 @@
     CGFloat moveYinc;
     
     BOOL computerPlayer;
+    BOOL captureFlag;
+    
+    Difficulty difficulty;
 }
 
 @property (nonatomic) Board *board;

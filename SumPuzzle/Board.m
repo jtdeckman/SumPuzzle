@@ -12,7 +12,7 @@
 
 @synthesize selectedSpace, spaces, player1Spaces, player2Spaces;
 
-- (void)initBoard: (CGRect)bvFrame : (int)dx : (int)dy : (CGFloat)offset {
+- (void)initBoard: (CGRect)bvFrame : (int)dx : (int)dy : (CGFloat)offset :(BOOL)cFlag {
     
     NSMutableArray *row;
     
@@ -22,6 +22,8 @@
     CGFloat xini, yini;
     
     CGRect spcFrm, pcFrm;
+    
+    captureFlagMode = cFlag;
     
     dimx = dx;
     dimy = dy;
@@ -391,25 +393,32 @@
     int numPlyr1 = (int)[player1Spaces count];
     int numPlyr2 = (int)[player2Spaces count];
     
-    if(numPlyr1 == 0)
-        return player2;
     
-    if(numPlyr2 == 0)
-        return player1;
+    if(captureFlagMode) {
+        
+      if([self farthestRowForPlayer:player1] == dimx-1)
+          return player1;
     
-    if([self piecesBlocked:player1])
-        return player1;
+      if([self farthestRowForPlayer:player2] == 0)
+          return player2;
+    }
     
-    if([self piecesBlocked:player2])
-        return player2;
+    else {
+        
+        if(numPlyr1 == 0)
+            return player2;
     
- //   if([self farthestRowForPlayer:player1] == dimx-1)
- //       return player1;
+        if(numPlyr2 == 0)
+            return player1;
     
- //   if([self farthestRowForPlayer:player2] == 0)
- //       return player2;
+        if([self piecesBlocked:player1])
+            return player1;
     
-    return notAssigned;
+        if([self piecesBlocked:player2])
+            return player2;
+    }
+    
+        return notAssigned;
 }
 
 - (int)pointsForPlayer: (Player)player {

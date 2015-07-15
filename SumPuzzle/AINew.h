@@ -15,8 +15,9 @@
 }
 
 @property (nonatomic) BOOL captureFlagMode;
+@property (nonatomic) uint nIter;
 
-- (void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy : (int)pInc : (BOOL)cfm;
+- (void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy : (int)pInc : (BOOL)cfm :(uint)nit;
 - (void)findSpaces : (Move*)compMove : (int)p1FltPieceVal : (int)compFloatPieceVal;
 - (void)deconstructAI;
 

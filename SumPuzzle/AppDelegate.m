@@ -72,6 +72,8 @@
         [defaults setInteger:5 forKey:@"dimx"];
         [defaults setInteger:5 forKey:@"dimy"];
         
+        [defaults setInteger:25 forKey:@"niter"];
+
         [defaults setObject:@"initialized" forKey:@"init"];
         
         [defaults setInteger:0 forKey:@"p1wins"];

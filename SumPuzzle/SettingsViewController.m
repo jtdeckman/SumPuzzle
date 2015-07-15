@@ -67,27 +67,29 @@
     CGRect viewFrame;
     
     CGFloat spcFct = SETTINGS_SPACE_FACT*self.view.frame.size.height;
-    CGFloat marginFact = 0.5*spcFct;
+  //  CGFloat marginFact = 0.4*spcFct;
     
-    viewFrame.size.width = 0.35*self.view.frame.size.width;
+    viewFrame.size.width = 0.275*self.view.frame.size.width;
     viewFrame.size.height = 0.05*self.view.frame.size.height;
-    viewFrame.origin.x = marginFact;
-    viewFrame.origin.y = spcFct;
+    viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;// marginFact;
+    viewFrame.origin.y = 0.75*spcFct;
     
     playerLabel = [[UILabel alloc] initWithFrame:viewFrame];
     playerLabel.clipsToBounds =YES;
     playerLabel.backgroundColor = [UIColor clearColor];
     playerLabel.textColor = [UIColor whiteColor];
-   // [playerLabel setTextAlignment:NSTextAlignmentCenter];
+    [playerLabel setTextAlignment:NSTextAlignmentCenter];
     
-    [playerLabel setFont:[UIFont fontWithName:@"Arial" size:2.0*FONT_FACT*viewFrame.size.height]];
-    playerLabel.text = @"Player:";
+    [playerLabel setFont:[UIFont fontWithName:@"Arial-ItalicMT" size:1.75*FONT_FACT*viewFrame.size.height]];
+    playerLabel.text = @"Player";
     
     [self.view addSubview:playerLabel];
     
     viewFrame.size.width = 0.55*self.view.frame.size.width;
-    viewFrame.origin.x = self.view.frame.size.width - viewFrame.size.width - marginFact ;//0.25*spcFct + viewFrame.size.width;
+    viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;// - marginFact ;//0.25*spcFct + viewFrame.size.width;
     viewFrame.size.height = 0.05*self.view.frame.size.height;
+    viewFrame.origin.y += 0.65*spcFct;
+    
  //   viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;
    
 
@@ -108,14 +110,108 @@
     
     [self.view addSubview:computerPlayerControl];
     
-    spcFct += viewFrame.size.height;
+   // spcFct += 0.5*viewFrame.size.height;
+    
+ // Difficulty
+    
+    viewFrame.origin.x = playerLabel.frame.origin.x;
+    viewFrame.origin.y += spcFct;
+    viewFrame.size = playerLabel.frame.size;
+    
+    difficultyLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    difficultyLabel.clipsToBounds =YES;
+    difficultyLabel.backgroundColor = [UIColor clearColor];
+    difficultyLabel.textColor = [UIColor whiteColor];
+    [difficultyLabel setTextAlignment:NSTextAlignmentCenter];
+    
+    [difficultyLabel setFont:[UIFont fontWithName:@"Arial-ItalicMT" size:1.75*FONT_FACT*viewFrame.size.height]];
+    difficultyLabel.text = @"Difficulty";
+    
+    [self.view addSubview:difficultyLabel];
     
     
+    viewFrame.size = computerPlayerControl.frame.size;
+    viewFrame.origin.x = computerPlayerControl.frame.origin.x;
+    viewFrame.origin.y += 0.65*spcFct;
+    
+    difficultyControl = [[UISegmentedControl alloc] initWithItems:@[@"Easy",@"Standard",@"Hard"]];
+    [difficultyControl setFrame:viewFrame];
+    [difficultyControl addTarget:self action:@selector(segmentedControlValueDidChange:) forControlEvents:UIControlEventValueChanged];
+    [difficultyControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
+
+    [difficultyControl setSelectedSegmentIndex:diffculty];
+    [self.view addSubview:difficultyControl];
+    
+ // Win settings
+    
+    viewFrame.size = difficultyLabel.frame.size;
+    viewFrame.origin.x = difficultyLabel.frame.origin.x;
+    viewFrame.origin.y += spcFct;
+    
+    gameModeLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    gameModeLabel.clipsToBounds =YES;
+    gameModeLabel.backgroundColor = [UIColor clearColor];
+    gameModeLabel.textColor = [UIColor whiteColor];
+    [gameModeLabel setTextAlignment:NSTextAlignmentCenter];
+    
+    [gameModeLabel setFont:[UIFont fontWithName:@"Arial-ItalicMT" size:1.75*FONT_FACT*viewFrame.size.height]];
+    gameModeLabel.text = @"Game Mode";
+    
+    [self.view addSubview:gameModeLabel];
+    
+    
+    viewFrame.size = difficultyControl.frame.size;
+    viewFrame.origin.x = difficultyControl.frame.origin.x;
+    viewFrame.origin.y += 0.65*spcFct;
+    
+    gameModeControl = [[UISegmentedControl alloc] initWithItems:@[@"Elimination",@"Capture Flag"]];
+    [gameModeControl setFrame:viewFrame];
+    [gameModeControl addTarget:self action:@selector(segmentedControlValueDidChange:) forControlEvents:UIControlEventValueChanged];
+    [gameModeControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    
+    [gameModeControl setSelectedSegmentIndex:captureFlagMode];
+    [self.view addSubview:gameModeControl];
+    
+ // Board Size
+    
+    viewFrame.size = difficultyLabel.frame.size;
+    viewFrame.origin.x = difficultyLabel.frame.origin.x;
+    viewFrame.origin.y += spcFct;
+    
+    boardSizeLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    boardSizeLabel.clipsToBounds =YES;
+    boardSizeLabel.backgroundColor = [UIColor clearColor];
+    boardSizeLabel.textColor = [UIColor whiteColor];
+    [boardSizeLabel setTextAlignment:NSTextAlignmentCenter];
+    
+    [boardSizeLabel setFont:[UIFont fontWithName:@"Arial-ItalicMT" size:1.75*FONT_FACT*viewFrame.size.height]];
+    boardSizeLabel.text = @"Board Size";
+    
+    [self.view addSubview:boardSizeLabel];
+    
+    
+    viewFrame.size = difficultyControl.frame.size;
+    viewFrame.origin.x = difficultyControl.frame.origin.x;
+    viewFrame.origin.y += 0.65*spcFct;
+    
+    boardSizeControl = [[UISegmentedControl alloc] initWithItems:@[@"5x5",@"6x6"]];
+    [boardSizeControl setFrame:viewFrame];
+    [boardSizeControl addTarget:self action:@selector(segmentedControlValueDidChange:) forControlEvents:UIControlEventValueChanged];
+    [boardSizeControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    
+    if(dimx == 5)
+        [boardSizeControl setSelectedSegmentIndex:0];
+    else
+        [boardSizeControl setSelectedSegmentIndex:1];
+    
+    [self.view addSubview:boardSizeControl];
+
+ 
  // Back button
     
-    viewFrame.size.height = 0.5*spcFct;
+    viewFrame.size.height = 0.75*spcFct;
     viewFrame.size.width = spcFct;
-    viewFrame.origin.x = 0.5*spcFct;
+    viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0; //0.5*spcFct;
     viewFrame.origin.y = self.view.frame.size.height - 0.5*spcFct - viewFrame.size.height;
     
     backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -127,9 +223,9 @@
     backButton.layer.borderColor = [[UIColor whiteColor] CGColor];
     
     [backButton.layer setBorderWidth:1.0f];
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [backButton setTitle:@"OK" forState:UIControlStateNormal];
     
-    [backButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:FONT_FACT*viewFrame.size.height]];
+    [backButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:1.5*FONT_FACT*viewFrame.size.height]];
     [backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
     [backButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];

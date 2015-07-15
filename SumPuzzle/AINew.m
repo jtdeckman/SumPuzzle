@@ -13,9 +13,9 @@
 
 @implementation AINew
 
-@synthesize captureFlagMode;
+@synthesize captureFlagMode, nIter;
 
--(void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy : (int)pInc : (BOOL)cfm {
+-(void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy : (int)pInc : (BOOL)cfm : (uint)nit {
     
     dimx = dx;
     dimy = dy;
@@ -28,6 +28,8 @@
     pieceInc = pInc;
     
     captureFlagMode = cfm;
+    
+    nIter = nit;
 }
 
 - (void)findSpaces : (Move*)compMove : (int)p1FltPieceVal : (int)compFltPieceVal {
@@ -65,7 +67,7 @@
                 nbr.value = compFltPieceVal;
                 nbr.player = player2;
                 
-                rank = [self calcWeight: tempP2Spaces :tempP1Spaces :N_ITER :p1FltPieceVal : compFltPieceVal];
+                rank = [self calcWeight: tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal];
                 
            //     rank -= (1.0/compFltPieceVal)*FLOAT_FACT;
                 
@@ -89,7 +91,7 @@
                     nbr.value = item.value;
                     nbr.player = player2;
                 
-                    rank = [self calcWeight: tempP2Spaces :tempP1Spaces :N_ITER :p1FltPieceVal : compFltPieceVal+TILE_INC];
+                    rank = [self calcWeight: tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal+TILE_INC];
                 
                     if(rank > bestMove.rank) {
                         bestMove.fromSpace = [self getSpaceForIndices:item.iind :item.jind];
@@ -123,7 +125,7 @@
                 
                 [tempP2Spaces removeObject:item];
                 
-                rank = [self calcWeight: tempP2Spaces :tempP1Spaces :N_ITER :p1FltPieceVal : compFltPieceVal+TILE_INC];
+                rank = [self calcWeight: tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal+TILE_INC];
                 
                 if(rank > bestMove.rank) {
                     bestMove.fromSpace = [self getSpaceForIndices:item.iind :item.jind];
@@ -160,7 +162,7 @@
                 
                 [tempP1Spaces removeObject:nbr];
                 
-                rank = [self calcWeight: tempP2Spaces :tempP1Spaces :N_ITER :p1FltPieceVal : compFltPieceVal+TILE_INC];
+                rank = [self calcWeight: tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal+TILE_INC];
                 
            //     rank += fabs(rank)*OVERTAKE_FACT;
                 
@@ -197,7 +199,7 @@
     compMove.toSpace = bestMove.toSpace;
 }
 
-- (double)calcWeight: (NSMutableSet*) p2Spaces : (NSMutableSet*) p1Spaces : (uint)niter : (int)p1Val : (int)p2Val {
+- (double)calcWeight: (NSMutableSet*) p2Spaces : (NSMutableSet*) p1Spaces : (int)p1Val : (int)p2Val {
     
     NSMutableArray *tempBoard = [self newTempBoard];
     
@@ -213,7 +215,7 @@
     
     weight = [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
     
-    for(int i=0; i<niter; i++) {
+    for(int i=0; i<nIter; i++) {
         
         if(![self makeBestP2Move:tempBoard :tempP1Spaces :tempP2Spaces :&p2Val]) break;
         if(![self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val]) break;

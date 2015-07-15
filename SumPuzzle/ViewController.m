@@ -430,7 +430,7 @@
     
     computer = [[AINew alloc] init];
     
-    [computer setUpAI:board.spaces :board.player1Spaces :board.player2Spaces :dimx :dimy : tileInc : YES];
+    [computer setUpAI:board.spaces :board.player1Spaces :board.player2Spaces :dimx :dimy : tileInc : YES :niter];
 }
 
 - (JDColor)getColorForPlayer {
@@ -449,6 +449,11 @@
     dimy = (int)[defaults integerForKey:@"dimy"];
     
     computerPlayer = [defaults boolForKey:@"computerPlayer"];
+    
+    niter = (uint)[defaults integerForKey:@"niter"];
+    
+    captureFlag = [defaults boolForKey:@"captureFlag"];
+    difficulty = [defaults integerForKey:@"difficulty"];
     
     startValue = (int)[defaults integerForKey:@"startValue"];
     tileValue = (int)[defaults integerForKey:@"tileValue"];
@@ -506,7 +511,7 @@
 - (void)setUpBoard:(CGFloat)offset {
     
     board = [[Board alloc] init];
-    [board initBoard:boardView.frame :dimx :dimy :offset];
+    [board initBoard:boardView.frame :dimx :dimy :offset :captureFlag];
     
     [self addPiecesToView];
     
