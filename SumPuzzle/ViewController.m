@@ -96,6 +96,10 @@
             location = [touch locationInView:menu];
             if([self isMenuBarItem:location :menu.settingsLabel.frame]) {
                 
+                SettingsViewController *settingsView = [[SettingsViewController alloc] init];
+                
+                [self presentViewController:settingsView animated:NO completion:nil];
+                                                        
             }
             else if([self isMenuBarItem:location :menu.nwGameLabel.frame]) {
                 menu.hidden = YES;
@@ -516,12 +520,14 @@
     [computer deconstructAI];
     [board deconstruct];
     
-    board = nil;
+    [self cleanUp];
+    
+   /* board = nil;
     computer = nil;
     
     [self loadData];
     [self setUpBoard:lineThickness];
-    [self setUpGamePlay];
+    [self setUpGamePlay]; */
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
@@ -906,7 +912,7 @@
     player1PntsLabel.layer.borderWidth = 2.0f;
     player1PntsLabel.textColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
     [player1PntsLabel setTextAlignment:NSTextAlignmentCenter];
-    [player1PntsLabel setFont:[UIFont fontWithName:@"Arial" size:0.85*FONT_FACT*viewFrame.size.width]];
+    [player1PntsLabel setFont:[UIFont fontWithName:@"Arial" size:0.9*FONT_FACT*viewFrame.size.width]];
     
     [self.view addSubview:player1PntsLabel];
     
@@ -925,7 +931,7 @@
     player2PntsLabel.textColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
     
     [player2PntsLabel setTextAlignment:NSTextAlignmentCenter];
-    [player2PntsLabel setFont:[UIFont fontWithName:@"Arial" size:0.85*FONT_FACT*viewFrame.size.width]];
+    [player2PntsLabel setFont:[UIFont fontWithName:@"Arial" size:0.9*FONT_FACT*viewFrame.size.width]];
     
     [self.view addSubview:player2PntsLabel];
     
@@ -1003,6 +1009,28 @@
     tileColor.green = 0.4;
     tileColor.blue = 0.4;
     
+}
+
+- (void)cleanUp {
+
+    selectedPiece = nil;
+    moveToSpace = nil;
+    
+    playerLabel = nil;
+    player1PntsLabel = nil;
+    player2PntsLabel = nil;
+    
+    nextTile = nil;
+    p2NextTile = nil;
+    
+    floatPiece = nil;
+    
+    board = nil;
+    computer = nil;
+    
+    topBar = nil;
+    bottomBar = nil;
+    boardView = nil;
 }
 
 @end

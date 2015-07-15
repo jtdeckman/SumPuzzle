@@ -13,6 +13,7 @@
 #import "MenuView.h"
 #import "AINew.h"
 #import "Move.h"
+#import "SettingsViewController.h"
 
 @interface ViewController : UIViewController {
     

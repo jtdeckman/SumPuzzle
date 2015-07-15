@@ -22,6 +22,17 @@
     
     Difficulty diffculty;
     
+    UISegmentedControl *computerPlayerControl;
+    UISegmentedControl *gameModeControl;
+    UISegmentedControl *difficultyControl;
+    UISegmentedControl *boardSizeControl;
+    
+    UIButton *backButton;
+    
+    UILabel *playerLabel;
+    UILabel *difficultyLabel;
+    UILabel *winModeLabel;
+    UILabel *boardSizeLabel;
 }
 
 @end
