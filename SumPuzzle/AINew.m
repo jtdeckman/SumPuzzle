@@ -57,7 +57,6 @@
         
         for(Space* nbr in item.nearestNbrs) {
             
-            
             if(nbr.player == notAssigned) {
                 
                 [tempP2Spaces addObject:nbr];
@@ -210,15 +209,22 @@
     
     int cnt = 1;
     
-    if(![self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val])
+    if(![self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val])
         return [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
     
     weight = [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
     
-    for(int i=0; i<nIter; i++) {
+    for(int i=0; i<3; i++) {
+   // for(int i=0; i<nIter; i++) {
         
-        if(![self makeBestP2Move:tempBoard :tempP1Spaces :tempP2Spaces :&p2Val]) break;
-        if(![self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val]) break;
+        if(![self makeBestP2Move:tempBoard :tempP1Spaces :tempP2Spaces :&p2Val]) {
+            weight -= 100000;
+            break;
+        }
+        if(![self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val]) {
+            weight += 100000;
+            break;
+        }
         
         weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(++cnt);
     }
@@ -300,7 +306,7 @@
     return metric;
 }
 
-- (BOOL)makeBestP1Move: (NSMutableArray*)tmpBoard :(NSMutableSet*)p1Spaces : (NSMutableSet*)p2Spaces : (int*)origP1Val {
+- (BOOL)makeBestP1Move: (NSMutableArray*)tmpBoard :(NSMutableSet*)p1Spaces : (NSMutableSet*)p2Spaces : (int*)origP1Val :(int)p2Val {
 
     NSMutableSet *newP1Spaces = [[NSMutableSet alloc] initWithSet:p1Spaces];
     NSMutableSet *newP2Spaces = [[NSMutableSet alloc] initWithSet:p2Spaces];
@@ -336,10 +342,12 @@
                 nbr.player = player1;
                 
                 rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
+                rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p2Val];
                 
           //     rank -= (1.0/p1Val)*FLOAT_FACT;
                 
                 if(rank > weight) {
+            
                     moveFrom.space = NULL;
                     moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
                     weight = rank;
@@ -357,8 +365,10 @@
                     nbr.player = player1;
                 
                     rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
-                
+                    rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p2Val];
+                    
                     if(rank > weight) {
+                     
                         moveFrom.space = [self getMinSpaceForIndices: tmpBoard:item.iind :item.jind];
                         moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
                         weight = rank;
@@ -386,8 +396,10 @@
                 [newP1Spaces removeObject:item];
                 
                 rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
+                rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p2Val];
                 
                 if(rank > weight) {
+                    
                     moveFrom.space = [self getMinSpaceForIndices: tmpBoard:item.iind :item.jind];
                     moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
                     weight = rank;
@@ -418,10 +430,12 @@
                 [newP2Spaces removeObject:nbr];
                 
                 rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
+                rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p2Val];
                 
           //      rank += fabs(rank)*OVERTAKE_FACT;
                 
                 if(rank > weight) {
+    
                     moveFrom.space = [self getMinSpaceForIndices: tmpBoard:item.iind :item.jind];
                     moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
                     weight = rank;
@@ -583,7 +597,7 @@
                     nbr.player = player2;
                     
                     rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
-                    
+                
                     if(rank > weight) {
                         moveFrom.space = [self getMinSpaceForIndices: tmpBoard:item.iind :item.jind];
                         moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
@@ -753,6 +767,136 @@
     }
     
     return YES;
+}
+
+- (double)makeBestP2MoveJustWeight: (NSMutableArray*)tmpBoard :(NSMutableSet*)p1Spaces : (NSMutableSet*)p2Spaces : (int)p2Val {
+    
+    NSMutableSet *newP1Spaces = [[NSMutableSet alloc] initWithSet:p1Spaces];
+    NSMutableSet *newP2Spaces = [[NSMutableSet alloc] initWithSet:p2Spaces];
+    
+    SubSpace *origSpace = [[SubSpace alloc] init];
+    SubSpace *nbrSpace = [[SubSpace alloc] init];
+    
+    double rank, weight = -1e30;
+    
+    for(MinSpace* item in p2Spaces) {
+        
+        for(MinSpace* nbr in item.nbrs) {
+            
+            if(nbr.player == notAssigned) {
+                
+                [newP2Spaces addObject:nbr];
+                
+                // Free move
+                
+                nbr.value = p2Val;
+                nbr.player = player2;
+                
+                rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
+                
+                //       rank -= (1.0/p2Val)*FLOAT_FACT;
+                
+                if(rank > weight)
+                    weight = rank;
+                
+                // Split move
+                
+                if(item.value > 1) {
+                    
+                    origSpace.value = item.value;
+                    item.value = (int)(item.value/2.0);
+                    
+                    nbr.value = item.value;
+                    nbr.player = player2;
+                    
+                    rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
+                    
+                    if(rank > weight)
+                        weight = rank;
+                    
+                    item.value = origSpace.value;
+                    
+                    nbr.player = notAssigned;
+                    nbr.value = 0;
+                    
+                    [newP2Spaces removeObject:nbr];
+                }
+            }
+            
+            else if(nbr.player == player2) {
+                
+                nbrSpace.value = nbr.value;
+                origSpace.value = item.value;
+                
+                nbr.value += item.value;
+                
+                item.value = 0;
+                item.player = notAssigned;
+                
+                [newP2Spaces removeObject:item];
+                
+                rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
+                
+                if(rank > weight)
+                    weight = rank;
+                
+                item.value = origSpace.value;
+                item.player = player2;
+                
+                nbr.value = nbrSpace.value;
+                
+                [newP2Spaces addObject:item];
+            }
+            
+            else if(nbr.player == player1 && ((item.value - nbr.value) >= 2)) {
+                
+                nbrSpace.value = nbr.value;
+                origSpace.value = item.value;
+                
+                nbr.value = item.value - (float)(nbr.value)/2.0;
+                nbr.player = player2;
+                
+                item.value = 0;
+                item.player = notAssigned;
+                
+                [newP2Spaces addObject:nbr];
+                [newP2Spaces removeObject:item];
+                
+                [newP1Spaces removeObject:nbr];
+                
+                rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
+                
+                //    rank += fabs(rank)*OVERTAKE_FACT;
+                
+                if(rank > weight)
+                    weight = rank;
+                
+                nbr.value = nbrSpace.value;
+                nbr.player = player1;
+                
+                item.value = origSpace.value;
+                item.player = player2;
+                
+                [newP2Spaces addObject:item];
+                [newP2Spaces removeObject:nbr];
+                
+                [newP1Spaces addObject:nbr];
+            }
+            
+            else {
+                
+                
+            }
+        }
+    }
+    
+    [newP1Spaces removeAllObjects];
+    [newP2Spaces removeAllObjects];
+    
+    newP1Spaces = nil;
+    newP2Spaces = nil;
+    
+    return weight;
 }
 
 - (void)resetP1Spaces : (NSMutableSet*)p1Spaces : (NSMutableSet*)p2Spaces : (SubSpace*)fromSpace : (SubSpace*)toSpace {

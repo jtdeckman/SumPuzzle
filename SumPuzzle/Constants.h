@@ -51,7 +51,7 @@
 
 #define WAVG_FACT 0.1
 #define OVERTAKE_FACT 0.1
-#define PPN_FACT 0.1
+#define PPN_FACT 10.0
 #define PPN_O_FACT 100000
 #define DIFF_MODE 1
 
@@ -72,6 +72,7 @@ typedef enum : NSUInteger {
     gameOver,
     gameMenu,
     winState,
+    winMenu,
     newGame
     
 } GameState;

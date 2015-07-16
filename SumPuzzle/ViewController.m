@@ -115,10 +115,15 @@
         }
     }
     
-    else if(gameState == gameMenu) {
+    else if(gameState == gameMenu || gameState ==  winMenu) {
         
         if(touch.view != menu) {
-            gameState = gameRunning;
+            
+            if(gameState == gameMenu)
+                gameState = gameRunning;
+            else
+                gameState = winState;
+            
             menu.hidden = YES;
         }
         else {
@@ -143,7 +148,7 @@
     else if(gameState == winState) {
         
         if(touch.view == bottomBar && [self isMenuBarLocation:location]) {
-            gameState = gameMenu;
+            gameState = winMenu;
             menu.hidden = NO;
             [self.view bringSubviewToFront:menu];
         }
@@ -320,10 +325,10 @@
     
     if(moveTo == nil) {
     
- //       winner = player1;
- //       gameState = winState;
+        winner = player1;
+        gameState = winState;
         
- //       [self gameWon];
+        [self gameWon];
     }
     
     else {
@@ -394,14 +399,6 @@
                 [self switchPlayers];
             }
         }
-    }
-    
-    [board checkForWinner];
-    
-    if(winner != notAssigned) {
-        
-        gameState = winState;
-        [self gameWon];
     }
 }
 
@@ -501,39 +498,43 @@
 
 - (void)switchPlayers {
     
-    if(currentPlayer == player1) {
-        currentPlayer = player2;
-        if(computerPlayer)
-            playerLabel.text = @"Computer";
-        else
-            playerLabel.text = @"Player 2";
-         playerLabel.backgroundColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
-    }
-    else {
-        currentPlayer = player1;
-        playerLabel.text = @"Player 1";
-        playerLabel.backgroundColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
-    }
-    
-    [self upDatePoints];
-
-    [self upDateNextTiles];
-    
-    selectedPiece = nil;
-    
-    placeMode = freeState;
-    
     winner = [board checkForWinner];
     
     if(winner != notAssigned) {
         
         gameState = winState;
-        
         [self gameWon];
     }
-         
-    if(computerPlayer && currentPlayer == player2)
-        [self AIMove];
+    
+    else {
+    
+        if(currentPlayer == player1) {
+            currentPlayer = player2;
+            if(computerPlayer)
+                playerLabel.text = @"Computer";
+            else
+                playerLabel.text = @"Player 2";
+            playerLabel.backgroundColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
+        }
+        
+        else {
+        
+            currentPlayer = player1;
+            playerLabel.text = @"Player 1";
+            playerLabel.backgroundColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
+        }
+    
+        [self upDatePoints];
+
+        [self upDateNextTiles];
+    
+        selectedPiece = nil;
+    
+        placeMode = freeState;
+    
+        if(computerPlayer && currentPlayer == player2)
+            [self AIMove];
+    }
 }
 
 - (void)upDatePoints {
@@ -690,8 +691,9 @@
         
         [moveTimer invalidate];
         moveTimer = nil;
-        
-        gameState = gameRunning;
+       
+        if(gameState == gamePaused)
+            gameState = gameRunning;
         
         floatPiece.hidden = YES;
         moveToSpace.piece.hidden = NO;
