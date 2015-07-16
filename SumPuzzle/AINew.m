@@ -206,7 +206,7 @@
     NSMutableSet *tempP1Spaces = [self setUpTempBoardAndPlayerSpaces:tempBoard :p1Spaces];
     NSMutableSet *tempP2Spaces = [self setUpTempBoardAndPlayerSpaces:tempBoard :p2Spaces];
     
-    double weight; //, avgw=0;
+    double weight;
     
     int cnt = 1;
     
@@ -221,17 +221,11 @@
         if(![self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val]) break;
         
         weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(++cnt);
-        
-     //   avgw += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(++cnt);
     }
     
     weight += [self calcP2BoardMetric: tempP1Spaces : tempP2Spaces]/(++cnt);
     
-   // avgw += [self calcP2BoardMetric: tempP1Spaces : tempP2Spaces]/(++cnt);
-    
-  //  avgw /= cnt-1;
-    
-    return weight;// + avgw;
+    return weight;
 }
 
 - (double)calcP2BoardMetric : (NSMutableSet*)p1spcs : (NSMutableSet*)p2spcs {
