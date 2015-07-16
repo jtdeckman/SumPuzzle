@@ -65,6 +65,8 @@
     UILabel *player1PntsLabel;
     UILabel *player2PntsLabel;
     
+    UILabel *timeLabel;
+    
     UILabel *winLabel;
     
     UIImage *p1Img;
@@ -74,7 +76,8 @@
     
     UIImageView *menuBar;
     
-    NSTimer *timer, *moveTimer;
+    NSTimer *timer;
+    NSTimer *moveTimer;
     
     GameState gameState;
     PlaceMode placeMode;

@@ -26,7 +26,7 @@
     [self setUpViewController];
     [self setUpGamePlay];
     
-     timer = [NSTimer timerWithTimeInterval:1/1 target:self selector:@selector(runLoop) userInfo:nil repeats:YES];
+    timer = [NSTimer scheduledTimerWithTimeInterval:1/1 target:self selector:@selector(runLoop) userInfo:nil repeats:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -68,7 +68,7 @@
     
     if(gameState == gameRunning) {
         
-        ++gameTimeCnt;
+       [self convertSecondsToHoursMinSec:gameTimeCnt++];
     }
     
 }
@@ -318,20 +318,12 @@
     
     moveInc = MOVE_NINC;
     
-    [board checkForWinner];
-    
-    if(winner != notAssigned) {
-    
-        gameState = winState;
-        [self gameWon];
-    }
-    
     if(moveTo == nil) {
     
-        winner = player1;
-        gameState = winState;
+ //       winner = player1;
+ //       gameState = winState;
         
-        [self gameWon];
+ //       [self gameWon];
     }
     
     else {
@@ -402,6 +394,14 @@
                 [self switchPlayers];
             }
         }
+    }
+    
+    [board checkForWinner];
+    
+    if(winner != notAssigned) {
+        
+        gameState = winState;
+        [self gameWon];
     }
 }
 
@@ -887,7 +887,7 @@
     
     floatPiece = [[UILabel alloc] initWithFrame:viewFrame];
     floatPiece.hidden = YES;
-    floatPiece.layer.cornerRadius = 3.0;
+    floatPiece.layer.cornerRadius = 10.0;
     floatPiece.clipsToBounds = YES;
     floatPiece.backgroundColor = nextTile.backgroundColor;
     //  floatPiece.layer.borderWidth = 2.0f;
@@ -917,7 +917,7 @@
     viewFrame.size.width = 0.4*self.view.frame.size.width;
     viewFrame.size.height = 0.055*self.view.frame.size.height;
     viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;
-    viewFrame.origin.y = 0.085*self.view.frame.size.height;
+    viewFrame.origin.y = 0.11*self.view.frame.size.height;
     
     playerLabel = [[UILabel alloc] initWithFrame:viewFrame];
     
@@ -979,6 +979,25 @@
     
     [self.view addSubview:player2PntsLabel];
     
+ // Timer label
+    
+    viewFrame.size.height = player1PntsLabel.frame.size.height;
+    viewFrame.size.width = 2.0*player1PntsLabel.frame.size.width;
+    viewFrame.origin.y = player1PntsLabel.frame.origin.y - 1.15*viewFrame.size.height;
+    viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;
+    
+    timeLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    
+    timeLabel.clipsToBounds = YES;
+    timeLabel.backgroundColor = [UIColor clearColor];
+    timeLabel.layer.borderColor = [[UIColor clearColor] CGColor];
+    timeLabel.textColor = [UIColor whiteColor];
+    [timeLabel setTextAlignment:NSTextAlignmentCenter];
+    [timeLabel setFont:[UIFont fontWithName:@"Arial" size:1.5*FONT_FACT*viewFrame.size.height]];
+    
+    timeLabel.text = @"00:00";
+    
+    [self.view addSubview:timeLabel];
     
  // Win Label
     
@@ -1075,6 +1094,28 @@
     topBar = nil;
     bottomBar = nil;
     boardView = nil;
+}
+
+- (void)convertSecondsToHoursMinSec:(uint)nSeconds {
+    
+    uint min, sec;
+    
+    min = (int)(nSeconds/60);
+    sec = nSeconds % 60;
+    
+    if(min < 10) {
+        if(sec < 10)
+            timeLabel.text = [NSString stringWithFormat:@"0%d:0%d",min,sec];
+        else
+            timeLabel.text = [NSString stringWithFormat:@"0%d:%d",min,sec];
+    }
+    else {
+        if(sec < 10)
+            timeLabel.text = [NSString stringWithFormat:@"%d:0%d",min,sec];
+        else
+            timeLabel.text = [NSString stringWithFormat:@"%d:%d",min,sec];
+    }
+    
 }
 
 @end
