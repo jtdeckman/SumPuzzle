@@ -209,27 +209,37 @@
     
     int cnt = 1;
     
-    if(![self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val])
-        return [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
-    
     weight = [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
     
-    for(int i=0; i<3; i++) {
+    [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val];
+    
+  //  if(![self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val])
+  //      return [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
+    
+    weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
+    
+    for(int i=0; i<10; i++) {
    // for(int i=0; i<nIter; i++) {
         
-        if(![self makeBestP2Move:tempBoard :tempP1Spaces :tempP2Spaces :&p2Val]) {
+        [self makeBestP2Move:tempBoard :tempP1Spaces :tempP2Spaces :&p2Val];
+        
+            weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(++cnt);
+        
+        [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val];
+     
+     /*   if(![self makeBestP2Move:tempBoard :tempP1Spaces :tempP2Spaces :&p2Val]) {
             weight -= 100000;
             break;
         }
         if(![self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val]) {
             weight += 100000;
             break;
-        }
+        } */
         
-        weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(++cnt);
+        weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/cnt;
     }
     
-    weight += [self calcP2BoardMetric: tempP1Spaces : tempP2Spaces]/(++cnt);
+  //  weight += [self calcP2BoardMetric: tempP1Spaces : tempP2Spaces]/(++cnt);
     
     return weight;
 }
@@ -257,9 +267,9 @@
       //  wavg = (compTotal*nP2Spc - p1Total*nP1Spc*nP1Spc)*WAVG_FACT;
     
   //  double sd = [self stdDev:p2spcs]*SD_FACT;
- //   double wd = [self weightedDistance:p2spcs :p1spcs]*WD_FACT;
+    double wd = [self weightedDistance:p2spcs :p1spcs]*WD_FACT;
     
-    metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg;// + wd;
+    metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg + wd + nP2Spc*NUM_FACT;
     
   //  if(captureFlagMode)
     //    metric += [self distWeight:p2spcs :player2]*DIST_WEIGHT;
@@ -294,9 +304,9 @@
      //   wavg = (p1Total*nP1Spc - compTotal*nP2Spc*nP2Spc)*WAVG_FACT;
     
    // double sd = [self stdDev:p1spcs]*SD_FACT;
-   // double wd = [self weightedDistance:p1spcs :p2spcs]*WD_FACT;
+    double wd = [self weightedDistance:p1spcs :p2spcs]*WD_FACT;
     
-    metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg;// + wd;
+    metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg + wd + nP1Spc*NUM_FACT;
     
   //  if(captureFlagMode)
     //    metric += [self distWeight:p1spcs :player1]*DIST_WEIGHT;
