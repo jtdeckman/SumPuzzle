@@ -26,8 +26,8 @@
     
     CGFloat spaceWidth;
     CGFloat spaceHeight;
-    CGFloat pieceHeight;
-    CGFloat pieceWidth;
+    CGFloat pieceHeight, ph2;
+    CGFloat pieceWidth, pw2;
     
     BOOL captureFlagMode;
 }

@@ -40,6 +40,9 @@
     pieceWidth = spaceWidth - offset;
     pieceHeight = spaceHeight - offset;
     
+    pw2 = pieceWidth/2.0;
+    ph2 = pieceWidth/2.0;
+    
     spcFrm.size.width = spaceWidth;
     spcFrm.size.height = spaceHeight;
     
@@ -168,6 +171,9 @@
 - (Space*)getSpaceFromPoint: (CGPoint)loc {
     
     Space *space;
+    
+    loc.x += pw2;
+    loc.y += ph2;
     
     for(int i=0; i<dimx; i++) {
         for(int j=0; j<dimy; j++) {
