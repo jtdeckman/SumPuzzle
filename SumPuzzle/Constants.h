@@ -31,6 +31,7 @@
 #define MAX_NEARBY_NEIGHBORS 8
 
 #define N_ITER 20
+#define NUM_R_ITER 1
 
 #define TILE_INIT 10
 #define TILE_INC 10
@@ -51,11 +52,12 @@
 
 #define WAVG_FACT 0.1
 #define OVERTAKE_FACT 0.1
-#define PPN_FACT 10.0
+#define PPN_FACT 1.0
 #define PPN_O_FACT 100000
 #define DIFF_MODE 1
 
 #define MOVE_NINC 3500
+#define AI_PAUSE_TIME 1
 
 typedef struct {
     
@@ -73,6 +75,7 @@ typedef enum : NSUInteger {
     gameMenu,
     winState,
     winMenu,
+    preAI,
     newGame
     
 } GameState;

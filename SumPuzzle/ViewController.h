@@ -53,6 +53,8 @@
     
     int gameTimeCnt;
     int moveTimeCnt;
+    int pauseTimeCnt;
+    
     int moveInc;
     
     uint niter;
@@ -78,6 +80,7 @@
     
     NSTimer *timer;
     NSTimer *moveTimer;
+    NSTimer *pauseTimer;
     
     GameState gameState;
     PlaceMode placeMode;

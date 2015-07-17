@@ -66,7 +66,7 @@
 
 - (void)runLoop {
     
-    if(gameState == gameRunning) {
+    if(gameState == gameRunning || gameState == preAI) {
         
        [self convertSecondsToHoursMinSec:gameTimeCnt++];
     }
@@ -533,8 +533,16 @@
         placeMode = freeState;
     
         if(computerPlayer && currentPlayer == player2)
-            [self AIMove];
+            [self AIWaitLoop];
     }
+}
+
+- (void)AIWaitLoop {
+
+    pauseTimer = [NSTimer scheduledTimerWithTimeInterval:1/2 target:self selector:@selector(AIPauseLoop) userInfo:nil repeats:YES];
+    
+    gameState = preAI;
+    pauseTimeCnt = 0;
 }
 
 - (void)upDatePoints {
@@ -656,6 +664,21 @@
     UIGraphicsEndImageContext();
     
     tile.backgroundColor = [UIColor colorWithPatternImage:newImage];
+}
+- (void)AIPauseLoop {
+
+    if(pauseTimeCnt >= AI_PAUSE_TIME) {
+        [pauseTimer invalidate];
+        pauseTimer = nil;
+        
+        if(gameState == preAI)
+            gameState = gameRunning;
+        
+        [self AIMove];
+    }
+    else {
+        ++pauseTimeCnt;
+    }
 }
 
 - (void)animateComputerMove: (Space*)fromSpace : (int)value :(BOOL)nxtTileMv {

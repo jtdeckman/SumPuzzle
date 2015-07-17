@@ -473,6 +473,8 @@
             for(Space* nbr in item.nearestNbrs) {
                 if(nbr.player == notAssigned || nbr.player == player1)
                     return NO;
+                if(item.value > nbr.value)
+                    return  NO;
             }
         }
     }
@@ -481,6 +483,8 @@
         for(Space* item in player2Spaces) {
             for(Space* nbr in item.nearestNbrs) {
                 if(nbr.player == notAssigned || nbr.player == player2)
+                    return NO;
+                if(item.value > nbr.value)
                     return NO;
             }
         }
