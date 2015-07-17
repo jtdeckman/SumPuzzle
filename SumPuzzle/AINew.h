@@ -15,6 +15,7 @@
 }
 
 @property (nonatomic) uint nIter;
+@property (nonatomic) uint numRnIter;
 
 - (void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy : (int)pInc : (BOOL)cfm :(uint)nit;
 - (void)findSpaces : (Move*)compMove : (int)p1FltPieceVal : (int)compFloatPieceVal;

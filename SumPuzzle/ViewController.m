@@ -48,12 +48,12 @@
             
             difficulty = [defaults integerForKey:@"difficulty"];
             
-            if(difficulty == 0)
-                niter = 10;
-            if(difficulty == 2)
-                niter = 35;
-            else
-                niter = 25;
+            [self setUpDifficulty];
+            
+            if(computerPlayer && computer != nil) {
+                computer.nIter = niter;
+                computer.numRnIter = nRnIter;
+            }
         }
     }
 }
@@ -443,8 +443,6 @@
     nextValueP1 = tileValue;
     nextValueP2 = tileValue;
     
-   // [self changeNextTileForPlayer];
-    
     [self upDateNextTiles];
     
     playerLabel.text = [NSString stringWithFormat:@"Player 1"];
@@ -458,6 +456,8 @@
     computer = [[AINew alloc] init];
     
     [computer setUpAI:board.spaces :board.player1Spaces :board.player2Spaces :dimx :dimy : tileInc : YES :niter];
+    
+    computer.numRnIter = nRnIter;
 }
 
 - (JDColor)getColorForPlayer {
@@ -477,8 +477,6 @@
     
     computerPlayer = [defaults boolForKey:@"computerPlayer"];
     
-  //  niter = (uint)[defaults integerForKey:@"niter"];
-    
     captureFlag = [defaults boolForKey:@"captureFlag"];
     difficulty = [defaults integerForKey:@"difficulty"];
     
@@ -486,12 +484,7 @@
     tileValue = (int)[defaults integerForKey:@"tileValue"];
     tileInc = (int)[defaults integerForKey:@"tileInc"];
     
-    if(difficulty == 0)
-        niter = 10;
-    else if(difficulty == 2)
-        niter = 35;
-    else
-        niter = 25;
+    [self setUpDifficulty];
     
     [defaults synchronize];
 }
@@ -572,13 +565,6 @@
     [board deconstruct];
     
     [self cleanUp];
-    
-   /* board = nil;
-    computer = nil;
-    
-    [self loadData];
-    [self setUpBoard:lineThickness];
-    [self setUpGamePlay]; */
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
@@ -742,15 +728,13 @@
 }
 
 - (void)gameWon {
-
-  //  [winLabel setFont:[UIFont fontWithName:@"Arial" size:0.65*FONT_FACT*winLabel.frame.size.width]];
     
-    if(winner == player1)
+    if(winner == player1) {
+
         winLabel.text = [NSString stringWithFormat:@"You Win!"];
+    }
+    
     else {
-        
-       // [winLabel setFont:[UIFont fontWithName:@"Arial" size:0.45*FONT_FACT*winLabel.frame.size.width]];
-        
         if(computerPlayer)
             winLabel.text = [NSString stringWithFormat:@"Computer Wins :("];
         else
@@ -1141,6 +1125,22 @@
             timeLabel.text = [NSString stringWithFormat:@"%d:%d",min,sec];
     }
     
+}
+
+- (void)setUpDifficulty {
+
+    if(difficulty == 0) {
+        niter = 0;
+        nRnIter = 1;
+    }
+    else if(difficulty == 2) {
+        niter = 7;
+        nRnIter = 2;
+    }
+    else {
+        niter = 4;
+        nRnIter = 2;
+    }
 }
 
 @end

@@ -58,6 +58,7 @@
     int moveInc;
     
     uint niter;
+    uint nRnIter;
     
     UILabel *nextTile;
     UILabel *p2NextTile;

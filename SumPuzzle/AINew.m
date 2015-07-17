@@ -13,7 +13,7 @@
 
 @implementation AINew
 
-@synthesize nIter;
+@synthesize nIter, numRnIter;
 
 -(void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy : (int)pInc : (BOOL)cfm : (uint)nit {
     
@@ -30,6 +30,8 @@
     captureFlagMode = cfm;
     
     nIter = nit;
+    
+    numRnIter = NUM_R_ITER;
 }
 
 - (void)findSpaces : (Move*)compMove : (int)p1FltPieceVal : (int)compFltPieceVal {
@@ -68,16 +70,10 @@
                 
                 rank = [self calcWeight: tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal];
                 
-           //     rank -= (1.0/compFltPieceVal)*FLOAT_FACT;
-                
                 if(rank > bestMove.rank) {
                     bestMove.fromSpace = NULL;
                     bestMove.toSpace = [self getSpaceForIndices:nbr.iind :nbr.jind];
                     bestMove.rank = rank;
-                }
-                
-                if([tempP1Spaces count] != cnt) {
-                    NSLog(@"Fuck");
                 }
 
              // Split move
@@ -104,11 +100,6 @@
                     nbr.value = 0;
                 
                     [tempP2Spaces removeObject:nbr];
-                    
-                    if([tempP1Spaces count] != cnt) {
-                        NSLog(@"Fuck");
-                    }
-
                 }
             }
             
@@ -163,8 +154,6 @@
                 
                 rank = [self calcWeight: tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal+TILE_INC];
                 
-           //     rank += fabs(rank)*OVERTAKE_FACT;
-                
                 if(rank > bestMove.rank) {
                     bestMove.fromSpace = [self getSpaceForIndices:item.iind :item.jind];
                     bestMove.toSpace = [self getSpaceForIndices:nbr.iind :nbr.jind];
@@ -181,11 +170,6 @@
                 [tempP2Spaces removeObject:nbr];
                 
                 [tempP1Spaces addObject:nbr];
-                
-                if([tempP1Spaces count] != cnt) {
-                    NSLog(@"Fuck");
-                }
-
             }
             
             else {
@@ -210,29 +194,20 @@
     int cnt = 1;
     
     weight = [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
-    
     [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val];
-    
-  //  if(![self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val])
-  //      return [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
     
     weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
     
-    for(int i=0; i<4; i++) {
-   // for(int i=0; i<nIter; i++) {
+    for(int i=0; i<nIter; i++) {
         
         ++cnt;
         
         [self makeBestP2Move:tempBoard :tempP1Spaces :tempP2Spaces :p1Val :&p2Val];
-        
-            weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(cnt*cnt);
+        weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(cnt*cnt);
         
         [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val];
-            
         weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(cnt*cnt);
     }
-    
-  //  weight += [self calcP2BoardMetric: tempP1Spaces : tempP2Spaces]/(++cnt);
     
     return weight;
 }
@@ -324,8 +299,6 @@
     
     int p1Val = *origP1Val;
     
- //   BOOL winState = NO;
-    
     moveFrom.space = NULL;
     moveTo.space = NULL;
     
@@ -345,7 +318,7 @@
                 nbr.player = player1;
                 
                 rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
-                rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val :NUM_R_ITER];
+                rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val :numRnIter];
                 
                 if(rank > weight) {
             
@@ -365,7 +338,7 @@
                     nbr.player = player1;
                 
                     rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
-                    rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val+TILE_INC  :p2Val :NUM_R_ITER];
+                    rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val+TILE_INC  :p2Val :numRnIter];
                     
                     if(rank > weight) {
                      
@@ -396,7 +369,7 @@
                 [newP1Spaces removeObject:item];
                 
                 rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
-                rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val+TILE_INC :p2Val :NUM_R_ITER];
+                rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val+TILE_INC :p2Val :numRnIter];
                 
                 if(rank > weight) {
                     
@@ -430,9 +403,7 @@
                 [newP2Spaces removeObject:nbr];
                 
                 rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
-                rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val+TILE_INC :p2Val :NUM_R_ITER];
-                
-          //      rank += fabs(rank)*OVERTAKE_FACT;
+                rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val+TILE_INC :p2Val :numRnIter];
                 
                 if(rank > weight) {
     
@@ -576,14 +547,13 @@
                 nbr.player = player2;
                 
                 rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
-                rank -= [self makeBestP1MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val :NUM_R_ITER];
+                rank -= [self makeBestP1MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val :numRnIter];
                 
                 if(rank > weight) {
                     moveFrom.space = NULL;
                     moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
                     weight = rank;
                 }
-                
                 
                 // Split move
                 
@@ -596,7 +566,7 @@
                     nbr.player = player2;
                     
                     rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
-                    rank -= [self makeBestP1MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val+TILE_INC :NUM_R_ITER];
+                    rank -= [self makeBestP1MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val+TILE_INC :numRnIter];
                     
                     if(rank > weight) {
                         moveFrom.space = [self getMinSpaceForIndices: tmpBoard:item.iind :item.jind];
@@ -626,7 +596,7 @@
                 [newP2Spaces removeObject:item];
                 
                 rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
-                rank -= [self makeBestP1MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val+TILE_INC :NUM_R_ITER];
+                rank -= [self makeBestP1MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val+TILE_INC :numRnIter];
                 
                 if(rank > weight) {
                     moveFrom.space = [self getMinSpaceForIndices: tmpBoard:item.iind :item.jind];
@@ -659,9 +629,7 @@
                 [newP1Spaces removeObject:nbr];
                 
                 rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
-                rank -= [self makeBestP1MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val+TILE_INC :NUM_R_ITER];
-                
-            //    rank += fabs(rank)*OVERTAKE_FACT;
+                rank -= [self makeBestP1MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val+TILE_INC :numRnIter];
                 
                 if(rank > weight) {
                     moveFrom.space = [self getMinSpaceForIndices: tmpBoard:item.iind :item.jind];
@@ -945,7 +913,6 @@
                     weight = rank;
                 }
                 
-                
                 // Split move
                 
                 if(item.value > 1) {
@@ -1194,54 +1161,3 @@
 }
 
 @end
-
-
-
-
-
-
-
-
-
-/*   
- // NSMutableArray *moves;
- // uint nmoves = 2*dimx*dimy*(int)[player1Spaces count];
- // moves = [[NSMutableArray alloc] initWithCapacity:nmoves];
- 
- 
- if([moves count] > 0) {
- 
- NSArray *sortedMoves;
- 
- sortedMoves = [moves sortedArrayUsingComparator:^NSComparisonResult(id move1, id move2) {
- 
- Move *m1 = (Move*)move1;
- Move *m2 = (Move*)move2;
- 
- if(m1.rank <= m2.rank) return YES;
- 
- return NO;
- }];
- 
- int cnt = 1;
- 
- Move *tempMove, *bestMove = sortedMoves[0];
- 
- for(int i=1; i < [sortedMoves count]; i++) {
- 
- tempMove = sortedMoves[i];
- 
- if(tempMove.rank != bestMove.rank)
- break;
- else
- ++cnt;
- }
- 
- if(cnt > 1)
- bestMove = sortedMoves[rand() % cnt];
- 
- compMove.rank = bestMove.rank;
- compMove.fromSpace = bestMove.fromSpace;
- compMove.toSpace = bestMove.toSpace;
- } */
-
