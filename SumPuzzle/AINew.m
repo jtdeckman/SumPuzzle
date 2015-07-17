@@ -14,16 +14,17 @@
 @implementation AINew
 
 @synthesize nIter, numRnIter;
+@synthesize flagPos1, flagPos2;
 
--(void)setUpAI : (NSMutableArray*)spc : (NSMutableSet*)p1s : (NSMutableSet*)p2s : (int)dx : (int)dy : (int)pInc : (BOOL)cfm : (uint)nit {
+-(void)setUpAI :(Board*)board :(int)pInc :(BOOL)cfm :(uint)nit {
     
-    dimx = dx;
-    dimy = dy;
+    dimx = board.dimx;
+    dimy = board.dimy;
     
-    spaces = spc;
+    spaces = board.spaces;
     
-    player1Spaces = p1s;
-    player2Spaces = p2s;
+    player1Spaces = board.player1Spaces;
+    player2Spaces = board.player2Spaces;
     
     pieceInc = pInc;
     
@@ -32,6 +33,9 @@
     nIter = nit;
     
     numRnIter = NUM_R_ITER;
+    
+    flagPos1 = 0;
+    flagPos2 = dimy-1;
 }
 
 - (void)findSpaces : (Move*)compMove : (int)p1FltPieceVal : (int)compFltPieceVal {
@@ -226,8 +230,8 @@
 
     double wavg = 0;
     
-    if(nP2Spc > 0)
-        wavg += (compTotal/nP2Spc)*PPN_FACT;
+  //  if(nP2Spc > 0)
+   //     wavg += (compTotal/nP2Spc)*PPN_FACT;
     
    // if(nP1Spc > 0)
      //   wavg += PPN_O_FACT/(p1Total*nP1Spc);
@@ -237,12 +241,20 @@
   //  double sd = [self stdDev:p2spcs]*SD_FACT;
   //  double wd = [self weightedDistance:p2spcs :p1spcs]*WD_FACT;
     
-    metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg;// + wd + nP2Spc*NUM_FACT;
+   // metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg;// + wd + nP2Spc*NUM_FACT;
     
   //  if(captureFlagMode)
     //    metric += [self distWeight:p2spcs :player2]*DIST_WEIGHT;
     
   //  if(nP1Spc == 0) return metric + WIN_WEIGHT_FACT;
+    
+    if(nP2Spc > 0)
+        wavg += (compTotal/nP2Spc)*PPN_FACT;
+    
+    metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg;
+
+    if(captureFlagMode)
+        metric += [self weightedDistanceFromFlag:p2spcs :player2]*DIST_WEIGHT;
     
     return metric;
 }
@@ -264,23 +276,11 @@
     if(nP1Spc > 0)
         wavg += (p1Total/nP1Spc)*PPN_FACT;
     
-   // if(nP1Spc > 0)
-     //   wavg += PPN_O_FACT/(compTotal*nP2Spc);
+    metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg;
     
-   // if(nP1Spc > 0 && nP2Spc > 0)
-    //    wavg = (compTotal/nP2Spc + p1Total/nP1Spc)*WAVG_FACT;
-     //   wavg = (p1Total*nP1Spc - compTotal*nP2Spc*nP2Spc)*WAVG_FACT;
-    
-   // double sd = [self stdDev:p1spcs]*SD_FACT;
-  //  double wd = [self weightedDistance:p1spcs :p2spcs]*WD_FACT;
-    
-    metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg;// + wd + nP1Spc*NUM_FACT;
-    
-  //  if(captureFlagMode)
-    //    metric += [self distWeight:p1spcs :player1]*DIST_WEIGHT;
-    
-  //  if(nP2Spc == 0) return metric + WIN_WEIGHT_FACT;
-    
+    if(captureFlagMode)
+        metric += [self weightedDistanceFromFlag:p1spcs :player1]*DIST_WEIGHT;
+ 
     return metric;
 }
 
@@ -1145,6 +1145,39 @@
         
     }
     return  weight;
+}
+
+- (double)weightedDistanceFromFlag: (NSMutableSet*)playerSpaces :(Player)player {
+
+    double dist, weight = 0;
+    
+    uint x, y, iind, jind;
+    
+    if(player == player1) {
+        iind = dimx-1;
+        jind = cFlagPos1;
+    }
+    else {
+        iind = 0;
+        jind = cFlagPos2;
+    }
+    
+    for(MinSpace* item in playerSpaces) {
+        
+        x = item.iind - iind;
+        y = item.jind - jind;
+        
+        dist = sqrt(x*x + y*y);
+        dist = dist*dist + 1;
+        
+        weight += item.value/dist;
+    }
+    
+    if(isnan(weight)) {
+        return 0;
+    }
+    
+    return weight;
 }
 
 - (MinSpace*)getMinSpaceForIndices: (NSMutableArray*)tmpBoard :(int)ii : (int)ji {

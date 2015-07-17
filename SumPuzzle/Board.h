@@ -21,6 +21,9 @@
     int dimy;
     int numSpaces;
     
+    uint cFlagPos1;
+    uint cFlagPos2;
+    
     CGFloat spaceWidth;
     CGFloat spaceHeight;
     CGFloat pieceHeight;
@@ -30,9 +33,16 @@
 }
 
 @property (nonatomic, strong) Space* selectedSpace;
+
 @property (nonatomic, strong) NSMutableArray *spaces;
 @property (nonatomic, strong) NSMutableSet *player1Spaces;
 @property (nonatomic, strong) NSMutableSet *player2Spaces;
+
+@property (nonatomic) int dimx;
+@property (nonatomic) int dimy;
+
+@property (nonatomic) uint cFlagPos1;
+@property (nonatomic) uint cFlagPos2;
 
 - (void)initBoard: (CGRect)bvFrame : (int)dimx : (int)dimy : (CGFloat)offset : (BOOL)cFlag;
 - (void)addPiece: (int)ii : (int)ji : (int)val : (Player)plyr : (JDColor)clr;

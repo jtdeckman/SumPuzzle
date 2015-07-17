@@ -11,6 +11,7 @@
 @implementation Board
 
 @synthesize selectedSpace, spaces, player1Spaces, player2Spaces;
+@synthesize dimx, dimy, cFlagPos1, cFlagPos2;
 
 - (void)initBoard: (CGRect)bvFrame : (int)dx : (int)dy : (CGFloat)offset :(BOOL)cFlag {
     
@@ -29,6 +30,9 @@
     dimy = dy;
     
     numSpaces = dimx*dimy;
+    
+    cFlagPos1 = dimy-1;
+    cFlagPos2 = 0;
     
     spaceWidth = (bvFrame.size.width - offset)/(CGFloat)dx;
     spaceHeight = (bvFrame.size.height - offset)/(CGFloat)dy;
@@ -96,7 +100,7 @@
             }
             
             inbr = i+1;
-            if(inbr < dimy) {
+            if(inbr < dimx) {
                 [space.nearestNbrs addObject:[self getSpaceForIndices:inbr :jnbr]];
                 [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
             }
@@ -109,13 +113,14 @@
             }
             
             jnbr = j+1;
-            if(jnbr < dimx) {
+            if(jnbr < dimy) {
                 [space.nearestNbrs addObject:[self getSpaceForIndices:inbr :jnbr]];
                 [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
             }
             
-      /*      inbr = i-1;
+            inbr = i-1;
             jnbr = j-1;
+            
             if(inbr > -1 && jnbr > -1)
                 [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
             
@@ -129,7 +134,7 @@
             
             jnbr = j-1;
             if(inbr < dimx && jnbr > -1)
-                [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]]; */
+                [space.neighbors addObject:[self getSpaceForIndices:inbr :jnbr]];
         }
     }
 }
@@ -393,32 +398,46 @@
     int numPlyr1 = (int)[player1Spaces count];
     int numPlyr2 = (int)[player2Spaces count];
     
-    
     if(captureFlagMode) {
         
-      if([self farthestRowForPlayer:player1] == dimx-1)
-          return player1;
-    
-      if([self farthestRowForPlayer:player2] == 0)
-          return player2;
-    }
-    
-    else {
+        if([self captureFlagPosition:player1])
+            return player1;
         
-        if(numPlyr1 == 0)
+        if([self captureFlagPosition:player2])
             return player2;
+    }
+        
+    if(numPlyr1 == 0)
+        return player2;
     
-        if(numPlyr2 == 0)
-            return player1;
+    if(numPlyr2 == 0)
+        return player1;
     
-        if([self piecesBlocked:player1])
-            return player2;
+    if([self piecesBlocked:player1])
+        return player2;
     
-        if([self piecesBlocked:player2])
-            return player1;
+    if([self piecesBlocked:player2])
+        return player1;
+    
+    return notAssigned;
+}
+
+- (BOOL)captureFlagPosition: (Player)player {
+
+    
+    if(player == player1) {
+        for(Space* item in player1Spaces)
+            if(item.iind == dimx-1 && item.jind == cFlagPos1)
+                return YES;
     }
     
-        return notAssigned;
+    else if(player == player2) {
+        for(Space* item in player2Spaces)
+            if(item.iind == 0 && item.jind == cFlagPos2)
+                return YES;
+    }
+    
+    return NO;
 }
 
 - (int)pointsForPlayer: (Player)player {

@@ -60,6 +60,9 @@
     uint niter;
     uint nRnIter;
     
+    uint cFlagPos1;
+    uint cFlagPos2;
+    
     UILabel *nextTile;
     UILabel *p2NextTile;
     UILabel *playerLabel;

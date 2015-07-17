@@ -434,6 +434,12 @@
     
     winLabel.hidden = YES;
     
+    cFlagPos1 = dimy-1;
+    cFlagPos2 = 0;
+    
+    board.cFlagPos1 = cFlagPos1;
+    board.cFlagPos2 = cFlagPos2;
+    
     [board addPiece:0 :0 :startValue : player1 : p1Color];
     [board addPiece:0 :dimy-1 :startValue : player1 : p1Color];
     
@@ -454,8 +460,7 @@
     player2PntsLabel.text = [NSString stringWithFormat:@"%d", p2PointsOnBoard];
     
     computer = [[AINew alloc] init];
-    
-    [computer setUpAI:board.spaces :board.player1Spaces :board.player2Spaces :dimx :dimy : tileInc : YES :niter];
+    [computer setUpAI:board : tileInc : captureFlag :niter];
     
     computer.numRnIter = nRnIter;
 }
@@ -485,7 +490,7 @@
     tileInc = (int)[defaults integerForKey:@"tileInc"];
     
     [self setUpDifficulty];
-    
+
     [defaults synchronize];
 }
 
@@ -1129,17 +1134,36 @@
 
 - (void)setUpDifficulty {
 
-    if(difficulty == 0) {
-        niter = 0;
-        nRnIter = 1;
-    }
-    else if(difficulty == 2) {
-        niter = 7;
-        nRnIter = 2;
+    if(captureFlag) {
+        
+        if(difficulty == 0) {
+            niter = 2;
+            nRnIter = 0;
+        }
+        else if(difficulty == 2) {
+            niter = 4;
+            nRnIter = 2;
+        }
+        else {
+            niter = 2;
+            nRnIter = 1;
+        }
     }
     else {
-        niter = 4;
-        nRnIter = 2;
+        
+        if(difficulty == 0) {
+            niter = 2;
+            nRnIter = 1;
+        }
+        else if(difficulty == 2) {
+            niter = 4;
+            nRnIter = 2;
+        }
+        else {
+            niter = 2;
+            nRnIter = 2;
+        }
+
     }
 }
 
