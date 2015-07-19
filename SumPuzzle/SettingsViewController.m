@@ -115,7 +115,7 @@
     
     [self.view addSubview:playerLabel];
     
-    viewFrame.size.width = 0.55*self.view.frame.size.width;
+    viewFrame.size.width = 0.60*self.view.frame.size.width;
     viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;// - marginFact ;//0.25*spcFct + viewFrame.size.width;
     viewFrame.size.height = 0.05*self.view.frame.size.height;
     viewFrame.origin.y += 0.65*spcFct;
@@ -163,7 +163,7 @@
     viewFrame.origin.x = computerPlayerControl.frame.origin.x;
     viewFrame.origin.y += 0.65*spcFct;
     
-    difficultyControl = [[UISegmentedControl alloc] initWithItems:@[@"Easy",@"Standard",@"Hard"]];
+    difficultyControl = [[UISegmentedControl alloc] initWithItems:@[@"Standard",@"Hard"]];
     [difficultyControl setFrame:viewFrame];
     [difficultyControl addTarget:self action:@selector(segmentedControlValueDidChange:) forControlEvents:UIControlEventValueChanged];
     [difficultyControl setTitleTextAttributes:attributes forState:UIControlStateNormal];

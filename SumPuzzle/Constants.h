@@ -34,9 +34,11 @@
 #define NUM_R_ITER 1
 
 #define TILE_INIT 10
-#define TILE_INC 10
+#define TILE_INC 20
 
 #define WIN_WEIGHT_FACT 1e10
+
+#define DIV_FACT 0.5
 
 // Weighting Factors
 
@@ -54,7 +56,7 @@
 #define OVERTAKE_FACT 0.1
 #define PPN_FACT 1.0
 #define PPN_O_FACT 100000
-#define DIFF_MODE 1
+#define DIFF_MODE 0
 
 #define MOVE_NINC 3500
 #define AI_PAUSE_TIME 1

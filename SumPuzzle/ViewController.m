@@ -228,7 +228,7 @@
         
             if(space != nil) {
             
-                if(!space.isOccupied && selectedPiece.value > 2 && [selectedPiece isNearestNearestNbrOf:space]) {
+                if(!space.isOccupied && selectedPiece.value > 1 && [selectedPiece isNearestNearestNbrOf:space]) {
                     int newVal = (int)((float)selectedPiece.value/2.0);
                     selectedPiece.value = newVal;
                     selectedPiece.piece.text = [NSString stringWithFormat:@"%d", newVal];
@@ -246,11 +246,9 @@
                         [self switchPlayers];
                     }
                     else if(space.player != currentPlayer && selectedPiece.value > space.value) {
-#ifdef DIFF_MODE
-                        int newVal = selectedPiece.value - space.value/2.0;
-#else
-                        int newVal = selectedPiece.value;
-#endif
+                        
+                        int newVal = selectedPiece.value - space.value*DIV_FACT;
+
                         [board convertPiece:space :newVal :[self getColorForPlayer] :currentPlayer];
                         [board removePiece:selectedPiece];
                         [self updateCurrentPlayer:NO];
@@ -369,11 +367,9 @@
             
             if(moveTo.player == player1) {
                 
-#ifdef DIFF_MODE
-                int newVal = moveFrom.value - moveTo.value/2.0;
-#else
-                int newVal = moveFrom.value;
-#endif
+                int newVal = moveFrom.value - moveTo.value*DIV_FACT;
+
+
                 
                 [self animateComputerMove:moveFrom :newVal :NO];
                 [board convertPiece:moveTo :newVal :[self getColorForPlayer] :player2];
@@ -487,7 +483,7 @@
     
     startValue = (int)[defaults integerForKey:@"startValue"];
     tileValue = (int)[defaults integerForKey:@"tileValue"];
-    tileInc = (int)[defaults integerForKey:@"tileInc"];
+    tileInc = TILE_INC; //(int)[defaults integerForKey:@"tileInc"];
     
     [self setUpDifficulty];
 
@@ -1136,32 +1132,24 @@
 
     if(captureFlag) {
         
-        if(difficulty == 0) {
-            niter = 2;
-            nRnIter = 0;
-        }
-        else if(difficulty == 2) {
-            niter = 4;
-            nRnIter = 2;
+        if(difficulty == 1) {
+            niter = 5;
+            nRnIter = 1;
         }
         else {
-            niter = 2;
+            niter = 3;
             nRnIter = 1;
         }
     }
     else {
         
-        if(difficulty == 0) {
-            niter = 2;
+        if(difficulty == 1) {
+            niter = 5;
             nRnIter = 1;
         }
-        else if(difficulty == 2) {
-            niter = 4;
-            nRnIter = 2;
-        }
         else {
-            niter = 2;
-            nRnIter = 2;
+            niter = 3;
+            nRnIter = 1;
         }
 
     }
