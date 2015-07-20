@@ -99,11 +99,11 @@
             
             if(space != NULL) {
                 
-                if(placeMode == placeTile) {
-                    if(!space.isOccupied && [board nbrNearestOccupied:space : currentPlayer] > 0)
-                        [self addPiece:space];
-                }
-                else if(placeMode == freeState) {
+            //    if(placeMode == placeTile) {
+            //        if(!space.isOccupied && [board nbrNearestOccupied:space : currentPlayer] > 0)
+            //            [self addPiece:space];
+             //   }
+                 if(placeMode == freeState) {
                     
                     if(space.isOccupied && space.player == currentPlayer) {
                         placeMode = swipeMove;
