@@ -43,6 +43,8 @@
     NSMutableSet *tempP2Spaces = [[NSMutableSet alloc] initWithSet:player2Spaces];
     NSMutableSet *tempP1Spaces = [[NSMutableSet alloc] initWithSet:player1Spaces];
     
+    NSMutableSet *checkedFreeSpaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy+1];
+    
     Move *bestMove = [[Move alloc] init];
     
     SubSpace *origSpace = [[SubSpace alloc] init];
@@ -65,21 +67,26 @@
             
             if(nbr.player == notAssigned) {
                 
-                [tempP2Spaces addObject:nbr];
+                if(![checkedFreeSpaces containsObject:nbr]) {
+               
+                    [tempP2Spaces addObject:nbr];
                 
-             // Free move
+                    // Free move
                 
-                nbr.value = compFltPieceVal;
-                nbr.player = player2;
+                    nbr.value = compFltPieceVal;
+                    nbr.player = player2;
                 
-                rank = [self calcWeight: tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal];
+                    rank = [self calcWeight: tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal];
                 
-                if(rank > bestMove.rank) {
-                    bestMove.fromSpace = NULL;
-                    bestMove.toSpace = [self getSpaceForIndices:nbr.iind :nbr.jind];
-                    bestMove.rank = rank;
+                    if(rank > bestMove.rank) {
+                        bestMove.fromSpace = NULL;
+                        bestMove.toSpace = [self getSpaceForIndices:nbr.iind :nbr.jind];
+                        bestMove.rank = rank;
+                    }
+                    
+                    [checkedFreeSpaces addObject:nbr];
                 }
-
+                
              // Split move
                 
                 if(item.value > 1) {
@@ -295,6 +302,7 @@
 
     NSMutableSet *newP1Spaces = [[NSMutableSet alloc] initWithSet:p1Spaces];
     NSMutableSet *newP2Spaces = [[NSMutableSet alloc] initWithSet:p2Spaces];
+    NSMutableSet *checkedFreeSpaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy+1];
     
     SubSpace *origSpace = [[SubSpace alloc] init];
     SubSpace *nbrSpace = [[SubSpace alloc] init];
@@ -317,21 +325,26 @@
             
             if(nbr.player == notAssigned) {
                 
-                [newP1Spaces addObject:nbr];
+                if(![checkedFreeSpaces containsObject:nbr]) {
                 
-                // Free move
+                    [newP1Spaces addObject:nbr];
                 
-                nbr.value = p1Val;
-                nbr.player = player1;
+                    // Free move
                 
-                rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
-                rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val :NRIter];
+                    nbr.value = p1Val;
+                    nbr.player = player1;
                 
-                if(rank > weight) {
+                    rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
+                    rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val :NRIter];
+                
+                    if(rank > weight) {
             
-                    moveFrom.space = NULL;
-                    moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
-                    weight = rank;
+                        moveFrom.space = NULL;
+                        moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
+                        weight = rank;
+                    }
+                    
+                    [checkedFreeSpaces addObject:nbr];
                 }
                 
                 // Split move
@@ -525,6 +538,7 @@
     
     NSMutableSet *newP1Spaces = [[NSMutableSet alloc] initWithSet:p1Spaces];
     NSMutableSet *newP2Spaces = [[NSMutableSet alloc] initWithSet:p2Spaces];
+    NSMutableSet *checkedFreeSpaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy+1];
     
     SubSpace *origSpace = [[SubSpace alloc] init];
     SubSpace *nbrSpace = [[SubSpace alloc] init];
@@ -547,23 +561,28 @@
             
             if(nbr.player == notAssigned) {
                 
-                [newP2Spaces addObject:nbr];
+                if(![checkedFreeSpaces containsObject:nbr]) {
                 
-                // Free move
+                    [newP2Spaces addObject:nbr];
                 
-                nbr.value = p2Val;
-                nbr.player = player2;
+                    // Free move
                 
-                rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
-                rank -= [self makeBestP1MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val :NRIter];
+                    nbr.value = p2Val;
+                    nbr.player = player2;
                 
-                if(rank > weight) {
-                    moveFrom.space = NULL;
-                    moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
-                    weight = rank;
+                    rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
+                    rank -= [self makeBestP1MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val :NRIter];
+                
+                    if(rank > weight) {
+                        moveFrom.space = NULL;
+                        moveTo.space = [self getMinSpaceForIndices:tmpBoard :nbr.iind :nbr.jind];
+                        weight = rank;
+                    }
+                    
+                    [checkedFreeSpaces addObject:tmpBoard[nbr.iind][nbr.jind]];
                 }
                 
-                // Split move
+             // Split move
                 
                 if(item.value > 1) {
                     
@@ -572,7 +591,7 @@
                     
                     nbr.value = item.value;
                     nbr.player = player2;
-                    
+                
                     rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
                     rank -= [self makeBestP1MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val+TILE_INC :NRIter];
                     
@@ -752,6 +771,7 @@
     
     NSMutableSet *newP1Spaces = [[NSMutableSet alloc] initWithSet:p1Spaces];
     NSMutableSet *newP2Spaces = [[NSMutableSet alloc] initWithSet:p2Spaces];
+    NSMutableSet *checkedFreeSpaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy+1];
     
     SubSpace *origSpace = [[SubSpace alloc] init];
     SubSpace *nbrSpace = [[SubSpace alloc] init];
@@ -764,20 +784,25 @@
             
             if(nbr.player == notAssigned) {
                 
-                [newP2Spaces addObject:nbr];
+                if(![checkedFreeSpaces containsObject:nbr]) {
+              
+                    [newP2Spaces addObject:nbr];
                 
-                // Free move
+                    // Free move
                 
-                nbr.value = p2Val;
-                nbr.player = player2;
+                    nbr.value = p2Val;
+                    nbr.player = player2;
                 
-                rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
+                    rank = [self calcP2BoardMetric:newP1Spaces : newP2Spaces];
                 
-                if(numIter > 0)
-                    rank -= [self makeBestP1MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val :numIter-1];
+                    if(numIter > 0)
+                        rank -= [self makeBestP1MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val :numIter-1];
                 
-                if(rank > weight)
-                    weight = rank;
+                    if(rank > weight)
+                        weight = rank;
+              
+                    [checkedFreeSpaces addObject:nbr];
+                }
                 
                 // Split move
                 
@@ -891,6 +916,7 @@
     
     NSMutableSet *newP1Spaces = [[NSMutableSet alloc] initWithSet:p1Spaces];
     NSMutableSet *newP2Spaces = [[NSMutableSet alloc] initWithSet:p2Spaces];
+    NSMutableSet *checkedFreeSpaces = [[NSMutableSet alloc] initWithCapacity:dimx*dimy+1];
     
     SubSpace *origSpace = [[SubSpace alloc] init];
     SubSpace *nbrSpace = [[SubSpace alloc] init];
@@ -903,22 +929,24 @@
             
             if(nbr.player == notAssigned) {
                 
-                [newP1Spaces addObject:nbr];
-                
-                // Free move
-                
-                nbr.value = p1Val;
-                nbr.player = player1;
-                
-                rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
-                
-                if(numIter > 0)
-                    rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val :numIter-1];
-                
-                
-                if(rank > weight) {
+                if(![checkedFreeSpaces containsObject:nbr]) {
                     
-                    weight = rank;
+                    [newP1Spaces addObject:nbr];
+                
+                    // Free move
+                
+                    nbr.value = p1Val;
+                    nbr.player = player1;
+                
+                    rank = [self calcP1BoardMetric:newP1Spaces : newP2Spaces];
+                
+                    if(numIter > 0)
+                        rank -= [self makeBestP2MoveJustWeight:tmpBoard :newP1Spaces :newP2Spaces :p1Val :p2Val :numIter-1];
+                
+                    if(rank > weight)
+                        weight = rank;
+                    
+                    [checkedFreeSpaces addObject:nbr];
                 }
                 
                 // Split move

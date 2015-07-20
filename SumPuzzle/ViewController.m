@@ -1128,6 +1128,12 @@
 
 - (void)cleanUp {
 
+    p1Img = nil;
+    p2Img = nil;
+    
+    flag1 = nil;
+    flag2 = nil;
+    
     selectedPiece = nil;
     moveToSpace = nil;
     
