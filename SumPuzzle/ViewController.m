@@ -166,7 +166,7 @@
         
         if(placeMode == swipeMove) {
             
-            frm.origin.x = location.x;// + boardView.frame.origin.x;
+            frm.origin.x = location.x + boardView.frame.origin.x;
             frm.origin.y = location.y + boardView.frame.origin.y;
             
             frm.size = floatPiece.frame.size;
@@ -181,10 +181,12 @@
             if(currentPlayer == player1) {
                 frm.size = nextTile.frame.size;
                 [nextTile setFrame:frm];
+                [self.view bringSubviewToFront:nextTile];
             }
             else {
                 frm.size = p2NextTile.frame.size;
                 [p2NextTile setFrame:frm];
+                [self.view bringSubviewToFront:p2NextTile];
             }
         }
     }
@@ -218,7 +220,7 @@
         if(placeMode == swipeMove) {
         
             CGRect frm;
-            frm.origin = location;
+            frm.origin.x = location.x + boardView.frame.origin.x;
             frm.size = floatPiece.frame.size;
         
             [floatPiece setFrame:frm];
@@ -396,24 +398,6 @@
             }
         }
     }
-}
-
-- (void)setUpFloatPiece: (Space*)space {
-    
-    CGRect frm;
-    
-    frm.origin.x = space.piece.frame.origin.x + boardView.frame.origin.x;
-    frm.origin.y = space.piece.frame.origin.y + boardView.frame.origin.y;
-    frm.size = space.piece.frame.size;
-    
-    floatPiece.hidden = NO;
-  
-    floatPiece.text = [NSString stringWithFormat:@"%d", space.value];
-    floatPiece.layer.borderColor = [[UIColor clearColor] CGColor];
-    
-    [self changeTileBackground:floatPiece];
-    
-    [floatPiece setFrame:frm];
 }
 
 - (void)setUpGamePlay {
@@ -789,6 +773,10 @@
     
     CGFloat width = self.view.frame.size.width*WIDTH_FACT;
     CGFloat height = self.view.frame.size.height*TOPBAR_V_FACT;
+    
+  //  if(self.view.frame.size.height > 700)
+  //      height *= 0.75;
+    
     CGFloat offset = self.view.frame.size.width*SPACING_FACT;
     
     CGRect viewFrame;
@@ -818,6 +806,12 @@
     
     viewFrame.size.width = width - 2.0*offset;
     viewFrame.size.height = viewFrame.size.width*HEIGHT_FACT;
+    
+    if(self.view.frame.size.height > 700) {
+        viewFrame.size.width = 0.75*width;
+        viewFrame.size.height = viewFrame.size.width;
+        viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;
+    }
     
     boardView = [[BoardView alloc] initWithFrame:viewFrame];
     [boardView initBoardView:dimx :dimy :lineThickness :dimx];
@@ -894,6 +888,7 @@
     nextTile.backgroundColor = [UIColor colorWithPatternImage:newImage];
     
     [self.view addSubview:nextTile];
+    [self.view bringSubviewToFront:nextTile];
     
     // Player 2 next tile
     
@@ -922,6 +917,7 @@
     p2NextTile.backgroundColor = [UIColor colorWithPatternImage:newImage];
     
     [self.view addSubview:p2NextTile];
+    [self.view bringSubviewToFront:p2NextTile];
     
     // Movable (floating) piece
     
@@ -1201,6 +1197,26 @@
         }
 
     }
+}
+
+- (void)setUpFloatPiece: (Space*)space {
+    
+    CGRect frm;
+    
+    frm.origin.x = space.piece.frame.origin.x + boardView.frame.origin.x;
+    frm.origin.y = space.piece.frame.origin.y + boardView.frame.origin.y;
+    frm.size = space.piece.frame.size;
+    
+    floatPiece.hidden = NO;
+    
+    floatPiece.text = [NSString stringWithFormat:@"%d", space.value];
+    floatPiece.layer.borderColor = [[UIColor clearColor] CGColor];
+    
+    [self changeTileBackground:floatPiece];
+    
+    [floatPiece setFrame:frm];
+    
+    [self.view bringSubviewToFront:floatPiece];
 }
 
 @end
