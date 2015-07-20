@@ -78,6 +78,9 @@
     UIImage *p1Img;
     UIImage *p2Img;
     
+    UIImageView *flag1;
+    UIImageView *flag2;
+
     CGSize imgSize;
     
     UIImageView *menuBar;

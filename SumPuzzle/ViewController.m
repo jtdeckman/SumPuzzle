@@ -459,6 +459,36 @@
     [computer setUpAI:board : tileInc : captureFlag :niter];
     
     computer.numRnIter = nRnIter;
+    
+    if(captureFlag) {
+        
+        Space *space = [board getSpaceForIndices:0 :cFlagPos2];
+        
+        CGRect viewFrame, frm = space.piece.frame;
+        
+        viewFrame = nextTile.frame;
+        
+        viewFrame.origin.x = boardView.frame.origin.x + frm.origin.x + frm.size.width/2.0;;
+        viewFrame.origin.y = boardView.frame.origin.y + frm.origin.y - frm.size.height/2.0;;
+        viewFrame.size.width *= 0.5;
+        
+        [flag1 setFrame:viewFrame];
+        
+        space = [board getSpaceForIndices:dimx-1 :cFlagPos1];
+        
+        frm = space.piece.frame;
+        
+        viewFrame.origin.x = boardView.frame.origin.x + frm.origin.x + frm.size.width/2.0;
+        viewFrame.origin.y = boardView.frame.origin.y + frm.origin.y - frm.size.height/2.0;
+        
+        [flag2 setFrame:viewFrame];
+        
+        flag1.hidden = NO;
+        flag2.hidden = NO;
+        
+        [self.view bringSubviewToFront:flag1];
+        [self.view bringSubviewToFront:flag2];
+    }
 }
 
 - (JDColor)getColorForPlayer {
@@ -1035,7 +1065,19 @@
     
     [self.view addSubview:winLabel];
     
-
+    viewFrame = nextTile.frame;
+    
+    flag1 = [[UIImageView alloc] initWithFrame:viewFrame];
+    flag2 = [[UIImageView alloc] initWithFrame:viewFrame];
+    
+    [flag1 setImage:[UIImage imageNamed:@"flag1.png"]];
+    [flag2 setImage:[UIImage imageNamed:@"flag2.png"]];
+    
+    flag1.hidden = YES;
+    flag2.hidden = YES;
+    
+    [self.view addSubview:flag1];
+    [self.view addSubview:flag2];
 }
 
 - (void)setUpColors {
