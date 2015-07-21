@@ -737,7 +737,7 @@
      WinViewController *winView = [[WinViewController alloc] init];
     
     [winView initView:winner];
-    [self presentViewController:winView animated:YES completion:nil];
+    [self presentViewController:winView animated:NO completion:nil];
     
 /*    if(winner == player1) {
      
@@ -1189,11 +1189,11 @@
     else {
         
         if(difficulty == 1) {
-            niter = 7;
+            niter = 10;
             nRnIter = 1;
         }
         else {
-            niter = 4;
+            niter = 7;
             nRnIter = 1;
         }
 
