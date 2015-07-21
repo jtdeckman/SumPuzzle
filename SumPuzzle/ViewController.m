@@ -1189,11 +1189,11 @@
     else {
         
         if(difficulty == 1) {
-            niter = 5;
+            niter = 7;
             nRnIter = 1;
         }
         else {
-            niter = 3;
+            niter = 4;
             nRnIter = 1;
         }
 

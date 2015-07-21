@@ -200,7 +200,7 @@
     
     double weight;
     
-    int cnt = 1;
+    int cnt = 0;
     int NumIter = 1;//numRnIter;
     
     weight = [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
@@ -208,7 +208,7 @@
     
     weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
     
-    NumIter = 1;
+    NumIter = 0;
     
     for(int i=0; i<nIter; i++) {
         
