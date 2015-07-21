@@ -102,7 +102,7 @@
     CGFloat lineThickness;
     CGFloat moveXinc;
     CGFloat moveYinc;
-    CGFloat offset;
+    CGFloat fpOffset;
     
     CGPoint floatOffset;
     

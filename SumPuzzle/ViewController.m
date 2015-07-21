@@ -174,8 +174,8 @@
         
         if(placeMode == swipeMove) {
             
-            frm.origin.x = location.x + boardView.frame.origin.x - 0.5*floatPiece.frame.size.width;
-            frm.origin.y = location.y + boardView.frame.origin.y - 0.5*floatPiece.frame.size.height;
+            frm.origin.x = location.x + floatOffset.x;// + boardView.frame.origin.x - 0.5*floatPiece.frame.size.width;
+            frm.origin.y = location.y + floatOffset.y;// boardView.frame.origin.y - 0.5*floatPiece.frame.size.height;
             
             frm.size = floatPiece.frame.size;
             [floatPiece setFrame:frm];
@@ -183,8 +183,8 @@
         }
         else if(placeMode == placeTile) {
             
-            frm.origin.x = location.x + boardView.frame.origin.x - 0.5*floatPiece.frame.size.width;
-            frm.origin.y = location.y + boardView.frame.origin.y - 0.5*floatPiece.frame.size.height;
+            frm.origin.x = location.x + floatOffset.x;// + boardView.frame.origin.x - 0.5*floatPiece.frame.size.width;
+            frm.origin.y = location.y + floatOffset.y;// boardView.frame.origin.y - 0.5*floatPiece.frame.size.height;
             
             if(currentPlayer == player1) {
                 frm.size = nextTile.frame.size;
@@ -228,8 +228,8 @@
         if(placeMode == swipeMove) {
         
             CGRect frm;
-            frm.origin.x = location.x + boardView.frame.origin.x - 0.5*floatPiece.frame.size.width;
-            frm.origin.y = location.y + boardView.frame.origin.y - 0.5*floatPiece.frame.size.height;
+            frm.origin.x = location.x + floatOffset.x;// + boardView.frame.origin.x - 0.5*floatPiece.frame.size.width;
+            frm.origin.y = location.y + floatOffset.y;// boardView.frame.origin.y - 0.5*floatPiece.frame.size.height;
             
             frm.size = floatPiece.frame.size;
         
@@ -777,7 +777,8 @@
     CGRect viewFrame;
     
     lineThickness = width*LINE_THICK_FACT;
-    
+    fpOffset = offset;
+
     if(dimx == 6)
         lineThickness *= 0.8;
         
@@ -930,6 +931,9 @@
     [floatPiece setFont:[UIFont fontWithName:@"Arial" size:1.0*FONT_FACT*space.spaceFrame.size.width]];
     
     [self.view addSubview:floatPiece];
+    
+    floatOffset.x = boardView.frame.origin.x - 0.5*floatPiece.frame.size.width + fpOffset;
+    floatOffset.y = boardView.frame.origin.y - 0.5*floatPiece.frame.size.height + fpOffset;
     
     // Menu bar
     
