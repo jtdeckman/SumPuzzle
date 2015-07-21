@@ -341,7 +341,7 @@
             
             Space *tmpSpace = [[Space alloc] init];
             tmpSpace.piece = p2NextTile;
-            
+    
             p2NextTile.hidden = YES;
             
             [self animateComputerMove:tmpSpace :nextValueP2 :YES];
@@ -686,7 +686,7 @@
     
     CGPoint origin = fromSpace.piece.frame.origin;
     
-    moveTimer = [NSTimer scheduledTimerWithTimeInterval:1/4 target:self selector:@selector(movePieceLoop) userInfo:nil repeats:YES];
+   // moveTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(movePieceLoop) userInfo:nil repeats:YES];
     
     gameState = gamePaused;
 
@@ -700,18 +700,45 @@
     movePieceLoc.origin.x = fromSpace.piece.frame.origin.x + boardView.frame.origin.x;
     movePieceLoc.origin.y = fromSpace.piece.frame.origin.y + boardView.frame.origin.y;
     
-    movePieceLoc.size = fromSpace.piece.frame.size;
+ //   movePieceLoc.size = fromSpace.piece.frame.size;
     
     moveTimeCnt = 0;
     
     moveToSpace.piece.hidden = YES;
     
     playerLabel.hidden = NO;
+
+    CGRect frm = fromSpace.piece.frame;
+    
+    if(!nxtTileMv) {
+        frm.origin.x += boardView.frame.origin.x;
+        frm.origin.y += boardView.frame.origin.y;
+    }
+    
+    frm.size.width = floatPiece.frame.size.width;
+    frm.size.height = floatPiece.frame.size.height;
+    
+    [floatPiece setFrame:frm];
+    
+    frm = moveToSpace.piece.frame;
+    frm.origin.x += boardView.frame.origin.x;
+    frm.origin.y += boardView.frame.origin.y;
+    frm.size.width = floatPiece.frame.size.width;
+    frm.size.height = floatPiece.frame.size.height;
+    
+    [UIView animateWithDuration:1.0
+                     animations:^{
+        floatPiece.frame = frm;}
+            completion:^(BOOL finished) {
+                [self movePieceLoop];
+            }
+     ];
+
 }
 
 - (void)movePieceLoop {
 
-   if(moveTimeCnt > moveInc) {
+  // if(moveTimeCnt > 1) {
         
         [moveTimer invalidate];
         moveTimer = nil;
@@ -726,20 +753,20 @@
        
        playerLabel.text = @"Player 1";
        playerLabel.backgroundColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
-    }
+ //   }
     
-    else {
+  //  else {
         
-        playerLabel.text = @"Computer";
-        playerLabel.backgroundColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
+ //       playerLabel.text = @"Computer";
+ //       playerLabel.backgroundColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
 
-        ++moveTimeCnt;
+     //   ++moveTimeCnt;
         
-        movePieceLoc.origin.x += moveXinc;
-        movePieceLoc.origin.y += moveYinc;
+    //    movePieceLoc.origin.x += moveXinc;
+     //   movePieceLoc.origin.y += moveYinc;
         
-        [floatPiece setFrame:movePieceLoc];
-   }
+     //   [floatPiece setFrame:movePieceLoc];
+ //  }
 }
 
 - (void)gameWon {
