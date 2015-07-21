@@ -14,6 +14,7 @@
 #import "AINew.h"
 #import "Move.h"
 #import "SettingsViewController.h"
+#import "WinViewController.h"
 
 @interface ViewController : UIViewController {
     
@@ -101,10 +102,14 @@
     CGFloat lineThickness;
     CGFloat moveXinc;
     CGFloat moveYinc;
+    CGFloat offset;
+    
+    CGPoint floatOffset;
     
     BOOL computerPlayer;
     BOOL captureFlag;
     BOOL wentToSettingsView;
+    BOOL wentToGameWinView;
     
     Difficulty difficulty;
 }

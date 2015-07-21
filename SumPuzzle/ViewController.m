@@ -55,7 +55,15 @@
                 computer.numRnIter = nRnIter;
             }
         }
+        
+        wentToSettingsView = NO;
     }
+    
+    else if(wentToGameWinView) {
+        
+        wentToGameWinView = NO;
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -166,8 +174,8 @@
         
         if(placeMode == swipeMove) {
             
-            frm.origin.x = location.x + boardView.frame.origin.x;
-            frm.origin.y = location.y + boardView.frame.origin.y;
+            frm.origin.x = location.x + boardView.frame.origin.x - 0.5*floatPiece.frame.size.width;
+            frm.origin.y = location.y + boardView.frame.origin.y - 0.5*floatPiece.frame.size.height;
             
             frm.size = floatPiece.frame.size;
             [floatPiece setFrame:frm];
@@ -175,8 +183,8 @@
         }
         else if(placeMode == placeTile) {
             
-            frm.origin.x = location.x;
-            frm.origin.y = location.y + boardView.frame.origin.y;
+            frm.origin.x = location.x + boardView.frame.origin.x - 0.5*floatPiece.frame.size.width;
+            frm.origin.y = location.y + boardView.frame.origin.y - 0.5*floatPiece.frame.size.height;
             
             if(currentPlayer == player1) {
                 frm.size = nextTile.frame.size;
@@ -220,7 +228,9 @@
         if(placeMode == swipeMove) {
         
             CGRect frm;
-            frm.origin.x = location.x + boardView.frame.origin.x;
+            frm.origin.x = location.x + boardView.frame.origin.x - 0.5*floatPiece.frame.size.width;
+            frm.origin.y = location.y + boardView.frame.origin.y - 0.5*floatPiece.frame.size.height;
+            
             frm.size = floatPiece.frame.size;
         
             [floatPiece setFrame:frm];
@@ -724,9 +734,13 @@
 
 - (void)gameWon {
     
-    if(winner == player1) {
-
-        winLabel.text = [NSString stringWithFormat:@"You Win!"];
+     WinViewController *winView = [[WinViewController alloc] init];
+    
+    [winView initView:winner];
+    [self presentViewController:winView animated:YES completion:nil];
+    
+/*    if(winner == player1) {
+     
     }
     
     else {
@@ -734,14 +748,15 @@
             winLabel.text = [NSString stringWithFormat:@"Computer Wins :("];
         else
             winLabel.text = [NSString stringWithFormat:@"Player 2 wins"];
-    }
+    } */
     
-    winLabel.hidden = NO;
+   // winLabel.hidden = NO;
 }
 
 - (void)setUpViewController {
     
     wentToSettingsView = NO;
+    wentToGameWinView = NO;
     
     self.view.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
     
@@ -787,7 +802,9 @@
     viewFrame.size.width = width - 2.0*offset;
     viewFrame.size.height = viewFrame.size.width*HEIGHT_FACT;
     
-    if(self.view.frame.size.height > 700) {
+    CGFloat aratio = self.view.frame.size.width/self.view.frame.size.height;
+    
+    if(aratio > 0.74) {
         viewFrame.size.width = 0.75*width;
         viewFrame.size.height = viewFrame.size.width;
         viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;

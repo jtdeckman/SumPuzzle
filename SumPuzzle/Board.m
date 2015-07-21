@@ -172,8 +172,8 @@
     
     Space *space;
     
-    loc.x += pw2;
-    loc.y += ph2;
+//    loc.x += pw2;
+//    loc.y += ph2;
     
     for(int i=0; i<dimx; i++) {
         for(int j=0; j<dimy; j++) {
