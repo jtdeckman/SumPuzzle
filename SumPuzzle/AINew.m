@@ -43,6 +43,8 @@
     NSMutableSet *tempP2Spaces = [[NSMutableSet alloc] initWithSet:player2Spaces];
     NSMutableSet *tempP1Spaces = [[NSMutableSet alloc] initWithSet:player1Spaces];
     
+    NSMutableArray *tempBoard = [self newTempBoard];
+    
     Move *bestMove = [[Move alloc] init];
     
     SubSpace *origSpace = [[SubSpace alloc] init];
@@ -72,7 +74,7 @@
                 nbr.value = compFltPieceVal;
                 nbr.player = player2;
                 
-                rank = [self calcWeight: tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal];
+                rank = [self calcWeight: tempBoard :tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal];
                 
                 if(rank > bestMove.rank) {
                     bestMove.fromSpace = NULL;
@@ -90,7 +92,7 @@
                     nbr.value = item.value;
                     nbr.player = player2;
                 
-                    rank = [self calcWeight: tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal+TILE_INC];
+                    rank = [self calcWeight: tempBoard :tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal+TILE_INC];
                 
                     if(rank > bestMove.rank) {
                         bestMove.fromSpace = [self getSpaceForIndices:item.iind :item.jind];
@@ -119,7 +121,7 @@
                 
                 [tempP2Spaces removeObject:item];
                 
-                rank = [self calcWeight: tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal+TILE_INC];
+                rank = [self calcWeight: tempBoard :tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal+TILE_INC];
                 
                 if(rank > bestMove.rank) {
                     
@@ -157,7 +159,7 @@
                 
                 [tempP1Spaces removeObject:nbr];
                 
-                rank = [self calcWeight: tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal+TILE_INC];
+                rank = [self calcWeight: tempBoard :tempP2Spaces :tempP1Spaces :p1FltPieceVal : compFltPieceVal+TILE_INC];
                 
                 if(rank > bestMove.rank) {
                     bestMove.fromSpace = [self getSpaceForIndices:item.iind :item.jind];
@@ -187,9 +189,11 @@
     compMove.toSpace = bestMove.toSpace;
 }
 
-- (double)calcWeight: (NSMutableSet*) p2Spaces : (NSMutableSet*) p1Spaces : (int)p1Val : (int)p2Val {
+- (double)calcWeight: (NSMutableArray*)tempBoard :(NSMutableSet*) p2Spaces : (NSMutableSet*) p1Spaces : (int)p1Val : (int)p2Val {
     
-    NSMutableArray *tempBoard = [self newTempBoard];
+  //  NSMutableArray *tempBoard = [self newTempBoard];
+    
+    [self clearTempBord:tempBoard];
     
     NSMutableSet *tempP1Spaces = [self setUpTempBoardAndPlayerSpaces:tempBoard :p1Spaces];
     NSMutableSet *tempP2Spaces = [self setUpTempBoardAndPlayerSpaces:tempBoard :p2Spaces];
@@ -1118,6 +1122,19 @@
     }
     
     return newPlayerSpaces;
+}
+
+- (void)clearTempBord: (NSMutableArray*)tmpBrd {
+
+    MinSpace *boardPntr;
+    
+    for(int i=0; i<dimx; i++) {
+        for(int j=0; j<dimy; j++) {
+            boardPntr = tmpBrd[i][j];
+            boardPntr.player = notAssigned;
+            boardPntr.value = 0;
+        }
+    }
 }
 
 - (double)weightedDistance : (NSMutableSet*)paSpaces : (NSMutableSet*)pbSpaces {

@@ -344,7 +344,7 @@
     
             p2NextTile.hidden = YES;
             
-            [self animateComputerMove:tmpSpace :nextValueP2 :YES];
+            [self animateComputerMove:tmpSpace :nextValueP2];
             
             [self addPiece:moveTo];
             
@@ -360,7 +360,7 @@
             
             [board addPiece:moveTo.iind :moveTo.jind : value : currentPlayer : [self getColorForPlayer]];
             
-            [self animateComputerMove:moveFrom :value :NO];
+            [self animateComputerMove:moveFrom :value];
             
             [self updateCurrentPlayer:NO];
             [self switchPlayers];
@@ -370,10 +370,8 @@
             if(moveTo.player == player1) {
                 
                 int newVal = moveFrom.value - moveTo.value*DIV_FACT;
-
-
                 
-                [self animateComputerMove:moveFrom :newVal :NO];
+                [self animateComputerMove:moveFrom :newVal];
                 [board convertPiece:moveTo :newVal :[self getColorForPlayer] :player2];
                 [board removePiece:moveFrom];
                 
@@ -386,7 +384,7 @@
                 
                 int newVal = (int)((float)moveFrom.value);
                 
-                [self animateComputerMove:moveFrom :newVal :NO];
+                [self animateComputerMove:moveFrom :newVal];
                 
                 [board removePiece:moveFrom];
                 
@@ -682,43 +680,18 @@
     }
 }
 
-- (void)animateComputerMove: (Space*)fromSpace : (int)value :(BOOL)nxtTileMv {
-    
-    CGPoint origin = fromSpace.piece.frame.origin;
-    
-   // moveTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(movePieceLoop) userInfo:nil repeats:YES];
+- (void)animateComputerMove: (Space*)fromSpace : (int)value {
     
     gameState = gamePaused;
 
-    moveXinc = (moveToSpace.piece.frame.origin.x - origin.x)/moveInc;
-    moveYinc = (moveToSpace.piece.frame.origin.y - origin.y)/moveInc;
-    
     [self setUpFloatPiece:fromSpace];
     
     floatPiece.text  = [NSString stringWithFormat:@"%d", value];
     
-    movePieceLoc.origin.x = fromSpace.piece.frame.origin.x + boardView.frame.origin.x;
-    movePieceLoc.origin.y = fromSpace.piece.frame.origin.y + boardView.frame.origin.y;
-    
- //   movePieceLoc.size = fromSpace.piece.frame.size;
-    
-    moveTimeCnt = 0;
-    
     moveToSpace.piece.hidden = YES;
-    
     playerLabel.hidden = NO;
 
     CGRect frm = fromSpace.piece.frame;
-    
-    if(!nxtTileMv) {
-        frm.origin.x += boardView.frame.origin.x;
-        frm.origin.y += boardView.frame.origin.y;
-    }
-    
-    frm.size.width = floatPiece.frame.size.width;
-    frm.size.height = floatPiece.frame.size.height;
-    
-    [floatPiece setFrame:frm];
     
     frm = moveToSpace.piece.frame;
     frm.origin.x += boardView.frame.origin.x;
@@ -733,40 +706,20 @@
                 [self movePieceLoop];
             }
      ];
-
 }
 
 - (void)movePieceLoop {
-
-  // if(moveTimeCnt > 1) {
-        
-        [moveTimer invalidate];
-        moveTimer = nil;
-       
-        if(gameState == gamePaused)
-            gameState = gameRunning;
-        
-        floatPiece.hidden = YES;
-        moveToSpace.piece.hidden = NO;
-        
-        p2NextTile.hidden = NO;
-       
-       playerLabel.text = @"Player 1";
-       playerLabel.backgroundColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
- //   }
     
-  //  else {
+    if(gameState == gamePaused)
+        gameState = gameRunning;
         
- //       playerLabel.text = @"Computer";
- //       playerLabel.backgroundColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
-
-     //   ++moveTimeCnt;
+    floatPiece.hidden = YES;
+    moveToSpace.piece.hidden = NO;
         
-    //    movePieceLoc.origin.x += moveXinc;
-     //   movePieceLoc.origin.y += moveYinc;
-        
-     //   [floatPiece setFrame:movePieceLoc];
- //  }
+    p2NextTile.hidden = NO;
+       
+    playerLabel.text = @"Player 1";
+    playerLabel.backgroundColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
 }
 
 - (void)gameWon {
@@ -957,7 +910,7 @@
     floatPiece.textColor = [UIColor whiteColor];
     
     [floatPiece setTextAlignment:NSTextAlignmentCenter];
-    [floatPiece setFont:[UIFont fontWithName:@"Arial" size:1.15*FONT_FACT*viewFrame.size.width]];
+    [floatPiece setFont:[UIFont fontWithName:@"Arial" size:1.0*FONT_FACT*space.spaceFrame.size.width]];
     
     [self.view addSubview:floatPiece];
     
@@ -1230,8 +1183,17 @@
     
     CGRect frm;
     
-    frm.origin.x = space.piece.frame.origin.x + boardView.frame.origin.x;
-    frm.origin.y = space.piece.frame.origin.y + boardView.frame.origin.y;
+    if(space.piece == nextTile || space.piece == p2NextTile) {
+        
+        frm.origin.x = space.piece.frame.origin.x;
+        frm.origin.y = space.piece.frame.origin.y;
+    }
+    else {
+        
+        frm.origin.x = space.piece.frame.origin.x + boardView.frame.origin.x;
+        frm.origin.y = space.piece.frame.origin.y + boardView.frame.origin.y;
+    }
+    
     frm.size = space.piece.frame.size;
     
     floatPiece.hidden = NO;
