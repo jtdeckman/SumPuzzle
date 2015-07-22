@@ -88,6 +88,8 @@
         
         [defaults setInteger:1 forKey:@"difficulty"];
         
+        [defaults setInteger:1 forKey:@"winner"];
+        
         [defaults synchronize];
     }
 }

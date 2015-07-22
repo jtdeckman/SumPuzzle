@@ -12,8 +12,14 @@
 @interface WinViewController : UIViewController {
     
     UIImageView *imgView;
+    
+    Player winner;
+    
+    bool computerPlayer;
+    
+    NSTimer *timer;
 }
 
-- (void)initView: (Player)player;
+- (void)initView: (Player)player :(bool)cp;
 
 @end

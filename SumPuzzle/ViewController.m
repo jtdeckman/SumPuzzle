@@ -734,23 +734,18 @@
 
 - (void)gameWon {
     
-     WinViewController *winView = [[WinViewController alloc] init];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    [winView initView:winner];
+    WinViewController *winView = [[WinViewController alloc] init];
+    
+    [winView initView:winner :computerPlayer];
+    
+    wentToGameWinView = YES;
+    
+    [defaults setInteger:winner forKey:@"winner"];
+    [defaults synchronize];
+    
     [self presentViewController:winView animated:NO completion:nil];
-    
-/*    if(winner == player1) {
-     
-    }
-    
-    else {
-        if(computerPlayer)
-            winLabel.text = [NSString stringWithFormat:@"Computer Wins :("];
-        else
-            winLabel.text = [NSString stringWithFormat:@"Player 2 wins"];
-    } */
-    
-   // winLabel.hidden = NO;
 }
 
 - (void)setUpViewController {
