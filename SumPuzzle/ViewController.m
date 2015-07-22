@@ -33,7 +33,7 @@
 
     if(wentToSettingsView) {
    
-        menu.hidden = YES;
+      //  menu.hidden = YES;
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
@@ -140,11 +140,8 @@
     }
     
     else if(gameState == howToPlay) {
-       
-        [howToScreen removeFromSuperview];
-        howToScreen = nil;
-        
-       // howToScreen.hidden = YES;
+
+        howToScreen.hidden = YES;
         gameState = gameMenu;
     }
     
@@ -180,22 +177,8 @@
             else if([self isMenuBarItem:location :menu.howToLabel.frame]) {
                 
                 gameState = howToPlay;
-              //  menu.hidden = YES;
-                
-                UIImage *newImg, *img = [UIImage imageNamed:@"howToPlay.png"];
-
-                CGSize pSize = self.view.frame.size;
-                
-                UIGraphicsBeginImageContext(pSize);
-                [img drawInRect:CGRectMake(0,0,pSize.width,pSize.height)];
-                newImg = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
-
-                howToScreen = [[UIImageView alloc] initWithImage:newImg];//[UIImage imageNamed:@"howToPlay.png"]];
-                howToScreen.alpha = 1.0;
-                
-                [self.view addSubview:howToScreen];
-
+            
+                [self.view bringSubviewToFront:howToScreen];
                 howToScreen.hidden = NO;
             }
         }
@@ -782,6 +765,8 @@
     gameState = preWin;
     winTimeCnt = 0;
     
+    [self writeGameStats];
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     [defaults setInteger:winner forKey:@"winner"];
@@ -879,13 +864,15 @@
     [menu setUpView];
     
     [self.view addSubview:menu];
+
+ // How to play screen
     
+    howToScreen = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"howToPlay.png"]];
+    howToScreen.frame = self.view.frame;
+    howToScreen.alpha = 1.0;
+    howToScreen.hidden = YES;
     
- //   howToScreen = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"howToPlay.png"]];
- //   howToScreen.alpha = 0.7;
- //   howToScreen.hidden = YES;
-    
- //   [self.view addSubview:howToScreen];
+    [self.view addSubview:howToScreen];
     
     
     // Board set-up
@@ -1270,6 +1257,58 @@
     [floatPiece setFrame:frm];
     
     [self.view bringSubviewToFront:floatPiece];
+}
+
+- (void)writeGameStats {
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    if(winner == player1) {
+    
+        NSInteger bestTime;
+        
+        if(captureFlag) {
+
+            bestTime = [defaults integerForKey:@"bestTimeCF"];
+    
+            if(gameTimeCnt < bestTime)
+                [defaults setInteger:gameTimeCnt forKey:@"bestTimeCF"];;
+            
+            [defaults setInteger:[defaults integerForKey:@"nP1WinsCF"]+1 forKey:@"nP1WinsCF"];
+        }
+        
+        else {
+            
+            bestTime = [defaults integerForKey:@"bestTime"];
+            
+            if(gameTimeCnt < bestTime)
+                  [defaults setInteger:gameTimeCnt forKey:@"bestTime"];
+            
+            [defaults setInteger:[defaults integerForKey:@"nP1Wins"]+1 forKey:@"nP1Wins"];
+        }
+    }
+    
+    else {
+        
+        if(computerPlayer) {
+            
+            if(captureFlag)
+                [defaults setInteger:[defaults integerForKey:@"nCompWinsCF"]+1 forKey:@"nCompWinsCF"];
+            
+            else
+                [defaults setInteger:[defaults integerForKey:@"nCompWins"]+1 forKey:@"nCompWins"];
+        }
+        
+        else {
+            
+            if(captureFlag)
+                [defaults setInteger:[defaults integerForKey:@"nP2WinsCF"]+1 forKey:@"nP2WinsCF"];
+            else
+                [defaults setInteger:[defaults integerForKey:@"nP2Wins"]+1 forKey:@"nP2Wins"];
+        }
+    }
+    
+    [defaults synchronize];
 }
 
 @end

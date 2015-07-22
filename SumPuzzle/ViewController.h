@@ -15,6 +15,7 @@
 #import "Move.h"
 #import "SettingsViewController.h"
 #import "WinViewController.h"
+#import "HowToViewController.h"
 
 @interface ViewController : UIViewController {
     

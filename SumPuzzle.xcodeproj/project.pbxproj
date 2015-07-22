@@ -32,7 +32,8 @@
 		A8A51E3C1B221BCE00C90315 /* p1square.png in Resources */ = {isa = PBXBuildFile; fileRef = A8A51E3B1B221BCE00C90315 /* p1square.png */; };
 		A8BF525E1B5ED42400DBDAEC /* WinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8BF525D1B5ED42400DBDAEC /* WinViewController.m */; };
 		A8BF526A1B5FF56900DBDAEC /* launch.png in Resources */ = {isa = PBXBuildFile; fileRef = A8BF52691B5FF56900DBDAEC /* launch.png */; };
-		A8BF526E1B60167300DBDAEC /* howToPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = A8BF526D1B60167300DBDAEC /* howToPlay.png */; };
+		A8BF52721B6018B000DBDAEC /* howToPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = A8BF52711B6018B000DBDAEC /* howToPlay.png */; };
+		A8BF52751B601B8F00DBDAEC /* HowToViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8BF52741B601B8F00DBDAEC /* HowToViewController.m */; };
 		A8DCF10E1B4EC15D0042885D /* AINew.m in Sources */ = {isa = PBXBuildFile; fileRef = A8DCF10D1B4EC15D0042885D /* AINew.m */; };
 		A8DCF1111B4EC55F0042885D /* SubSpace.m in Sources */ = {isa = PBXBuildFile; fileRef = A8DCF1101B4EC55F0042885D /* SubSpace.m */; };
 		A8FDFA531B55806600AB37D3 /* fiveXfiveBoard.png in Resources */ = {isa = PBXBuildFile; fileRef = A8FDFA521B55806600AB37D3 /* fiveXfiveBoard.png */; };
@@ -93,7 +94,9 @@
 		A8BF525C1B5ED42400DBDAEC /* WinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WinViewController.h; sourceTree = "<group>"; };
 		A8BF525D1B5ED42400DBDAEC /* WinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WinViewController.m; sourceTree = "<group>"; };
 		A8BF52691B5FF56900DBDAEC /* launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launch.png; sourceTree = "<group>"; };
-		A8BF526D1B60167300DBDAEC /* howToPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = howToPlay.png; sourceTree = "<group>"; };
+		A8BF52711B6018B000DBDAEC /* howToPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = howToPlay.png; sourceTree = "<group>"; };
+		A8BF52731B601B8F00DBDAEC /* HowToViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HowToViewController.h; sourceTree = "<group>"; };
+		A8BF52741B601B8F00DBDAEC /* HowToViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HowToViewController.m; sourceTree = "<group>"; };
 		A8DCF10C1B4EC15D0042885D /* AINew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AINew.h; sourceTree = "<group>"; };
 		A8DCF10D1B4EC15D0042885D /* AINew.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AINew.m; sourceTree = "<group>"; };
 		A8DCF10F1B4EC55F0042885D /* SubSpace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubSpace.h; sourceTree = "<group>"; };
@@ -149,6 +152,8 @@
 				A81902591B0C13EC00DCD8CB /* ViewController.m */,
 				A8FDFA561B55CE0F00AB37D3 /* SettingsViewController.h */,
 				A8FDFA571B55CE0F00AB37D3 /* SettingsViewController.m */,
+				A8BF52731B601B8F00DBDAEC /* HowToViewController.h */,
+				A8BF52741B601B8F00DBDAEC /* HowToViewController.m */,
 				A819025B1B0C13EC00DCD8CB /* Main.storyboard */,
 				A819027B1B0C159700DCD8CB /* Constants.h */,
 				A8DCF10F1B4EC55F0042885D /* SubSpace.h */,
@@ -185,7 +190,7 @@
 		A81902511B0C13EC00DCD8CB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				A8BF526D1B60167300DBDAEC /* howToPlay.png */,
+				A8BF52711B6018B000DBDAEC /* howToPlay.png */,
 				A8BF52691B5FF56900DBDAEC /* launch.png */,
 				A8FDFA521B55806600AB37D3 /* fiveXfiveBoard.png */,
 				A8FDFA541B558F5800AB37D3 /* sixXsixBoard.png */,
@@ -310,7 +315,7 @@
 				A89601091B5D558F00626E0B /* flag1.png in Resources */,
 				A8FDFA551B558F5800AB37D3 /* sixXsixBoard.png in Resources */,
 				A819025F1B0C13EC00DCD8CB /* Images.xcassets in Resources */,
-				A8BF526E1B60167300DBDAEC /* howToPlay.png in Resources */,
+				A8BF52721B6018B000DBDAEC /* howToPlay.png in Resources */,
 				A8A51E381B2219D500C90315 /* blueSquare.png in Resources */,
 				A8BF526A1B5FF56900DBDAEC /* launch.png in Resources */,
 			);
@@ -342,6 +347,7 @@
 				A819027E1B0C16D900DCD8CB /* Board.m in Sources */,
 				A81089831B25F77600FB880F /* AI.m in Sources */,
 				A8BF525E1B5ED42400DBDAEC /* WinViewController.m in Sources */,
+				A8BF52751B601B8F00DBDAEC /* HowToViewController.m in Sources */,
 				A81089861B274F2300FB880F /* TempBoard.m in Sources */,
 				A8FDFA581B55CE0F00AB37D3 /* SettingsViewController.m in Sources */,
 				A819028A1B0C19A000DCD8CB /* BoardView.m in Sources */,

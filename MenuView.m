@@ -11,7 +11,7 @@
 
 @implementation MenuView
 
-@synthesize nwGameLabel, settingsLabel, howToLabel;
+@synthesize nwGameLabel, settingsLabel, howToLabel, statsLabel;
 
 - (void)setUpView {
     
@@ -90,12 +90,39 @@
     //  howToLabel.textColor = [UIColor redColor];
     howToLabel.textColor = [UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0];
     
-    howToLabel.text = @"How To Play";
+    howToLabel.text = @"How to Play";
     
     [howToLabel setTextAlignment:NSTextAlignmentCenter];
     [howToLabel setFont:[UIFont fontWithName:@"Arial" size:0.4*FONT_FACT*viewFrame.size.width]];
     
     [self addSubview:howToLabel];
+    
+    
+ // Stats label
+    
+    viewFrame.origin.y = viewFrame.origin.y + settingsLabel.frame.origin.y + 0.75*viewFrame.size.height;
+    
+    statsLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    
+    statsLabel.hidden = NO;
+    statsLabel.layer.cornerRadius = 3.0;
+    statsLabel.clipsToBounds = YES;
+    statsLabel.backgroundColor = [UIColor clearColor];
+    //   statsLabel.layer.borderColor = [[UIColor redColor] CGColor];
+    
+    statsLabel.layer.borderColor = [[UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0] CGColor];
+    
+    statsLabel.layer.borderWidth = 1.0f;
+    //  statsLabel.textColor = [UIColor redColor];
+    statsLabel.textColor = [UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0];
+    
+    statsLabel.text = @"Game Stats";
+    
+    [statsLabel setTextAlignment:NSTextAlignmentCenter];
+    [statsLabel setFont:[UIFont fontWithName:@"Arial" size:0.4*FONT_FACT*viewFrame.size.width]];
+    
+    [self addSubview:statsLabel];
+
 }
 
 @end

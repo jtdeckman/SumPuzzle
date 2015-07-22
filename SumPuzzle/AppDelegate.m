@@ -90,6 +90,18 @@
         
         [defaults setInteger:1 forKey:@"winner"];
         
+     // Game stats
+        
+        [defaults setInteger:0 forKey:@"nP1Wins"];
+        [defaults setInteger:0 forKey:@"nP2Wins"];
+        [defaults setInteger:0 forKey:@"nCompWins"];
+        [defaults setInteger:10000000 forKey:@"bestTime"];
+        
+        [defaults setInteger:0 forKey:@"nP1WinsCF"];
+        [defaults setInteger:0 forKey:@"nP2WinsCF"];
+        [defaults setInteger:0 forKey:@"nCompWinsCF"];
+        [defaults setInteger:10000000 forKey:@"bestTimeCF"];
+        
         [defaults synchronize];
     }
 }

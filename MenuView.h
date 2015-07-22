@@ -14,12 +14,13 @@
     UILabel *nwGameLabel;
     UILabel *settingsLabel;
     UILabel *howToLabel;
-    
+    UILabel *statsLabel;
 }
 
 @property (nonatomic, strong) UILabel *nwGameLabel;
 @property (nonatomic, strong) UILabel *settingsLabel;
 @property (nonatomic, strong) UILabel *howToLabel;
+@property (nonatomic, strong) UILabel *statsLabel;
 
 - (void)setUpView;
 
