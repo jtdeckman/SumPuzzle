@@ -55,6 +55,7 @@
     int gameTimeCnt;
     int moveTimeCnt;
     int pauseTimeCnt;
+    int winTimeCnt;
     
     int moveInc;
     

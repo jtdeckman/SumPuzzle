@@ -79,6 +79,24 @@
        [self convertSecondsToHoursMinSec:gameTimeCnt++];
     }
     
+    if(gameState == preWin) {
+        
+        if(winTimeCnt > 0) {
+            
+            gameState = winState;
+            
+            WinViewController *winView = [[WinViewController alloc] init];
+            [winView initView:winner :computerPlayer];
+        
+            wentToGameWinView = YES;
+            
+            [self presentViewController:winView animated:NO completion:nil];
+        }
+        else {
+            ++winTimeCnt;
+        }
+        
+    }
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -516,11 +534,8 @@
     
     winner = [board checkForWinner];
     
-    if(winner != notAssigned) {
-        
-        gameState = winState;
+    if(winner != notAssigned)
         [self gameWon];
-    }
     
     else {
     
@@ -734,18 +749,13 @@
 
 - (void)gameWon {
     
+    gameState = preWin;
+    winTimeCnt = 0;
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    WinViewController *winView = [[WinViewController alloc] init];
-    
-    [winView initView:winner :computerPlayer];
-    
-    wentToGameWinView = YES;
     
     [defaults setInteger:winner forKey:@"winner"];
     [defaults synchronize];
-    
-    [self presentViewController:winView animated:NO completion:nil];
 }
 
 - (void)setUpViewController {
@@ -1188,7 +1198,7 @@
             nRnIter = 1;
         }
         else {
-            niter = 7;
+            niter = 5;
             nRnIter = 1;
         }
 

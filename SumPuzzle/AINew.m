@@ -236,7 +236,7 @@
     
     double metric = 0;
     
-   // int nP1Spc = (int)[p1spcs count];
+  //  int nP1Spc = (int)[p1spcs count];
     int nP2Spc = (int)[p2spcs count];
 
     int p1Total = [self scoreOfMinSpaceSet:p1spcs];
@@ -280,7 +280,7 @@
     double metric = 0;
     
     int nP1Spc = (int)[p1spcs count];
-  //  int nP2Spc = (int)[p2spcs count];
+ //   int nP2Spc = (int)[p2spcs count];
 
     int p1Total = [self scoreOfMinSpaceSet:p1spcs];
     int compTotal = [self scoreOfMinSpaceSet:p2spcs];

@@ -251,7 +251,7 @@
     backButton.layer.cornerRadius = 5.0;
     backButton.layer.borderColor = [[UIColor whiteColor] CGColor];
     
-    [backButton.layer setBorderWidth:1.0f];
+    [backButton.layer setBorderWidth:0.5f];
     [backButton setTitle:@"OK" forState:UIControlStateNormal];
     
     [backButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:1.5*FONT_FACT*viewFrame.size.height]];

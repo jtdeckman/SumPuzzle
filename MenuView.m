@@ -25,8 +25,8 @@
     clr.green = 0.8;
     clr.blue = 0.8;
     
-    viewFrame.size.width = 0.5*self.frame.size.width;
-    viewFrame.size.height = 0.1*self.frame.size.height;
+    viewFrame.size.width = 0.4*self.frame.size.width;
+    viewFrame.size.height = 0.14*self.frame.size.height;
     viewFrame.origin.x = (self.frame.size.width - viewFrame.size.width)/2.0;
     viewFrame.origin.y = 0.075*self.frame.size.height;
     
@@ -47,7 +47,7 @@
     settingsLabel.text = @"Settings";
     
     [settingsLabel setTextAlignment:NSTextAlignmentCenter];
-    [settingsLabel setFont:[UIFont fontWithName:@"Arial" size:0.25*FONT_FACT*viewFrame.size.width]];
+    [settingsLabel setFont:[UIFont fontWithName:@"Arial" size:0.4*FONT_FACT*viewFrame.size.width]];
     
     [self addSubview:settingsLabel];
     
@@ -70,7 +70,7 @@
     nwGameLabel.text = @"New Game";
     
     [nwGameLabel setTextAlignment:NSTextAlignmentCenter];
-    [nwGameLabel setFont:[UIFont fontWithName:@"Arial" size:0.25*FONT_FACT*viewFrame.size.width]];
+    [nwGameLabel setFont:[UIFont fontWithName:@"Arial" size:0.4*FONT_FACT*viewFrame.size.width]];
 
     [self addSubview:nwGameLabel];
 
@@ -93,7 +93,7 @@
     howToLabel.text = @"How To Play";
     
     [howToLabel setTextAlignment:NSTextAlignmentCenter];
-    [howToLabel setFont:[UIFont fontWithName:@"Arial" size:0.25*FONT_FACT*viewFrame.size.width]];
+    [howToLabel setFont:[UIFont fontWithName:@"Arial" size:0.4*FONT_FACT*viewFrame.size.width]];
     
     [self addSubview:howToLabel];
 }
