@@ -103,19 +103,6 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    [defaults setInteger:player2 forKey:@"winner"];
-    [defaults setBool:NO forKey:@"computerPlayer"];
-    
-    [defaults synchronize];
-    WinViewController *winView = [[WinViewController alloc] init];
-    [winView initView:player2 :computerPlayer];
-    
-    wentToGameWinView = YES;
-    
-    [self presentViewController:winView animated:NO completion:nil];
-    
     UITouch *touch = [[event allTouches] anyObject];
     CGPoint location = [touch locationInView:touch.view];
     
@@ -765,7 +752,7 @@
 - (void)gameWon {
     
     gameState = preWin;
-    winTimeCnt = 1;
+    winTimeCnt = 0;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
