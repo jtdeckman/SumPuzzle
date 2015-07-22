@@ -79,7 +79,8 @@ typedef enum : NSUInteger {
     winMenu,
     preWin,
     preAI,
-    newGame
+    newGame,
+    howToPlay
     
 } GameState;
 

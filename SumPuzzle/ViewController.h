@@ -82,7 +82,8 @@
     
     UIImageView *flag1;
     UIImageView *flag2;
-
+    UIImageView *howToScreen;
+    
     CGSize imgSize;
     
     UIImageView *menuBar;

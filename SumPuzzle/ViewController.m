@@ -127,10 +127,6 @@
             
             if(space != NULL) {
                 
-            //    if(placeMode == placeTile) {
-            //        if(!space.isOccupied && [board nbrNearestOccupied:space : currentPlayer] > 0)
-            //            [self addPiece:space];
-             //   }
                  if(placeMode == freeState) {
                     
                     if(space.isOccupied && space.player == currentPlayer) {
@@ -141,6 +137,15 @@
                 }
             }
         }
+    }
+    
+    else if(gameState == howToPlay) {
+       
+        [howToScreen removeFromSuperview];
+        howToScreen = nil;
+        
+       // howToScreen.hidden = YES;
+        gameState = gameMenu;
     }
     
     else if(gameState == gameMenu || gameState ==  winMenu) {
@@ -155,7 +160,9 @@
             menu.hidden = YES;
         }
         else {
+            
             location = [touch locationInView:menu];
+            
             if([self isMenuBarItem:location :menu.settingsLabel.frame]) {
                 
                 wentToSettingsView = YES;
@@ -165,10 +172,31 @@
                                                         
             }
             else if([self isMenuBarItem:location :menu.nwGameLabel.frame]) {
-                menu.hidden = YES;
                 
-            //    [board clearBoard];
+                menu.hidden = YES;
                 [self setUpNewGame];
+            }
+            
+            else if([self isMenuBarItem:location :menu.howToLabel.frame]) {
+                
+                gameState = howToPlay;
+              //  menu.hidden = YES;
+                
+                UIImage *newImg, *img = [UIImage imageNamed:@"howToPlay.png"];
+
+                CGSize pSize = self.view.frame.size;
+                
+                UIGraphicsBeginImageContext(pSize);
+                [img drawInRect:CGRectMake(0,0,pSize.width,pSize.height)];
+                newImg = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+
+                howToScreen = [[UIImageView alloc] initWithImage:newImg];//[UIImage imageNamed:@"howToPlay.png"]];
+                howToScreen.alpha = 1.0;
+                
+                [self.view addSubview:howToScreen];
+
+                howToScreen.hidden = NO;
             }
         }
     }
@@ -851,6 +879,14 @@
     [menu setUpView];
     
     [self.view addSubview:menu];
+    
+    
+ //   howToScreen = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"howToPlay.png"]];
+ //   howToScreen.alpha = 0.7;
+ //   howToScreen.hidden = YES;
+    
+ //   [self.view addSubview:howToScreen];
+    
     
     // Board set-up
     
