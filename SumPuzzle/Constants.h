@@ -36,7 +36,7 @@
 #define TILE_INIT 10
 #define TILE_INC 20
 
-#define WIN_WEIGHT_FACT 1e10
+#define WIN_WEIGHT_FACT 1e4
 
 #define DIV_FACT 0.5
 
