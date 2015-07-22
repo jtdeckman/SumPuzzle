@@ -10,11 +10,19 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="launch.png" translatesAutoresizingMaskIntoConstraints="NO" id="JGo-Tn-QOK">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch.png" translatesAutoresizingMaskIntoConstraints="NO" id="JGo-Tn-QOK">
                     <rect key="frame" x="37" y="33" width="300" height="600"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="600" id="AdW-23-8bP"/>
+                        <constraint firstAttribute="width" constant="300" id="ReQ-TP-Psz"/>
+                    </constraints>
                 </imageView>
             </subviews>
             <color key="backgroundColor" red="0.13870550719999999" green="0.3666447363" blue="0.72127149469999996" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="centerY" secondItem="JGo-Tn-QOK" secondAttribute="centerY" id="1Pd-Cj-BoP"/>
+                <constraint firstAttribute="centerX" secondItem="JGo-Tn-QOK" secondAttribute="centerX" id="rUU-2V-9H4"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
             <point key="canvasLocation" x="480" y="395"/>
