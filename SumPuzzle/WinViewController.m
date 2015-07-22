@@ -76,7 +76,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     winner = [defaults integerForKey:@"winner"];
-    computerPlayer = [defaults integerForKey:@"computerPlayer"];
+    computerPlayer = [defaults boolForKey:@"computerPlayer"];
     
    // if(winner == player1)
    //   imgPlayer = [UIImage imageNamed:@"blueSquare.png"];
@@ -95,9 +95,9 @@
     playerFrm.origin.x = 0;
     
     if(winner == player1)
-        winFrm.size.width = 1.2*playerFrm.size.width;
+        winFrm.size.width = 1.1*playerFrm.size.width;
     else 
-        winFrm.size.width = 1.5*playerFrm.size.width;
+        winFrm.size.width = 1.1*playerFrm.size.width;
 
     winFrm.size.height = winFrm.size.width;
 
@@ -120,11 +120,85 @@
     UIGraphicsEndImageContext();
     
     if(winner == player1)
-        spacing = playerFrm.size.width/4.0;
+        spacing = playerFrm.size.width/7.0;
     else
-        spacing = playerFrm.size.width/5.0;
+        spacing = playerFrm.size.width/7.0;
     
-    winTiles = [[NSMutableArray alloc] initWithCapacity:5];
+    winTiles = [[NSMutableArray alloc] initWithCapacity:9];
+    
+    if(winner != player1) {
+        
+        tilesWidth = 6.0*winFrm.size.width + 5.0*spacing;
+        winFrm.origin.x = (self.view.frame.size.width - tilesWidth)/2.0;
+
+        for(int i=0; i<6; i++) {
+        
+            labelPtr = [[UILabel alloc] initWithFrame:winFrm];
+        
+            labelPtr.hidden = NO;
+            labelPtr.layer.cornerRadius = 10.0;
+            labelPtr.clipsToBounds = YES;
+            labelPtr.backgroundColor = [UIColor colorWithPatternImage:wImage];
+            labelPtr.textColor = [UIColor whiteColor];
+        
+            [labelPtr setTextAlignment:NSTextAlignmentCenter];
+            [labelPtr setFont:[UIFont fontWithName:@"Arial" size:2.5*FONT_FACT*playerFrm.size.width]];
+        
+            [self.view addSubview:labelPtr];
+            [winTiles addObject:labelPtr];
+        
+            winFrm.origin.x += winFrm.size.width + spacing;
+        }
+
+        tilesWidth = 2.0*winFrm.size.width + 1.0*spacing;
+        winFrm.origin.x = (self.view.frame.size.width - tilesWidth)/2.0;
+    
+        for(int i=0; i<3; i++) {
+        
+            labelPtr = [[UILabel alloc] initWithFrame:winFrm];
+        
+            labelPtr.hidden = NO;
+            labelPtr.layer.cornerRadius = 10.0;
+            labelPtr.clipsToBounds = YES;
+            labelPtr.backgroundColor = [UIColor colorWithPatternImage:wImage];
+            labelPtr.textColor = [UIColor whiteColor];
+        
+            [labelPtr setTextAlignment:NSTextAlignmentCenter];
+            [labelPtr setFont:[UIFont fontWithName:@"Arial" size:2.5*FONT_FACT*playerFrm.size.width]];
+        
+            [self.view addSubview:labelPtr];
+            [winTiles addObject:labelPtr];
+        
+            winFrm.origin.x += winFrm.size.width + spacing;
+        }
+
+        labelPtr = winTiles[0];
+        labelPtr.text = @"W";
+    
+        labelPtr = winTiles[1];
+        labelPtr.text = @"I";
+    
+        labelPtr = winTiles[2];
+        labelPtr.text = @"N";
+    
+        labelPtr = winTiles[3];
+        labelPtr.text = @"N";
+    
+        labelPtr = winTiles[4];
+        labelPtr.text = @"E";
+    
+        labelPtr = winTiles[5];
+        labelPtr.text = @"R";
+    
+        labelPtr = winTiles[6];
+        labelPtr.text = @"I";
+    
+        labelPtr = winTiles[7];
+        labelPtr.text = @"S";
+    
+        labelPtr = winTiles[8];
+        labelPtr.text = @":";
+    }
     
     if(winner == player1) {
         
@@ -162,35 +236,35 @@
         
         tilesWidth = 4.0*winFrm.size.width + 3.0*spacing;
         winFrm.origin.x = (self.view.frame.size.width - tilesWidth)/2.0;
-        
+         
         for(int i=0; i<4; i++) {
-            
+         
             labelPtr = [[UILabel alloc] initWithFrame:winFrm];
-            
+         
             labelPtr.hidden = NO;
             labelPtr.layer.cornerRadius = 10.0;
             labelPtr.clipsToBounds = YES;
             labelPtr.backgroundColor = [UIColor colorWithPatternImage:wImage];
             labelPtr.textColor = [UIColor whiteColor];
-            
+         
             [labelPtr setTextAlignment:NSTextAlignmentCenter];
             [labelPtr setFont:[UIFont fontWithName:@"Arial" size:2.5*FONT_FACT*playerFrm.size.width]];
-            
+         
             [self.view addSubview:labelPtr];
             [winTiles addObject:labelPtr];
-            
+         
             winFrm.origin.x += winFrm.size.width + spacing;
         }
-        
+         
         labelPtr = winTiles[0];
         labelPtr.text = @"W";
-        
+         
         labelPtr = winTiles[1];
         labelPtr.text = @"I";
-        
+         
         labelPtr = winTiles[2];
         labelPtr.text = @"N";
-        
+         
         labelPtr = winTiles[3];
         labelPtr.text = @"!";
     }
@@ -250,78 +324,134 @@
         
         else {
             
+            playerTiles = [[NSMutableArray alloc] initWithCapacity:7];
+            tilesWidth = 7.0*playerFrm.size.width + 6.0*spacing;
+            playerFrm.origin.x = (self.view.frame.size.width - tilesWidth)/2.0;
+            
+            for(int i=0; i<7; i++) {
+                
+                labelPtr = [[UILabel alloc] initWithFrame:playerFrm];
+                
+                labelPtr.hidden = NO;
+                labelPtr.layer.cornerRadius = 10.0;
+                labelPtr.clipsToBounds = YES;
+                labelPtr.backgroundColor = [UIColor colorWithPatternImage:pImage];
+                labelPtr.textColor = [UIColor whiteColor];
+                
+                [labelPtr setTextAlignment:NSTextAlignmentCenter];
+                [labelPtr setFont:[UIFont fontWithName:@"Arial" size:2.0*FONT_FACT*playerFrm.size.width]];
+                
+                [self.view addSubview:labelPtr];
+                [playerTiles addObject:labelPtr];
+                
+                playerFrm.origin.x += playerFrm.size.width + spacing;
+            }
+            
+            
+            labelPtr = playerTiles[0];
+            labelPtr.text = @"P";
+            
+            labelPtr = playerTiles[1];
+            labelPtr.text = @"L";
+            
+            labelPtr = playerTiles[2];
+            labelPtr.text = @"A";
+            
+            labelPtr = playerTiles[3];
+            labelPtr.text = @"Y";
+            
+            labelPtr = playerTiles[4];
+            labelPtr.text = @"E";
+            
+            labelPtr = playerTiles[5];
+            labelPtr.text = @"R";
+            
+            labelPtr = playerTiles[6];
+            labelPtr.text = @"2";
+            
         }
         
-        tilesWidth = 4.0*winFrm.size.width + 3.0*spacing;
-        winFrm.origin.x = (self.view.frame.size.width - tilesWidth)/2.0;
-        
-        for(int i=0; i<4; i++) {
-            
-            labelPtr = [[UILabel alloc] initWithFrame:winFrm];
-            
-            labelPtr.hidden = NO;
-            labelPtr.layer.cornerRadius = 10.0;
-            labelPtr.clipsToBounds = YES;
-            labelPtr.backgroundColor = [UIColor colorWithPatternImage:wImage];
-            labelPtr.textColor = [UIColor whiteColor];
-            
-            [labelPtr setTextAlignment:NSTextAlignmentCenter];
-            [labelPtr setFont:[UIFont fontWithName:@"Arial" size:2.5*FONT_FACT*playerFrm.size.width]];
-            
-            [self.view addSubview:labelPtr];
-            [winTiles addObject:labelPtr];
-            
-            winFrm.origin.x += winFrm.size.width + spacing;
-        }
-
-        labelPtr = winTiles[0];
-        labelPtr.text = @"W";
-        
-        labelPtr = winTiles[1];
-        labelPtr.text = @"I";
-        
-        labelPtr = winTiles[2];
-        labelPtr.text = @"N";
-        
-        labelPtr = winTiles[3];
-        labelPtr.text = @"S";
     }
     
-    [self doAnimations:playerTiles :winTiles];
+    if(winner == player1) {
+        
+        [self doP1Animations:playerTiles :0.35];
+        [self doP1WinAnimations:winTiles :0.5];
+    }
+    else {
+        
+        [self doWinAnimations:winTiles :0.30];
+        [self doAnimations:playerTiles :0.5];
+    }
 }
 
-- (void)doAnimations: (NSMutableArray*)pieces :(NSMutableArray*)winPieces {
+- (void)doP1Animations: (NSMutableArray*)pieces :(CGFloat)vfact {
     
     UILabel *currPc = pieces[0];
+    
+    CGRect animFrm = currPc.frame;
+    
+    animFrm.origin.y = self.view.frame.size.height*vfact;
+    
+    [UIView animateWithDuration:0.75
+                          delay:0.0
+                        options:UIViewAnimationOptionTransitionCrossDissolve
+                     animations:^{
+                         currPc.frame = animFrm;
+                     } completion:^(BOOL finished) {
+                         
+                     }];
+    
+    currPc = pieces[1];
+    animFrm = currPc.frame;
+    animFrm.origin.y = self.view.frame.size.height*vfact;
+    
+    [UIView animateWithDuration:0.75
+                          delay:0.3
+                        options:UIViewAnimationOptionTransitionCrossDissolve
+                     animations:^{
+                         currPc.frame = animFrm;
+                     } completion:^(BOOL finished) {
+                         
+                     }];
+    
+    currPc = pieces[2];
+    animFrm = currPc.frame;
+    animFrm.origin.y = self.view.frame.size.height*vfact;
+    
+    [UIView animateWithDuration:0.75
+                          delay:0.4
+                        options:UIViewAnimationOptionTransitionCrossDissolve
+                     animations:^{
+                         currPc.frame = animFrm;
+                     } completion:^(BOOL finished) {
+                         
+                     }];
+}
 
+- (void)doAnimations: (NSMutableArray*)pieces :(CGFloat)vfact {
+    
+    UILabel *currPc = pieces[0];
         
     CGRect animFrm = currPc.frame;
     
-    animFrm.origin.y = self.view.frame.size.height*0.4;
+    animFrm.origin.y = self.view.frame.size.height*vfact;
     
     [UIView animateWithDuration:0.75
-                    animations:^{
-                        currPc.frame = animFrm;}
-                    completion:^(BOOL finished) {
-                        //[self getNextPiece:pieces :currPc];
-                    }
-            ];
-        
-      /*  [UIView animateWithDuration:0.75
-                              delay:1.0
-                            options:UIViewAnimationOptionTransitionCrossDissolve
-                         animations:^{
-                             currPc.frame = animFrm;
-                         } completion:^(BOOL finished) {
-    
-                         }]; */
-        
+                          delay:0.4
+                        options:UIViewAnimationOptionTransitionCrossDissolve
+                     animations:^{
+                         currPc.frame = animFrm;
+                     } completion:^(BOOL finished) {
+                         
+                     }];
+
     currPc = pieces[1];
     animFrm = currPc.frame;
-    animFrm.origin.y = self.view.frame.size.height*0.4;
+    animFrm.origin.y = self.view.frame.size.height*vfact;
     
      [UIView animateWithDuration:0.75
-                           delay:0.4
+                           delay:0.5
                          options:UIViewAnimationOptionTransitionCrossDissolve
                       animations:^{
                           currPc.frame = animFrm;
@@ -331,10 +461,10 @@
     
     currPc = pieces[2];
     animFrm = currPc.frame;
-    animFrm.origin.y = self.view.frame.size.height*0.4;
+    animFrm.origin.y = self.view.frame.size.height*vfact;
     
     [UIView animateWithDuration:0.75
-                          delay:0.5
+                          delay:0.6
                         options:UIViewAnimationOptionTransitionCrossDissolve
                      animations:^{
                          currPc.frame = animFrm;
@@ -346,10 +476,10 @@
  
         currPc = pieces[3];
         animFrm = currPc.frame;
-        animFrm.origin.y = self.view.frame.size.height*0.4;
+        animFrm.origin.y = self.view.frame.size.height*vfact;
     
         [UIView animateWithDuration:0.75
-                              delay:0.6
+                              delay:0.7
                             options:UIViewAnimationOptionTransitionCrossDissolve
                          animations:^{
                              currPc.frame = animFrm;
@@ -359,7 +489,7 @@
         
         currPc = pieces[4];
         animFrm = currPc.frame;
-        animFrm.origin.y = self.view.frame.size.height*0.4;
+        animFrm.origin.y = self.view.frame.size.height*vfact;
         
         [UIView animateWithDuration:0.75
                               delay:0.8
@@ -372,7 +502,7 @@
         
         currPc = pieces[5];
         animFrm = currPc.frame;
-        animFrm.origin.y = self.view.frame.size.height*0.4;
+        animFrm.origin.y = self.view.frame.size.height*vfact;
         
         [UIView animateWithDuration:0.75
                               delay:0.9
@@ -385,7 +515,7 @@
         
         currPc = pieces[6];
         animFrm = currPc.frame;
-        animFrm.origin.y = self.view.frame.size.height*0.4;
+        animFrm.origin.y = self.view.frame.size.height*vfact;
         
         [UIView animateWithDuration:0.75
                               delay:1.0
@@ -401,7 +531,7 @@
         
         currPc = pieces[7];
         animFrm = currPc.frame;
-        animFrm.origin.y = self.view.frame.size.height*0.4;
+        animFrm.origin.y = self.view.frame.size.height*vfact;
         
         [UIView animateWithDuration:0.75
                               delay:1.1
@@ -413,62 +543,197 @@
                          }];
         
     }
+}
+- (void)doP1WinAnimations: (NSMutableArray*)pieces :(CGFloat)vfact {
     
-    currPc = winPieces[0];
-    animFrm = currPc.frame;
-    animFrm.origin.y = self.view.frame.size.height*0.55;
+    UILabel *currPc = pieces[0];
+    
+    CGRect animFrm = currPc.frame;
+    
+    animFrm.origin.y = self.view.frame.size.height*vfact;//*0.9;
     
     [UIView animateWithDuration:0.75
-                          delay:1.2
+                          delay:0.75
                         options:UIViewAnimationOptionTransitionCrossDissolve
                      animations:^{
                          currPc.frame = animFrm;
                      } completion:^(BOOL finished) {
                          
                      }];
+    
+    currPc = pieces[1];
+    animFrm = currPc.frame;
+    animFrm.origin.y = self.view.frame.size.height*vfact;
+    
+    [UIView animateWithDuration:0.75
+                          delay:0.85
+                        options:UIViewAnimationOptionTransitionCrossDissolve
+                     animations:^{
+                         currPc.frame = animFrm;
+                     } completion:^(BOOL finished) {
+                         
+                     }];
+    
+    currPc = pieces[2];
+    animFrm = currPc.frame;
+    animFrm.origin.y = self.view.frame.size.height*vfact;//*0.9;
+    
+    [UIView animateWithDuration:0.75
+                          delay:0.95
+                        options:UIViewAnimationOptionTransitionCrossDissolve
+                     animations:^{
+                         currPc.frame = animFrm;
+                     } completion:^(BOOL finished) {
+                         
+                     }];
+    
+    
+    
+    currPc = pieces[3];
+    animFrm = currPc.frame;
+    animFrm.origin.y = self.view.frame.size.height*vfact;//*0.85;
+    
+    [UIView animateWithDuration:0.75
+                          delay:1.00
+                        options:UIViewAnimationOptionTransitionCrossDissolve
+                     animations:^{
+                         currPc.frame = animFrm;
+                     } completion:^(BOOL finished) {
+                         
+                     }];
+}
 
+- (void)doWinAnimations: (NSMutableArray*)pieces :(CGFloat)vfact {
     
-    currPc = winPieces[1];
-    animFrm = currPc.frame;
-    animFrm.origin.y = self.view.frame.size.height*0.6;
+    UILabel *currPc = pieces[0];
+    
+    CGRect animFrm = currPc.frame;
+    
+    animFrm.origin.y = self.view.frame.size.height*vfact;
     
     [UIView animateWithDuration:0.75
-                          delay:1.3
+                          delay:0.0
                         options:UIViewAnimationOptionTransitionCrossDissolve
                      animations:^{
                          currPc.frame = animFrm;
                      } completion:^(BOOL finished) {
                          
                      }];
+    
+    currPc = pieces[1];
+    animFrm = currPc.frame;
+    animFrm.origin.y = self.view.frame.size.height*vfact;
+    
+    [UIView animateWithDuration:0.75
+                          delay:0.0
+                        options:UIViewAnimationOptionTransitionCrossDissolve
+                     animations:^{
+                         currPc.frame = animFrm;
+                     } completion:^(BOOL finished) {
+                         
+                     }];
+    
+    currPc = pieces[2];
+    animFrm = currPc.frame;
+    animFrm.origin.y = self.view.frame.size.height*vfact;
+    
+    [UIView animateWithDuration:0.75
+                          delay:0.0
+                        options:UIViewAnimationOptionTransitionCrossDissolve
+                     animations:^{
+                         currPc.frame = animFrm;
+                     } completion:^(BOOL finished) {
+                         
+                     }];
+    
+    
+        
+    currPc = pieces[3];
+    animFrm = currPc.frame;
+    animFrm.origin.y = self.view.frame.size.height*vfact;
+        
+    [UIView animateWithDuration:0.75
+                          delay:0.0
+                        options:UIViewAnimationOptionTransitionCrossDissolve
+                     animations:^{
+                         currPc.frame = animFrm;
+                     } completion:^(BOOL finished) {
+                             
+                     }];
+    
+    if([pieces count] > 4) {
+            
+        currPc = pieces[4];
+        animFrm = currPc.frame;
+        animFrm.origin.y = self.view.frame.size.height*vfact;
+        
+        [UIView animateWithDuration:0.75
+                              delay:0.0
+                            options:UIViewAnimationOptionTransitionCrossDissolve
+                         animations:^{
+                             currPc.frame = animFrm;
+                         } completion:^(BOOL finished) {
+                             
+                         }];
+        
+        currPc = pieces[5];
+        animFrm = currPc.frame;
+        animFrm.origin.y = self.view.frame.size.height*vfact;
+        
+        [UIView animateWithDuration:0.75
+                              delay:0.0
+                            options:UIViewAnimationOptionTransitionCrossDissolve
+                         animations:^{
+                             currPc.frame = animFrm;
+                         } completion:^(BOOL finished) {
+                             
+                        }];
+        
+        vfact *= 1.25;
+        
+        currPc = pieces[6];
+        animFrm = currPc.frame;
+        animFrm.origin.y = self.view.frame.size.height*vfact;
+        
+        [UIView animateWithDuration:0.75
+                              delay:0.4
+                            options:UIViewAnimationOptionTransitionCrossDissolve
+                         animations:^{
+                             currPc.frame = animFrm;
+                         } completion:^(BOOL finished) {
+                             
+                         }];
+        
+        currPc = pieces[7];
+        animFrm = currPc.frame;
+        animFrm.origin.y = self.view.frame.size.height*vfact;
+        
+        [UIView animateWithDuration:0.75
+                              delay:0.4
+                            options:UIViewAnimationOptionTransitionCrossDissolve
+                         animations:^{
+                             currPc.frame = animFrm;
+                         } completion:^(BOOL finished) {
+                  
+                         }];
+        
+        currPc = pieces[8];
+        
+        currPc.backgroundColor = [UIColor clearColor];
+        [currPc setTextAlignment:NSTextAlignmentLeft];
 
-    currPc = winPieces[2];
-    animFrm = currPc.frame;
-    animFrm.origin.y = self.view.frame.size.height*0.55;
-    
-    [UIView animateWithDuration:0.75
-                          delay:1.4
-                        options:UIViewAnimationOptionTransitionCrossDissolve
-                     animations:^{
-                         currPc.frame = animFrm;
-                     } completion:^(BOOL finished) {
-                         
-                     }];
-    
-    
-    currPc = winPieces[3];
-    animFrm = currPc.frame;
-    animFrm.origin.y = self.view.frame.size.height*0.6;
-    
-    [UIView animateWithDuration:0.75
-                          delay:1.5
-                        options:UIViewAnimationOptionTransitionCrossDissolve
-                     animations:^{
-                         currPc.frame = animFrm;
-                     } completion:^(BOOL finished) {
-                         
-                     }];
-
-    
+        animFrm = currPc.frame;
+        animFrm.origin.y = self.view.frame.size.height*vfact;
+        
+        [UIView animateWithDuration:0.75
+                              delay:0.4
+                            options:UIViewAnimationOptionTransitionCrossDissolve
+                         animations:^{
+                             currPc.frame = animFrm;
+                         } completion:^(BOOL finished) {
+                             
+                        }];
+    }
 }
 
 @end
