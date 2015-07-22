@@ -31,9 +31,7 @@
 		A8A51E3A1B2219DA00C90315 /* redSquare.png in Resources */ = {isa = PBXBuildFile; fileRef = A8A51E391B2219DA00C90315 /* redSquare.png */; };
 		A8A51E3C1B221BCE00C90315 /* p1square.png in Resources */ = {isa = PBXBuildFile; fileRef = A8A51E3B1B221BCE00C90315 /* p1square.png */; };
 		A8BF525E1B5ED42400DBDAEC /* WinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8BF525D1B5ED42400DBDAEC /* WinViewController.m */; };
-		A8BF52601B5ED59400DBDAEC /* youWin.png in Resources */ = {isa = PBXBuildFile; fileRef = A8BF525F1B5ED59400DBDAEC /* youWin.png */; };
-		A8BF52621B5ED59C00DBDAEC /* computerWin.png in Resources */ = {isa = PBXBuildFile; fileRef = A8BF52611B5ED59C00DBDAEC /* computerWin.png */; };
-		A8BF52641B5ED5A300DBDAEC /* player2Win.png in Resources */ = {isa = PBXBuildFile; fileRef = A8BF52631B5ED5A300DBDAEC /* player2Win.png */; };
+		A8BF526A1B5FF56900DBDAEC /* launch.png in Resources */ = {isa = PBXBuildFile; fileRef = A8BF52691B5FF56900DBDAEC /* launch.png */; };
 		A8DCF10E1B4EC15D0042885D /* AINew.m in Sources */ = {isa = PBXBuildFile; fileRef = A8DCF10D1B4EC15D0042885D /* AINew.m */; };
 		A8DCF1111B4EC55F0042885D /* SubSpace.m in Sources */ = {isa = PBXBuildFile; fileRef = A8DCF1101B4EC55F0042885D /* SubSpace.m */; };
 		A8FDFA531B55806600AB37D3 /* fiveXfiveBoard.png in Resources */ = {isa = PBXBuildFile; fileRef = A8FDFA521B55806600AB37D3 /* fiveXfiveBoard.png */; };
@@ -93,9 +91,7 @@
 		A8A51E3B1B221BCE00C90315 /* p1square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = p1square.png; sourceTree = "<group>"; };
 		A8BF525C1B5ED42400DBDAEC /* WinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WinViewController.h; sourceTree = "<group>"; };
 		A8BF525D1B5ED42400DBDAEC /* WinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WinViewController.m; sourceTree = "<group>"; };
-		A8BF525F1B5ED59400DBDAEC /* youWin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youWin.png; sourceTree = "<group>"; };
-		A8BF52611B5ED59C00DBDAEC /* computerWin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = computerWin.png; sourceTree = "<group>"; };
-		A8BF52631B5ED5A300DBDAEC /* player2Win.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player2Win.png; sourceTree = "<group>"; };
+		A8BF52691B5FF56900DBDAEC /* launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launch.png; sourceTree = "<group>"; };
 		A8DCF10C1B4EC15D0042885D /* AINew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AINew.h; sourceTree = "<group>"; };
 		A8DCF10D1B4EC15D0042885D /* AINew.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AINew.m; sourceTree = "<group>"; };
 		A8DCF10F1B4EC55F0042885D /* SubSpace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubSpace.h; sourceTree = "<group>"; };
@@ -187,9 +183,7 @@
 		A81902511B0C13EC00DCD8CB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				A8BF525F1B5ED59400DBDAEC /* youWin.png */,
-				A8BF52611B5ED59C00DBDAEC /* computerWin.png */,
-				A8BF52631B5ED5A300DBDAEC /* player2Win.png */,
+				A8BF52691B5FF56900DBDAEC /* launch.png */,
 				A8FDFA521B55806600AB37D3 /* fiveXfiveBoard.png */,
 				A8FDFA541B558F5800AB37D3 /* sixXsixBoard.png */,
 				A8A51E371B2219D500C90315 /* blueSquare.png */,
@@ -307,16 +301,14 @@
 				A8A51E3C1B221BCE00C90315 /* p1square.png in Resources */,
 				A8A51E301B1A760100C90315 /* menuBars.png in Resources */,
 				A8FDFA531B55806600AB37D3 /* fiveXfiveBoard.png in Resources */,
-				A8BF52601B5ED59400DBDAEC /* youWin.png in Resources */,
 				A819025D1B0C13EC00DCD8CB /* Main.storyboard in Resources */,
 				A8A51E3A1B2219DA00C90315 /* redSquare.png in Resources */,
 				A81902621B0C13EC00DCD8CB /* LaunchScreen.xib in Resources */,
 				A89601091B5D558F00626E0B /* flag1.png in Resources */,
-				A8BF52641B5ED5A300DBDAEC /* player2Win.png in Resources */,
 				A8FDFA551B558F5800AB37D3 /* sixXsixBoard.png in Resources */,
-				A8BF52621B5ED59C00DBDAEC /* computerWin.png in Resources */,
 				A819025F1B0C13EC00DCD8CB /* Images.xcassets in Resources */,
 				A8A51E381B2219D500C90315 /* blueSquare.png in Resources */,
+				A8BF526A1B5FF56900DBDAEC /* launch.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

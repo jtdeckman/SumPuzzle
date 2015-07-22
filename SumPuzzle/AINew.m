@@ -203,7 +203,7 @@
     int cnt = 0;
     int NumIter = 1;//numRnIter;
     
-   // weight = [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
+    weight = [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
     [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val: NumIter];
     
     weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
@@ -218,7 +218,7 @@
     
     NumIter = 0;
     
-    for(int i=0; i<nIter; i++) {
+    for(int i=0; i<nIter-1; i++) {
         
         ++cnt;
         

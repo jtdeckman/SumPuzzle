@@ -40,7 +40,7 @@
    
     settingsLabel.layer.borderColor = [[UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0] CGColor];
     
-    settingsLabel.layer.borderWidth = 2.0f;
+    settingsLabel.layer.borderWidth = 1.0f;
   //  settingsLabel.textColor = [UIColor redColor];
     settingsLabel.textColor = [UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0];
     
@@ -63,7 +63,7 @@
     
     nwGameLabel.layer.borderColor = [[UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0] CGColor];
     
-    nwGameLabel.layer.borderWidth = 2.0f;
+    nwGameLabel.layer.borderWidth = 1.0f;
     //  nwGameLabel.textColor = [UIColor redColor];
     nwGameLabel.textColor = [UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0];
     
@@ -86,7 +86,7 @@
     
     howToLabel.layer.borderColor = [[UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0] CGColor];
     
-    howToLabel.layer.borderWidth = 2.0f;
+    howToLabel.layer.borderWidth = 1.0f;
     //  howToLabel.textColor = [UIColor redColor];
     howToLabel.textColor = [UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0];
     
