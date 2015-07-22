@@ -16,6 +16,7 @@
 #import "SettingsViewController.h"
 #import "WinViewController.h"
 #import "HowToViewController.h"
+#import "StatsViewController.h"
 
 @interface ViewController : UIViewController {
     
@@ -113,6 +114,7 @@
     BOOL captureFlag;
     BOOL wentToSettingsView;
     BOOL wentToGameWinView;
+    BOOL wentToStatsView;
     
     Difficulty difficulty;
 }

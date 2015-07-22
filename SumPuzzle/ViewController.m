@@ -66,6 +66,11 @@
         wentToGameWinView = NO;
     }
     
+    else if(wentToStatsView) {
+        
+        wentToStatsView = NO;
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -180,6 +185,15 @@
             
                 [self.view bringSubviewToFront:howToScreen];
                 howToScreen.hidden = NO;
+            }
+            
+            else if([self isMenuBarItem:location :menu.statsLabel.frame]) {
+                
+                wentToStatsView = YES;
+                
+                StatsViewController *statsView = [[StatsViewController alloc] init];
+                
+                [self presentViewController:statsView animated:NO completion:nil];
             }
         }
     }
@@ -777,6 +791,7 @@
     
     wentToSettingsView = NO;
     wentToGameWinView = NO;
+    wentToStatsView = NO;
     
     self.view.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
     
@@ -1200,7 +1215,6 @@
         else
             timeLabel.text = [NSString stringWithFormat:@"%d:%d",min,sec];
     }
-    
 }
 
 - (void)setUpDifficulty {
