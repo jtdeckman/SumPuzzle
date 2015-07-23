@@ -201,12 +201,18 @@
     double weight = 0;
     
     int cnt = 0;
-    int NumIter = 1;
+    int NumIter = numRnIter;
     
     weight = [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
     
+    if(captureFlagMode && [self checkIfAtFlag:tempP2Spaces :player2])
+        return 1e20;
+    
     [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val: NumIter];
     weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
+    
+    if(captureFlagMode && [self checkIfAtFlag:tempP1Spaces :player1])
+        weight -= 1e10;
     
     NumIter = 1;
     
@@ -217,7 +223,7 @@
     weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
     
     if(numRnIter == 2)
-        NumIter = 1;
+        NumIter = 0;
     else
         NumIter = 0;
     
@@ -271,7 +277,7 @@
     metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg;
 
     if(captureFlagMode)
-        metric += ([self weightedDistanceFromFlag:p2spcs :player2] - [self weightedDistanceFromFlag:p1spcs :player1])*DIST_WEIGHT;
+        metric += ([self weightedDistanceFromFlagSingle:p2spcs :player2] - [self weightedDistanceFromFlagSingle:p1spcs :player1])*DIST_WEIGHT;
     
     if(nP1Spc == 0) return metric + WIN_WEIGHT_FACT;
 
@@ -298,7 +304,7 @@
     metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg;
     
     if(captureFlagMode)
-        metric += ([self weightedDistanceFromFlag:p1spcs :player1] - [self weightedDistanceFromFlag:p2spcs :player2])*DIST_WEIGHT;
+        metric += ([self weightedDistanceFromFlagSingle:p1spcs :player1] - [self weightedDistanceFromFlagSingle:p2spcs :player2])*DIST_WEIGHT;
  
     if(nP2Spc == 0) return metric + WIN_WEIGHT_FACT;
     
@@ -1182,18 +1188,23 @@
 - (double)weightedDistanceFromFlag: (NSMutableSet*)playerSpaces :(Player)player {
 
     double dist, weight = 0;
+    double hweight = 0;
     
-    uint x, y, iind, jind;
+    uint x, y, iind, jind, hiind, hjind;
     
     BOOL atFlag = NO;
     
     if(player == player1) {
         iind = dimx-1;
         jind = cFlagPos1;
+        hiind = 0;
+        hjind = cFlagPos2;
     }
     else {
         iind = 0;
         jind = cFlagPos2;
+        hiind = dimx-1;
+        hjind = cFlagPos1;
     }
     
     for(MinSpace* item in playerSpaces) {
@@ -1208,6 +1219,14 @@
             atFlag = YES;
         
         weight += item.value/dist;
+        
+        x = item.iind - hiind;
+        y = item.jind - hjind;
+        
+        dist = sqrt(x*x + y*y);
+        dist = dist*dist + 1;
+        
+        hweight += item.value/dist;
     }
     
     if(isnan(weight)) {
@@ -1216,7 +1235,66 @@
     
     if(atFlag) weight += 1000000;
     
-    return weight;
+    return weight - 1000/hweight;
+}
+
+- (double)weightedDistanceFromFlagSingle: (NSMutableSet*)playerSpaces :(Player)player {
+    
+    double dist, tmpWt, weight = -1e10;
+    double hweight = -1e10;
+    
+    uint x, y, iind, jind, hiind, hjind;
+    
+    BOOL atFlag = NO;
+    
+    if(player == player1) {
+        iind = dimx-1;
+        jind = cFlagPos1;
+        hiind = 0;
+        hjind = cFlagPos2;
+    }
+    else {
+        iind = 0;
+        jind = cFlagPos2;
+        hiind = dimx-1;
+        hjind = cFlagPos1;
+    }
+    
+    for(MinSpace* item in playerSpaces) {
+        
+        x = item.iind - iind;
+        y = item.jind - jind;
+        
+        dist = sqrt(x*x + y*y);
+        dist = dist*dist + 1;
+        
+        if(dist == 1)
+            atFlag = YES;
+        
+        tmpWt = item.value/dist;
+        
+        if(tmpWt > weight)
+            weight = tmpWt;
+        
+        x = item.iind - hiind;
+        y = item.jind - hjind;
+        
+        dist = sqrt(x*x + y*y);
+        dist = dist*dist + 1;
+        
+        tmpWt = item.value/dist;
+        
+        if(tmpWt > hweight)
+            hweight = tmpWt;
+    }
+    
+    if(isnan(weight)) {
+        return 0;
+    }
+    
+    if(atFlag) weight += 1000000;
+    
+    return weight;// - 1000/hweight;
 }
 
 - (MinSpace*)getMinSpaceForIndices: (NSMutableArray*)tmpBoard :(int)ii : (int)ji {
@@ -1230,6 +1308,29 @@
     
     player1Spaces = nil;
     player2Spaces = nil;
+}
+
+- (BOOL)checkIfAtFlag:(NSMutableSet*)pSpaces :(Player)player {
+    
+    int iind, jind;
+    
+    if(player == player1) {
+    
+        iind = dimx-1;
+        jind = cFlagPos1;
+    }
+    else {
+     
+        iind = 0;
+        jind = cFlagPos2;
+    }
+
+    for(MinSpace* item in pSpaces) {
+        if(item.iind == iind && item.jind == jind)
+            return YES;
+    }
+    
+    return NO;
 }
 
 @end

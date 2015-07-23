@@ -27,6 +27,12 @@
     [self setUpGamePlay];
     
     timer = [NSTimer scheduledTimerWithTimeInterval:1/1 target:self selector:@selector(runLoop) userInfo:nil repeats:YES];
+    
+ //   [board addPiece:1 :1 :475 :player1 :p1Color];
+ //   [board addPiece:1 :2 :83 :player2 :p2Color];
+ //   [board addPiece:2 :1 :360 :player2 :p2Color];
+ //   [board addPiece:2 :2 :58 :player1 :p1Color];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -1240,18 +1246,18 @@
     if(captureFlag) {
         
         if(difficulty == 1) {
-            niter = 5;
+            niter = 17;
             nRnIter = 1;
         }
         else {
-            niter = 3;
+            niter = 12;
             nRnIter = 1;
         }
     }
     else {
         
         if(difficulty == 1) {
-            niter = 17;
+            niter = 30;
             nRnIter = 1;
         }
         else {

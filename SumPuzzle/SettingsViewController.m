@@ -163,7 +163,7 @@
     viewFrame.origin.x = computerPlayerControl.frame.origin.x;
     viewFrame.origin.y += 0.65*spcFct;
     
-    difficultyControl = [[UISegmentedControl alloc] initWithItems:@[@"Standard",@"Hard"]];
+    difficultyControl = [[UISegmentedControl alloc] initWithItems:@[@"Standard",@"Advanced"]];
     [difficultyControl setFrame:viewFrame];
     [difficultyControl addTarget:self action:@selector(segmentedControlValueDidChange:) forControlEvents:UIControlEventValueChanged];
     [difficultyControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
