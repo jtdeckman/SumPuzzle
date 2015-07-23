@@ -40,11 +40,15 @@
     
     CGFloat spcFct = SPACE_FACT*self.view.frame.size.height;
     
-    JDColor blueColor;
+    JDColor blueColor, goldColor;
     
-    blueColor.red = 0.2;
-    blueColor.green = 0.1;
+    blueColor.red = 0.25;
+    blueColor.green = 0.55;
     blueColor.blue = 0.9;
+    
+    goldColor.red = 0.9;
+    goldColor.green = 0.5;
+    goldColor.blue = 0.3;
     
     [self getData];
     
@@ -53,22 +57,22 @@
 
     viewFrame.size.width = 0.5*self.view.frame.size.width;
     viewFrame.size.height = 0.05*self.view.frame.size.height;
-    viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/4.0;// marginFact;
+    viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/3.5;// marginFact;
     viewFrame.origin.y = 1.75*spcFct;
     
     elimLabel = [[UILabel alloc] initWithFrame:viewFrame];
     elimLabel.clipsToBounds =YES;
     elimLabel.backgroundColor = [UIColor clearColor];
     elimLabel.textColor = [UIColor colorWithRed:blueColor.red green:blueColor.green blue:blueColor.blue alpha:1.0];
-    [elimLabel setTextAlignment:NSTextAlignmentCenter];
+    [elimLabel setTextAlignment:NSTextAlignmentLeft];
     
-    [elimLabel setFont:[UIFont fontWithName:@"Helvetica" size:2.25*FONT_FACT*viewFrame.size.height]];
-    elimLabel.text = @"Elimination Mode:";
+    [elimLabel setFont:[UIFont fontWithName:@"Arial-ItalicMT" size:2.25*FONT_FACT*viewFrame.size.height]];
+    elimLabel.text = @"Elimination Mode";
     
     [self.view addSubview:elimLabel];
     
-    viewFrame.size.width = 0.55*self.view.frame.size.width;
-    viewFrame.origin.x =  viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;
+    viewFrame.size.width = 0.4*self.view.frame.size.width;
+    viewFrame.origin.x =  viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.5;
     viewFrame.origin.y += 0.75*spcFct;
     
     elimP1Label = [[UILabel alloc] initWithFrame:viewFrame];
@@ -77,11 +81,27 @@
     elimP1Label.textColor = [UIColor whiteColor];
     [elimP1Label setTextAlignment:NSTextAlignmentLeft];
     
-    [elimP1Label setFont:[UIFont fontWithName:@"Arial-ItalicMT" size:1.75*FONT_FACT*viewFrame.size.height]];
-    elimP1Label.text = [NSString stringWithFormat:@"Your Wins:                   %d",(int)p1Wins];
+    [elimP1Label setFont:[UIFont fontWithName:@"Arial" size:1.75*FONT_FACT*viewFrame.size.height]];
+    elimP1Label.text = [NSString stringWithFormat:@"Your Wins:"];//,(int)p1Wins];
 
     [self.view addSubview:elimP1Label];
 
+    viewFrame.origin.x += elimP1Label.frame.size.width + 0.25*spcFct;
+    viewFrame.size.width = 0.5*elimP1Label.frame.size.width;
+    
+    elimP1Val = [[UILabel alloc] initWithFrame:viewFrame];
+    elimP1Val.clipsToBounds =YES;
+    elimP1Val.backgroundColor = [UIColor clearColor];
+    elimP1Val.textColor = [UIColor colorWithRed:goldColor.red green:goldColor.green blue:goldColor.blue alpha:1.0];
+    [elimP1Val setTextAlignment:NSTextAlignmentLeft];
+    
+    [elimP1Val setFont:[UIFont fontWithName:@"Arial" size:2.0*FONT_FACT*viewFrame.size.height]];
+    elimP1Val.text = [NSString stringWithFormat:@"%d",(int)p1Wins];
+    
+    [self.view addSubview:elimP1Val];
+    
+    viewFrame.size.width = elimP1Label.frame.size.width;
+    viewFrame.origin.x = elimP1Label.frame.origin.x;
     viewFrame.origin.y += 0.5*spcFct;
     
     elimCompLabel = [[UILabel alloc] initWithFrame:viewFrame];
@@ -90,11 +110,27 @@
     elimCompLabel.textColor = [UIColor whiteColor];
     [elimCompLabel setTextAlignment:NSTextAlignmentLeft];
     
-    [elimCompLabel setFont:[UIFont fontWithName:@"Arial-ItalicMT" size:1.75*FONT_FACT*viewFrame.size.height]];
-    elimCompLabel.text = [NSString stringWithFormat:@"Computer Wins:          %d",(int)compWins];
+    [elimCompLabel setFont:[UIFont fontWithName:@"Arial" size:1.75*FONT_FACT*viewFrame.size.height]];
+    elimCompLabel.text = [NSString stringWithFormat:@"Computer Wins:"];
     
     [self.view addSubview:elimCompLabel];
     
+    viewFrame.origin.x += elimP1Label.frame.size.width + 0.25*spcFct;
+    viewFrame.size.width = 0.5*elimP1Label.frame.size.width;
+    
+    elimCompVal = [[UILabel alloc] initWithFrame:viewFrame];
+    elimCompVal.clipsToBounds =YES;
+    elimCompVal.backgroundColor = [UIColor clearColor];
+    elimCompVal.textColor = [UIColor colorWithRed:goldColor.red green:goldColor.green blue:goldColor.blue alpha:1.0];
+    [elimCompVal setTextAlignment:NSTextAlignmentLeft];
+    
+    [elimCompVal setFont:[UIFont fontWithName:@"Arial" size:2.0*FONT_FACT*viewFrame.size.height]];
+    elimCompVal.text = [NSString stringWithFormat:@"%d",(int)compWins];
+    
+    [self.view addSubview:elimCompVal];
+
+    viewFrame.size.width = elimP1Label.frame.size.width;
+    viewFrame.origin.x = elimP1Label.frame.origin.x;
     viewFrame.origin.y += 0.5*spcFct;
     
     elimP2Label = [[UILabel alloc] initWithFrame:viewFrame];
@@ -103,11 +139,27 @@
     elimP2Label.textColor = [UIColor whiteColor];
     [elimP2Label setTextAlignment:NSTextAlignmentLeft];
     
-    [elimP2Label setFont:[UIFont fontWithName:@"Arial-ItalicMT" size:1.75*FONT_FACT*viewFrame.size.height]];
-    elimP2Label.text = [NSString stringWithFormat:@"Player 2 Wins:            %d",(int)p2Wins];
+    [elimP2Label setFont:[UIFont fontWithName:@"Arial" size:1.75*FONT_FACT*viewFrame.size.height]];
+    elimP2Label.text = [NSString stringWithFormat:@"Player 2 Wins:"];
     
     [self.view addSubview:elimP2Label];
     
+    viewFrame.origin.x += elimP1Label.frame.size.width + 0.25*spcFct;
+    viewFrame.size.width = 0.5*elimP1Label.frame.size.width;
+    
+    elimP2Val = [[UILabel alloc] initWithFrame:viewFrame];
+    elimP2Val.clipsToBounds =YES;
+    elimP2Val.backgroundColor = [UIColor clearColor];
+    elimP2Val.textColor = [UIColor colorWithRed:goldColor.red green:goldColor.green blue:goldColor.blue alpha:1.0];
+    [elimP2Val setTextAlignment:NSTextAlignmentLeft];
+    
+    [elimP2Val setFont:[UIFont fontWithName:@"Arial" size:2.0*FONT_FACT*viewFrame.size.height]];
+    elimP2Val.text = [NSString stringWithFormat:@"%d",(int)p2Wins];
+    
+    [self.view addSubview:elimP2Val];
+
+    viewFrame.size.width = elimP1Label.frame.size.width;
+    viewFrame.origin.x = elimP1Label.frame.origin.x;
     viewFrame.origin.y += 0.5*spcFct;
     
     elimTimeLabel= [[UILabel alloc] initWithFrame:viewFrame];
@@ -116,15 +168,168 @@
     elimTimeLabel.textColor = [UIColor whiteColor];
     [elimTimeLabel setTextAlignment:NSTextAlignmentLeft];
     
-    [elimTimeLabel setFont:[UIFont fontWithName:@"Arial-ItalicMT" size:1.75*FONT_FACT*viewFrame.size.height]];
-    
-    if(p1Wins > 0)
-        elimTimeLabel.text = [NSString stringWithFormat:@"Best Time:                 %@s",[self convertSecondsToHoursMinSec:(uint)bestTime]];
-    else
-        elimTimeLabel.text = [NSString stringWithFormat:@"Best Time:                 --"];
+    [elimTimeLabel setFont:[UIFont fontWithName:@"Arial" size:1.75*FONT_FACT*viewFrame.size.height]];
+    elimTimeLabel.text = [NSString stringWithFormat:@"Best Time:"];
     
     [self.view addSubview:elimTimeLabel];
-  }
+    
+    viewFrame.origin.x += 0.83*elimP1Label.frame.size.width;// + 0.25*spcFct;
+    viewFrame.size.width = 0.65*elimP1Label.frame.size.width;
+    
+    elimTimeVal = [[UILabel alloc] initWithFrame:viewFrame];
+    elimTimeVal.clipsToBounds =YES;
+    elimTimeVal.backgroundColor = [UIColor clearColor];
+    elimTimeVal.textColor = [UIColor colorWithRed:goldColor.red green:goldColor.green blue:goldColor.blue alpha:1.0];
+    [elimTimeVal setTextAlignment:NSTextAlignmentCenter];
+    
+    [elimTimeVal setFont:[UIFont fontWithName:@"Arial" size:2.0*FONT_FACT*viewFrame.size.height]];
+    
+    if(p1Wins > 0)
+        elimTimeVal.text = [NSString stringWithFormat:@"%@",[self convertSecondsToHoursMinSec:(uint)bestTime]];
+    else
+        elimTimeVal.text = @"00:00:00";
+                                                                                        
+    [self.view addSubview:elimTimeVal];
+    
+    
+ // Capture the flag labels
+    
+    viewFrame = elimLabel.frame;
+    viewFrame.size.width = 0.65*self.view.frame.size.width;
+    viewFrame.origin.y = elimTimeVal.frame.origin.y + 1.1*spcFct;
+    
+    CFLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    CFLabel.clipsToBounds =YES;
+    CFLabel.backgroundColor = [UIColor clearColor];
+    CFLabel.textColor = [UIColor colorWithRed:blueColor.red green:blueColor.green blue:blueColor.blue alpha:1.0];
+    [CFLabel setTextAlignment:NSTextAlignmentLeft];
+    
+    [CFLabel setFont:[UIFont fontWithName:@"Arial-ItalicMT" size:2.25*FONT_FACT*viewFrame.size.height]];
+    CFLabel.text = @"Capture the Flag";
+    
+    [self.view addSubview:CFLabel];
+    
+    viewFrame.size.width = 0.4*self.view.frame.size.width;
+    viewFrame.origin.x =  viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.5;
+    viewFrame.origin.y += 0.75*spcFct;
+    
+    CFP1Label = [[UILabel alloc] initWithFrame:viewFrame];
+    CFP1Label.clipsToBounds =YES;
+    CFP1Label.backgroundColor = [UIColor clearColor];
+    CFP1Label.textColor = [UIColor whiteColor];
+    [CFP1Label setTextAlignment:NSTextAlignmentLeft];
+    
+    [CFP1Label setFont:[UIFont fontWithName:@"Arial" size:1.75*FONT_FACT*viewFrame.size.height]];
+    CFP1Label.text = [NSString stringWithFormat:@"Your Wins:"];
+    
+    [self.view addSubview:CFP1Label];
+    
+    viewFrame.origin.x += CFP1Label.frame.size.width + 0.25*spcFct;
+    viewFrame.size.width = 0.5*CFP1Label.frame.size.width;
+    
+    CFP1Val = [[UILabel alloc] initWithFrame:viewFrame];
+    CFP1Val.clipsToBounds =YES;
+    CFP1Val.backgroundColor = [UIColor clearColor];
+    CFP1Val.textColor = [UIColor colorWithRed:goldColor.red green:goldColor.green blue:goldColor.blue alpha:1.0];
+    [CFP1Val setTextAlignment:NSTextAlignmentLeft];
+    
+    [CFP1Val setFont:[UIFont fontWithName:@"Arial" size:2.0*FONT_FACT*viewFrame.size.height]];
+    CFP1Val.text = [NSString stringWithFormat:@"%d",(int)CFp1Wins];
+    
+    [self.view addSubview:CFP1Val];
+    
+    viewFrame.size.width = CFP1Label.frame.size.width;
+    viewFrame.origin.x = CFP1Label.frame.origin.x;
+    viewFrame.origin.y += 0.5*spcFct;
+    
+    CFCompLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    CFCompLabel.clipsToBounds =YES;
+    CFCompLabel.backgroundColor = [UIColor clearColor];
+    CFCompLabel.textColor = [UIColor whiteColor];
+    [CFCompLabel setTextAlignment:NSTextAlignmentLeft];
+    
+    [CFCompLabel setFont:[UIFont fontWithName:@"Arial" size:1.75*FONT_FACT*viewFrame.size.height]];
+    CFCompLabel.text = [NSString stringWithFormat:@"Computer Wins:"];
+    
+    [self.view addSubview:CFCompLabel];
+    
+    viewFrame.origin.x += CFP1Label.frame.size.width + 0.25*spcFct;
+    viewFrame.size.width = 0.5*CFP1Label.frame.size.width;
+    
+    CFCompVal = [[UILabel alloc] initWithFrame:viewFrame];
+    CFCompVal.clipsToBounds =YES;
+    CFCompVal.backgroundColor = [UIColor clearColor];
+    CFCompVal.textColor = [UIColor colorWithRed:goldColor.red green:goldColor.green blue:goldColor.blue alpha:1.0];
+    [CFCompVal setTextAlignment:NSTextAlignmentLeft];
+    
+    [CFCompVal setFont:[UIFont fontWithName:@"Arial" size:2.0*FONT_FACT*viewFrame.size.height]];
+    CFCompVal.text = [NSString stringWithFormat:@"%d",(int)CFCompWins];
+    
+    [self.view addSubview:CFCompVal];
+    
+    viewFrame.size.width = CFP1Label.frame.size.width;
+    viewFrame.origin.x = CFP1Label.frame.origin.x;
+    viewFrame.origin.y += 0.5*spcFct;
+    
+    CFP2Label = [[UILabel alloc] initWithFrame:viewFrame];
+    CFP2Label.clipsToBounds =YES;
+    CFP2Label.backgroundColor = [UIColor clearColor];
+    CFP2Label.textColor = [UIColor whiteColor];
+    [CFP2Label setTextAlignment:NSTextAlignmentLeft];
+    
+    [CFP2Label setFont:[UIFont fontWithName:@"Arial" size:1.75*FONT_FACT*viewFrame.size.height]];
+    CFP2Label.text = [NSString stringWithFormat:@"Player 2 Wins:"];
+    
+    [self.view addSubview:CFP2Label];
+    
+    viewFrame.origin.x += CFP1Label.frame.size.width + 0.25*spcFct;
+    viewFrame.size.width = 0.5*CFP1Label.frame.size.width;
+    
+    CFP2Val = [[UILabel alloc] initWithFrame:viewFrame];
+    CFP2Val.clipsToBounds =YES;
+    CFP2Val.backgroundColor = [UIColor clearColor];
+    CFP2Val.textColor = [UIColor colorWithRed:goldColor.red green:goldColor.green blue:goldColor.blue alpha:1.0];
+    [CFP2Val setTextAlignment:NSTextAlignmentLeft];
+    
+    [CFP2Val setFont:[UIFont fontWithName:@"Arial" size:2.0*FONT_FACT*viewFrame.size.height]];
+    CFP2Val.text = [NSString stringWithFormat:@"%d",(int)CFp2Wins];
+    
+    [self.view addSubview:CFP2Val];
+    
+    viewFrame.size.width = CFP1Label.frame.size.width;
+    viewFrame.origin.x = CFP1Label.frame.origin.x;
+
+    viewFrame.origin.y += 0.5*spcFct;
+    
+    CFTimeLabel= [[UILabel alloc] initWithFrame:viewFrame];
+    CFTimeLabel.clipsToBounds =YES;
+    CFTimeLabel.backgroundColor = [UIColor clearColor];
+    CFTimeLabel.textColor = [UIColor whiteColor];
+    [CFTimeLabel setTextAlignment:NSTextAlignmentLeft];
+    
+    [CFTimeLabel setFont:[UIFont fontWithName:@"Arial" size:1.75*FONT_FACT*viewFrame.size.height]];
+    CFTimeLabel.text = [NSString stringWithFormat:@"Best Time:"];
+    
+    [self.view addSubview:CFTimeLabel];
+    
+    viewFrame.origin.x += 0.83*CFP1Label.frame.size.width;
+    viewFrame.size.width = 0.65*CFP1Label.frame.size.width;
+    
+    CFTimeVal = [[UILabel alloc] initWithFrame:viewFrame];
+    CFTimeVal.clipsToBounds =YES;
+    CFTimeVal.backgroundColor = [UIColor clearColor];
+    CFTimeVal.textColor = [UIColor colorWithRed:goldColor.red green:goldColor.green blue:goldColor.blue alpha:1.0];
+    [CFTimeVal setTextAlignment:NSTextAlignmentCenter];
+    
+    [CFTimeVal setFont:[UIFont fontWithName:@"Arial" size:2.0*FONT_FACT*viewFrame.size.height]];
+    
+    if(CFp1Wins > 0)
+        CFTimeVal.text = [NSString stringWithFormat:@"%@",[self convertSecondsToHoursMinSec:(uint)CFBestTime]];
+    else
+        CFTimeVal.text = @"00:00:00";
+    
+    [self.view addSubview:CFTimeVal];
+}
 
 - (void)getData {
 

@@ -204,8 +204,8 @@
     int NumIter = 1;//numRnIter;
     
     weight = [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
-    [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val: NumIter];
     
+    [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val: NumIter];
     weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
     
     NumIter = 1;
@@ -216,7 +216,10 @@
     [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val :NumIter];
     weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
     
-    NumIter = 0;
+    if(numRnIter == 2)
+        NumIter = 1;
+    else
+        NumIter = 0;
     
     for(int i=0; i<nIter-1; i++) {
         
