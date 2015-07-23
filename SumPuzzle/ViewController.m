@@ -1154,21 +1154,21 @@
  //   botColor.green = 0.55;
  //   botColor.blue = 0.8;
    
- //   botColor.red = 0.6;
- //   botColor.green = 0.5;
- //   botColor.blue = 0.3;
-    
     botColor.red = 0.7;
     botColor.green = 0.7;
     botColor.blue = 0.7;
+    
+ //   botColor.red = 0.55;
+ //   botColor.green = 0.5;
+ //   botColor.blue = 0.4;
     
  //    botColor.red = 0.65;
  //    botColor.green = 0.55;
  //    botColor.blue = 0.55;
 
- //  botColor.red = 0.2;
- //   botColor.green = 0.4;
- //   botColor.blue = 0.5;
+  //  botColor.red = 0.2;
+  //  botColor.green = 0.4;
+  //  botColor.blue = 0.5;
     
     p1Color.red = 0.25;
     p1Color.green = 0.55;
@@ -1257,8 +1257,8 @@
     else {
         
         if(difficulty == 1) {
-            niter = 30;
-            nRnIter = 1;
+            niter = 5;
+            nRnIter = 2;
         }
         else {
             niter = 12;

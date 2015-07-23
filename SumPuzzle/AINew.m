@@ -225,7 +225,7 @@
     if(numRnIter == 2)
         NumIter = 0;
     else
-        NumIter = 0;
+        NumIter = 1;
     
     for(int i=0; i<nIter-1; i++) {
         
