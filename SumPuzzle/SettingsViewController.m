@@ -254,7 +254,7 @@
     [backButton.layer setBorderWidth:0.5f];
     [backButton setTitle:@"OK" forState:UIControlStateNormal];
     
-    [backButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:1.5*FONT_FACT*viewFrame.size.height]];
+    [backButton.titleLabel setFont:[UIFont fontWithName:@"Arial" size:1.25*FONT_FACT*viewFrame.size.height]];
     [backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
     [backButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];

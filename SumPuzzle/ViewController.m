@@ -146,7 +146,7 @@
     
     else if(gameState == howToPlay) {
 
-        howToScreen.hidden = YES;
+      //  howToScreen.hidden = YES;
         gameState = gameMenu;
     }
     
@@ -183,8 +183,11 @@
                 
                 gameState = howToPlay;
             
-                [self.view bringSubviewToFront:howToScreen];
-                howToScreen.hidden = NO;
+                HowToViewController *howToView = [[HowToViewController alloc] init];
+                [self presentViewController:howToView animated:NO completion:nil];
+                
+             //   [self.view bringSubviewToFront:howToScreen];
+             //   howToScreen.hidden = NO;
             }
             
             else if([self isMenuBarItem:location :menu.statsLabel.frame]) {
@@ -882,12 +885,12 @@
 
  // How to play screen
     
-    howToScreen = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"howToPlay.png"]];
-    howToScreen.frame = self.view.frame;
-    howToScreen.alpha = 1.0;
-    howToScreen.hidden = YES;
+  //  howToScreen = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"howToPlay.png"]];
+//    howToScreen.frame = self.view.frame;
+ //   howToScreen.alpha = 1.0;
+ //   howToScreen.hidden = YES;
     
-    [self.view addSubview:howToScreen];
+  //  [self.view addSubview:howToScreen];
     
     
     // Board set-up
@@ -1233,8 +1236,8 @@
     else {
         
         if(difficulty == 1) {
-            niter = 5;
-            nRnIter = 2;
+            niter = 12;
+            nRnIter = 1;
         }
         else {
             niter = 10;

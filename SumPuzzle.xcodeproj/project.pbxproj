@@ -23,8 +23,6 @@
 		A81902811B0C177400DCD8CB /* Space.m in Sources */ = {isa = PBXBuildFile; fileRef = A81902801B0C177400DCD8CB /* Space.m */; };
 		A819028A1B0C19A000DCD8CB /* BoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = A81902891B0C19A000DCD8CB /* BoardView.m */; };
 		A84A99911B4D6DE8004DDD8A /* orangeSquare.png in Resources */ = {isa = PBXBuildFile; fileRef = A84A99901B4D6DE8004DDD8A /* orangeSquare.png */; };
-		A89601091B5D558F00626E0B /* flag1.png in Resources */ = {isa = PBXBuildFile; fileRef = A89601081B5D558F00626E0B /* flag1.png */; };
-		A896010B1B5D559400626E0B /* flag2.png in Resources */ = {isa = PBXBuildFile; fileRef = A896010A1B5D559400626E0B /* flag2.png */; };
 		A8A51E2A1B1A663100C90315 /* MenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = A8A51E291B1A663100C90315 /* MenuView.m */; };
 		A8A51E301B1A760100C90315 /* menuBars.png in Resources */ = {isa = PBXBuildFile; fileRef = A8A51E2F1B1A760100C90315 /* menuBars.png */; };
 		A8A51E381B2219D500C90315 /* blueSquare.png in Resources */ = {isa = PBXBuildFile; fileRef = A8A51E371B2219D500C90315 /* blueSquare.png */; };
@@ -35,6 +33,8 @@
 		A8BF52721B6018B000DBDAEC /* howToPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = A8BF52711B6018B000DBDAEC /* howToPlay.png */; };
 		A8BF52751B601B8F00DBDAEC /* HowToViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8BF52741B601B8F00DBDAEC /* HowToViewController.m */; };
 		A8BF52781B60527B00DBDAEC /* StatsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A8BF52771B60527B00DBDAEC /* StatsViewController.m */; };
+		A8BF527E1B60B2F400DBDAEC /* flag2.png in Resources */ = {isa = PBXBuildFile; fileRef = A8BF527D1B60B2F400DBDAEC /* flag2.png */; };
+		A8BF52801B60B2FB00DBDAEC /* flag1.png in Resources */ = {isa = PBXBuildFile; fileRef = A8BF527F1B60B2FB00DBDAEC /* flag1.png */; };
 		A8DCF10E1B4EC15D0042885D /* AINew.m in Sources */ = {isa = PBXBuildFile; fileRef = A8DCF10D1B4EC15D0042885D /* AINew.m */; };
 		A8DCF1111B4EC55F0042885D /* SubSpace.m in Sources */ = {isa = PBXBuildFile; fileRef = A8DCF1101B4EC55F0042885D /* SubSpace.m */; };
 		A8FDFA531B55806600AB37D3 /* fiveXfiveBoard.png in Resources */ = {isa = PBXBuildFile; fileRef = A8FDFA521B55806600AB37D3 /* fiveXfiveBoard.png */; };
@@ -84,8 +84,6 @@
 		A81902881B0C19A000DCD8CB /* BoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardView.h; sourceTree = "<group>"; };
 		A81902891B0C19A000DCD8CB /* BoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardView.m; sourceTree = "<group>"; };
 		A84A99901B4D6DE8004DDD8A /* orangeSquare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = orangeSquare.png; sourceTree = "<group>"; };
-		A89601081B5D558F00626E0B /* flag1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flag1.png; sourceTree = "<group>"; };
-		A896010A1B5D559400626E0B /* flag2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flag2.png; sourceTree = "<group>"; };
 		A8A51E281B1A663100C90315 /* MenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuView.h; path = ../MenuView.h; sourceTree = "<group>"; };
 		A8A51E291B1A663100C90315 /* MenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuView.m; path = ../MenuView.m; sourceTree = "<group>"; };
 		A8A51E2F1B1A760100C90315 /* menuBars.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menuBars.png; sourceTree = "<group>"; };
@@ -100,6 +98,8 @@
 		A8BF52741B601B8F00DBDAEC /* HowToViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HowToViewController.m; sourceTree = "<group>"; };
 		A8BF52761B60527B00DBDAEC /* StatsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatsViewController.h; sourceTree = "<group>"; };
 		A8BF52771B60527B00DBDAEC /* StatsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatsViewController.m; sourceTree = "<group>"; };
+		A8BF527D1B60B2F400DBDAEC /* flag2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flag2.png; sourceTree = "<group>"; };
+		A8BF527F1B60B2FB00DBDAEC /* flag1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flag1.png; sourceTree = "<group>"; };
 		A8DCF10C1B4EC15D0042885D /* AINew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AINew.h; sourceTree = "<group>"; };
 		A8DCF10D1B4EC15D0042885D /* AINew.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AINew.m; sourceTree = "<group>"; };
 		A8DCF10F1B4EC55F0042885D /* SubSpace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubSpace.h; sourceTree = "<group>"; };
@@ -197,13 +197,13 @@
 			children = (
 				A8BF52711B6018B000DBDAEC /* howToPlay.png */,
 				A8BF52691B5FF56900DBDAEC /* launch.png */,
+				A8BF527F1B60B2FB00DBDAEC /* flag1.png */,
+				A8BF527D1B60B2F400DBDAEC /* flag2.png */,
 				A8FDFA521B55806600AB37D3 /* fiveXfiveBoard.png */,
 				A8FDFA541B558F5800AB37D3 /* sixXsixBoard.png */,
 				A8A51E371B2219D500C90315 /* blueSquare.png */,
 				A8A51E391B2219DA00C90315 /* redSquare.png */,
 				A84A99901B4D6DE8004DDD8A /* orangeSquare.png */,
-				A89601081B5D558F00626E0B /* flag1.png */,
-				A896010A1B5D559400626E0B /* flag2.png */,
 				A8A51E3B1B221BCE00C90315 /* p1square.png */,
 				A8A51E2F1B1A760100C90315 /* menuBars.png */,
 				A81902521B0C13EC00DCD8CB /* Info.plist */,
@@ -309,7 +309,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A896010B1B5D559400626E0B /* flag2.png in Resources */,
 				A84A99911B4D6DE8004DDD8A /* orangeSquare.png in Resources */,
 				A8A51E3C1B221BCE00C90315 /* p1square.png in Resources */,
 				A8A51E301B1A760100C90315 /* menuBars.png in Resources */,
@@ -317,12 +316,13 @@
 				A819025D1B0C13EC00DCD8CB /* Main.storyboard in Resources */,
 				A8A51E3A1B2219DA00C90315 /* redSquare.png in Resources */,
 				A81902621B0C13EC00DCD8CB /* LaunchScreen.xib in Resources */,
-				A89601091B5D558F00626E0B /* flag1.png in Resources */,
 				A8FDFA551B558F5800AB37D3 /* sixXsixBoard.png in Resources */,
 				A819025F1B0C13EC00DCD8CB /* Images.xcassets in Resources */,
+				A8BF527E1B60B2F400DBDAEC /* flag2.png in Resources */,
 				A8BF52721B6018B000DBDAEC /* howToPlay.png in Resources */,
 				A8A51E381B2219D500C90315 /* blueSquare.png in Resources */,
 				A8BF526A1B5FF56900DBDAEC /* launch.png in Resources */,
+				A8BF52801B60B2FB00DBDAEC /* flag1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

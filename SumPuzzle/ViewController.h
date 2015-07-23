@@ -84,7 +84,7 @@
     
     UIImageView *flag1;
     UIImageView *flag2;
-    UIImageView *howToScreen;
+  //  UIImageView *howToScreen;
     
     CGSize imgSize;
     
