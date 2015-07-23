@@ -201,7 +201,7 @@
     double weight = 0;
     
     int cnt = 0;
-    int NumIter = 1;//numRnIter;
+    int NumIter = 1;
     
     weight = [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
     
@@ -228,8 +228,6 @@
         [self makeBestP2Move:tempBoard :tempP1Spaces :tempP2Spaces :p1Val :&p2Val :NumIter];
         weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(cnt*cnt);
         
-      //  NumIter = 0;
-        
         [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val :NumIter];
         weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(cnt*cnt);
     }
@@ -241,7 +239,7 @@
     
     double metric = 0;
     
-  //  int nP1Spc = (int)[p1spcs count];
+    int nP1Spc = (int)[p1spcs count];
     int nP2Spc = (int)[p2spcs count];
 
     int p1Total = [self scoreOfMinSpaceSet:p1spcs];
@@ -267,17 +265,15 @@
   //  if(captureFlagMode)
     //    metric += [self distWeight:p2spcs :player2]*DIST_WEIGHT;
     
-  //  if(nP1Spc == 0) return metric + WIN_WEIGHT_FACT;
-    
     if(nP2Spc > 0)
         wavg += (compTotal/nP2Spc)*PPN_FACT;
     
     metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg;
 
     if(captureFlagMode)
-        metric = ([self weightedDistanceFromFlag:p2spcs :player2] - 2.0*[self weightedDistanceFromFlag:p1spcs :player1])*DIST_WEIGHT;
+        metric += ([self weightedDistanceFromFlag:p2spcs :player2] - [self weightedDistanceFromFlag:p1spcs :player1])*DIST_WEIGHT;
     
-   // if(nP1Spc == 0) return metric + WIN_WEIGHT_FACT;
+    if(nP1Spc == 0) return metric + WIN_WEIGHT_FACT;
 
     return metric;
 }
@@ -287,7 +283,7 @@
     double metric = 0;
     
     int nP1Spc = (int)[p1spcs count];
-  //  int nP2Spc = (int)[p2spcs count];
+    int nP2Spc = (int)[p2spcs count];
 
     int p1Total = [self scoreOfMinSpaceSet:p1spcs];
     int compTotal = [self scoreOfMinSpaceSet:p2spcs];
@@ -302,9 +298,9 @@
     metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg;
     
     if(captureFlagMode)
-        metric = ([self weightedDistanceFromFlag:p1spcs :player1] - 2.0*[self weightedDistanceFromFlag:p2spcs :player2])*DIST_WEIGHT;
+        metric += ([self weightedDistanceFromFlag:p1spcs :player1] - [self weightedDistanceFromFlag:p2spcs :player2])*DIST_WEIGHT;
  
- //   if(nP1Spc == 0) return metric + WIN_WEIGHT_FACT;
+    if(nP2Spc == 0) return metric + WIN_WEIGHT_FACT;
     
     return metric;
 }
@@ -1210,6 +1206,7 @@
         
         if(dist == 1)
             atFlag = YES;
+        
         weight += item.value/dist;
     }
     

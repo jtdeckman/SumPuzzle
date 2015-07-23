@@ -88,7 +88,7 @@
     
     if(gameState == preWin) {
         
-        if(winTimeCnt > 0) {
+        if(winTimeCnt > 1) {
             
             gameState = winState;
             
@@ -470,8 +470,17 @@
     
     winLabel.hidden = YES;
     
-    cFlagPos1 = dimy-1;
-    cFlagPos2 = 0;
+  //  cFlagPos1 = dimy-1;
+  //  cFlagPos2 = 0;
+    
+    if(dimy == 6) {
+        cFlagPos1 = 3;
+        cFlagPos2 = 2;
+    }
+    else {
+        cFlagPos1 = 2;
+        cFlagPos2 = 2;
+    }
     
     board.cFlagPos1 = cFlagPos1;
     board.cFlagPos2 = cFlagPos2;
@@ -796,7 +805,7 @@
     wentToGameWinView = NO;
     wentToStatsView = NO;
     
-    self.view.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    self.view.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0];
     
     p1Img = [UIImage imageNamed:@"blueSquare.png"];
     p2Img = [UIImage imageNamed:@"orangeSquare.png"];
@@ -1143,11 +1152,17 @@
  //   botColor.green = 0.5;
  //   botColor.blue = 0.3;
     
+    botColor.red = 0.7;
+    botColor.green = 0.7;
+    botColor.blue = 0.7;
     
-     botColor.red = 0.7;
-     botColor.green = 0.7;
-     botColor.blue = 0.7;
+ //    botColor.red = 0.65;
+ //    botColor.green = 0.55;
+ //    botColor.blue = 0.55;
 
+ //  botColor.red = 0.2;
+ //   botColor.green = 0.4;
+ //   botColor.blue = 0.5;
     
     p1Color.red = 0.25;
     p1Color.green = 0.55;
@@ -1236,11 +1251,11 @@
     else {
         
         if(difficulty == 1) {
-            niter = 12;
+            niter = 17;
             nRnIter = 1;
         }
         else {
-            niter = 10;
+            niter = 12;
             nRnIter = 1;
         }
 

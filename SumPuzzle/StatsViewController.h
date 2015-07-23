@@ -10,6 +10,8 @@
 
 @interface StatsViewController : UIViewController {
     
+    UILabel *titleLabel;
+    
     UILabel *elimLabel;
     UILabel *elimP1Label;
     UILabel *elimP2Label;

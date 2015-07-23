@@ -47,7 +47,7 @@
 #define NUM_FACT 25
 #define FLOAT_FACT 1000
 
-#define DIST_WEIGHT 100.0
+#define DIST_WEIGHT 1.0
 
 #define WD_FACT 0.1
 #define SD_FACT 1.0
