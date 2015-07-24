@@ -230,6 +230,8 @@
         weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(cnt*cnt);
     }
     
+    if([p1Spaces count] == 0) return weight + 1e10;
+    
     return weight;
 }
 

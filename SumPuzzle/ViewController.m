@@ -1259,8 +1259,8 @@
     else {
         
         if(difficulty == 1) {
-            niter = 5;
-            nRnIter = 2;
+            niter = 7;
+            nRnIter = 1;
         }
         else {
             niter = 3;
