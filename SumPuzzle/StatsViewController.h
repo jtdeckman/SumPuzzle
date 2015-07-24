@@ -22,7 +22,7 @@
     UILabel *elimP2Val;
     UILabel *elimCompVal;
     UILabel *elimTimeVal;
-
+/*
     UILabel *CFLabel;
     UILabel *CFP1Label;
     UILabel *CFP2Label;
@@ -32,7 +32,7 @@
     UILabel *CFP1Val;
     UILabel *CFP2Val;
     UILabel *CFCompVal;
-    UILabel *CFTimeVal;
+    UILabel *CFTimeVal; */
     
     NSInteger p1Wins, p2Wins, compWins, bestTime;
     NSInteger CFp1Wins, CFp2Wins, CFCompWins, CFBestTime;

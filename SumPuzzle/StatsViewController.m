@@ -179,7 +179,7 @@
 
     viewFrame.size.width = elimP1Label.frame.size.width;
     viewFrame.origin.x = elimP1Label.frame.origin.x;
-    viewFrame.origin.y += 0.6*spcFct;
+    viewFrame.origin.y += 0.5*spcFct;
     
     elimTimeLabel= [[UILabel alloc] initWithFrame:viewFrame];
     elimTimeLabel.clipsToBounds =YES;
@@ -212,7 +212,7 @@
     
     
  // Capture the flag labels
-    
+ /*
     viewFrame = elimLabel.frame;
     viewFrame.size.width = 0.65*self.view.frame.size.width;
     viewFrame.origin.y = elimTimeVal.frame.origin.y + 1.1*spcFct;
@@ -347,7 +347,7 @@
     else
         CFTimeVal.text = @"00:00:00";
     
-    [self.view addSubview:CFTimeVal];
+    [self.view addSubview:CFTimeVal]; */
 }
 
 - (void)getData {

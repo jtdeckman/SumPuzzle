@@ -172,7 +172,7 @@
     [self.view addSubview:difficultyControl];
     
  // Win settings
-    
+   /*
     viewFrame.size = difficultyLabel.frame.size;
     viewFrame.origin.x = difficultyLabel.frame.origin.x;
     viewFrame.origin.y += spcFct;
@@ -199,7 +199,7 @@
     [gameModeControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
     
     [gameModeControl setSelectedSegmentIndex:captureFlagMode];
-    [self.view addSubview:gameModeControl];
+    [self.view addSubview:gameModeControl]; */
     
  // Board Size
     
