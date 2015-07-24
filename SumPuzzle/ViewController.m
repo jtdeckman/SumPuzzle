@@ -27,14 +27,6 @@
     [self setUpGamePlay];
     
     timer = [NSTimer scheduledTimerWithTimeInterval:1/1 target:self selector:@selector(runLoop) userInfo:nil repeats:YES];
-    
-   // [board addPiece:2 :2 :475 :player1 :p1Color];
-   // [board addPiece:2 :3 :83 :player2 :p2Color];
-   // [board addPiece:3 :2 :360 :player2 :p2Color];
-   // [board addPiece:3 :3 :58 :player1 :p1Color];
-    
-   // [board removePiece:[board getSpaceForIndices:4 :4]];
-
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -194,8 +186,6 @@
                 HowToViewController *howToView = [[HowToViewController alloc] init];
                 [self presentViewController:howToView animated:NO completion:nil];
                 
-             //   [self.view bringSubviewToFront:howToScreen];
-             //   howToScreen.hidden = NO;
             }
             
             else if([self isMenuBarItem:location :menu.statsLabel.frame]) {
@@ -230,8 +220,8 @@
         
         if(placeMode == swipeMove) {
             
-            frm.origin.x = location.x + floatOffset.x;// + boardView.frame.origin.x - 0.5*floatPiece.frame.size.width;
-            frm.origin.y = location.y + floatOffset.y;// boardView.frame.origin.y - 0.5*floatPiece.frame.size.height;
+            frm.origin.x = location.x + floatOffset.x;
+            frm.origin.y = location.y + floatOffset.y;
             
             frm.size = floatPiece.frame.size;
             [floatPiece setFrame:frm];
@@ -239,8 +229,8 @@
         }
         else if(placeMode == placeTile) {
             
-            frm.origin.x = location.x + floatOffset.x;// + boardView.frame.origin.x - 0.5*floatPiece.frame.size.width;
-            frm.origin.y = location.y + floatOffset.y;// boardView.frame.origin.y - 0.5*floatPiece.frame.size.height;
+            frm.origin.x = location.x + floatOffset.x;
+            frm.origin.y = location.y + floatOffset.y;
             
             if(currentPlayer == player1) {
                 frm.size = nextTile.frame.size;
@@ -284,8 +274,8 @@
         if(placeMode == swipeMove) {
         
             CGRect frm;
-            frm.origin.x = location.x + floatOffset.x;// + boardView.frame.origin.x - 0.5*floatPiece.frame.size.width;
-            frm.origin.y = location.y + floatOffset.y;// boardView.frame.origin.y - 0.5*floatPiece.frame.size.height;
+            frm.origin.x = location.x + floatOffset.x;
+            frm.origin.y = location.y + floatOffset.y;
             
             frm.size = floatPiece.frame.size;
         
@@ -354,7 +344,6 @@
             [boardView addSubview:space.piece];
         }
     }
-    
 }
 
 - (bool)didTouchAddPiece: (CGPoint)crd {
@@ -478,9 +467,6 @@
     
     winLabel.hidden = YES;
     
-  //  cFlagPos1 = dimy-1;
-  //  cFlagPos2 = 0;
-    
     if(dimy == 6) {
         cFlagPos1 = 3;
         cFlagPos2 = 2;
@@ -570,7 +556,7 @@
     
     startValue = (int)[defaults integerForKey:@"startValue"];
     tileValue = (int)[defaults integerForKey:@"tileValue"];
-    tileInc = TILE_INC; //(int)[defaults integerForKey:@"tileInc"];
+    tileInc = TILE_INC;
     
     [self setUpDifficulty];
 
@@ -676,7 +662,6 @@
 
     nextTile.text = [NSString stringWithFormat:@"%d",nextValueP1];
     p2NextTile.text = [NSString stringWithFormat:@"%d",nextValueP2];
-
 }
 
 - (void)changeNextTileForPlayer {
@@ -739,6 +724,7 @@
 - (void)AIPauseLoop {
 
     if(pauseTimeCnt >= AI_PAUSE_TIME) {
+        
         [pauseTimer invalidate];
         pauseTimer = nil;
         
@@ -747,7 +733,9 @@
         
         [self AIMove];
     }
+    
     else {
+        
         ++pauseTimeCnt;
     }
 }
@@ -824,9 +812,6 @@
     CGFloat width = self.view.frame.size.width*WIDTH_FACT;
     CGFloat height = self.view.frame.size.height*TOPBAR_V_FACT;
     
-  //  if(self.view.frame.size.height > 700)
-  //      height *= 0.75;
-    
     CGFloat offset = self.view.frame.size.width*SPACING_FACT;
     
     CGRect viewFrame;
@@ -861,6 +846,7 @@
     CGFloat aratio = self.view.frame.size.width/self.view.frame.size.height;
     
     if(aratio > 0.74) {
+        
         viewFrame.size.width = 0.75*width;
         viewFrame.size.height = viewFrame.size.width;
         viewFrame.origin.x = (self.view.frame.size.width - viewFrame.size.width)/2.0;
@@ -899,18 +885,6 @@
     [menu setUpView];
     
     [self.view addSubview:menu];
-
- // How to play screen
-    
-  //  howToScreen = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"howToPlay.png"]];
-//    howToScreen.frame = self.view.frame;
- //   howToScreen.alpha = 1.0;
- //   howToScreen.hidden = YES;
-    
-  //  [self.view addSubview:howToScreen];
-    
-    
-    // Board set-up
     
     [self setUpBoard:lineThickness];
     [self setUpLabels];
@@ -922,8 +896,7 @@
     
     Space *space = [board getSpaceForIndices:0 :0];
     
-    // viewFrame.origin.x = 0.5*self.view.frame.size.width - space.spaceFrame.size.width/2.0;
-    viewFrame.origin.x = 0.1*bottomBar.frame.size.width;// - space.spaceFrame.size.width/2.0;
+    viewFrame.origin.x = 0.1*bottomBar.frame.size.width;
     viewFrame.size.width = 0.98*space.spaceFrame.size.width;
     viewFrame.size.height = 0.98*space.spaceFrame.size.height;
     viewFrame.origin.y = bottomBar.frame.origin.y + bottomBar.frame.size.height/2.0 -viewFrame.size.height/2.0;
@@ -989,7 +962,6 @@
     floatPiece.layer.cornerRadius = 10.0;
     floatPiece.clipsToBounds = YES;
     floatPiece.backgroundColor = nextTile.backgroundColor;
-    //  floatPiece.layer.borderWidth = 2.0f;
     floatPiece.textColor = [UIColor whiteColor];
     
     [floatPiece setTextAlignment:NSTextAlignmentCenter];
@@ -1053,7 +1025,6 @@
     player1PntsLabel.layer.cornerRadius = 3.0;
     player1PntsLabel.clipsToBounds = YES;
     player1PntsLabel.backgroundColor = [UIColor clearColor];
-    // player1PntsLabel.layer.borderColor = [[UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0] CGColor];
     player1PntsLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
     player1PntsLabel.layer.borderWidth = 2.0f;
     player1PntsLabel.textColor = [UIColor colorWithRed:p1Color.red green:p1Color.green blue:p1Color.blue alpha:1.0];
@@ -1071,7 +1042,6 @@
     player2PntsLabel.layer.cornerRadius = 3.0;
     player2PntsLabel.clipsToBounds = YES;
     player2PntsLabel.backgroundColor = [UIColor clearColor];
-    //  player2PntsLabel.layer.borderColor = [[UIColor colorWithRed:clr.red green:clr.green blue:clr.blue alpha:1.0] CGColor];
     player2PntsLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
     player2PntsLabel.layer.borderWidth = 2.0f;
     player2PntsLabel.textColor = [UIColor colorWithRed:p2Color.red green:p2Color.green blue:p2Color.blue alpha:1.0];
@@ -1104,10 +1074,7 @@
  // Win Label
     
     viewFrame = topBar.frame;
-    
     viewFrame.size.width *= 0.75;
-   // viewFrame.size.height *= 0.75;
-    
     viewFrame.origin.x = self.view.frame.size.width/2.0 - 0.5*viewFrame.size.width;
     viewFrame.origin.y = self.view.frame.size.height/2.0 - 0.5*viewFrame.size.height;
     
@@ -1123,7 +1090,6 @@
     winLabel.numberOfLines = 2;
     
     winLabel.text = [NSString stringWithFormat:@"You Won!"];
-   // winLabel.hidden = NO;
     
     [self.view addSubview:winLabel];
     
@@ -1251,22 +1217,24 @@
             niter = 17;
             nRnIter = 1;
         }
+        
         else {
             niter = 12;
             nRnIter = 1;
         }
     }
+    
     else {
         
         if(difficulty == 1) {
             niter = 7;
             nRnIter = 1;
         }
+        
         else {
             niter = 3;
             nRnIter = 1;
         }
-
     }
 }
 
