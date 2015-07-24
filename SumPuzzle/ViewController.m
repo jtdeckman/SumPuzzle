@@ -1305,7 +1305,7 @@
     
         NSInteger bestTime;
         
-        if(captureFlag) {
+        if(difficulty == 1) {
 
             bestTime = [defaults integerForKey:@"bestTimeCF"];
     

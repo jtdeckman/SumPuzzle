@@ -86,7 +86,7 @@
     [elimLabel setTextAlignment:NSTextAlignmentLeft];
     
     [elimLabel setFont:[UIFont fontWithName:@"Arial-ItalicMT" size:2.25*FONT_FACT*viewFrame.size.height]];
-    elimLabel.text = @"Elimination Mode";
+    elimLabel.text = @"Standard Difficulty";
     
     [self.view addSubview:elimLabel];
     
@@ -212,7 +212,7 @@
     
     
  // Capture the flag labels
- /*
+ 
     viewFrame = elimLabel.frame;
     viewFrame.size.width = 0.65*self.view.frame.size.width;
     viewFrame.origin.y = elimTimeVal.frame.origin.y + 1.1*spcFct;
@@ -224,7 +224,7 @@
     [CFLabel setTextAlignment:NSTextAlignmentLeft];
     
     [CFLabel setFont:[UIFont fontWithName:@"Arial-ItalicMT" size:2.25*FONT_FACT*viewFrame.size.height]];
-    CFLabel.text = @"Capture the Flag";
+    CFLabel.text = @"Advanced Difficulty";
     
     [self.view addSubview:CFLabel];
     
@@ -347,7 +347,7 @@
     else
         CFTimeVal.text = @"00:00:00";
     
-    [self.view addSubview:CFTimeVal]; */
+    [self.view addSubview:CFTimeVal];
 }
 
 - (void)getData {
