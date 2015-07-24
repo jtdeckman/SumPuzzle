@@ -28,10 +28,12 @@
     
     timer = [NSTimer scheduledTimerWithTimeInterval:1/1 target:self selector:@selector(runLoop) userInfo:nil repeats:YES];
     
- //   [board addPiece:1 :1 :475 :player1 :p1Color];
- //   [board addPiece:1 :2 :83 :player2 :p2Color];
- //   [board addPiece:2 :1 :360 :player2 :p2Color];
- //   [board addPiece:2 :2 :58 :player1 :p1Color];
+   // [board addPiece:2 :2 :475 :player1 :p1Color];
+   // [board addPiece:2 :3 :83 :player2 :p2Color];
+   // [board addPiece:3 :2 :360 :player2 :p2Color];
+   // [board addPiece:3 :3 :58 :player1 :p1Color];
+    
+   // [board removePiece:[board getSpaceForIndices:4 :4]];
 
 }
 
