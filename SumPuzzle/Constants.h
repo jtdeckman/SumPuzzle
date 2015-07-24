@@ -34,7 +34,7 @@
 #define NUM_R_ITER 1
 
 #define TILE_INIT 10
-#define TILE_INC 25
+#define TILE_INC 20
 
 #define WIN_WEIGHT_FACT 1e4
 
