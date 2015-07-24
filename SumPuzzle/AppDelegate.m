@@ -84,7 +84,7 @@
         [defaults setInteger:500 forKey:@"startValue"];
         [defaults setInteger:10 forKey:@"tileValue"];
         
-        [defaults setInteger:1 forKey:@"difficulty"];
+        [defaults setInteger:0 forKey:@"difficulty"];
         
         [defaults setInteger:1 forKey:@"winner"];
         
