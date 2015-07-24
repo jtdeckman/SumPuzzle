@@ -232,7 +232,7 @@
         ++cnt;
         
         [self makeBestP2Move:tempBoard :tempP1Spaces :tempP2Spaces :p1Val :&p2Val :NumIter];
-        weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(cnt*cnt);
+    //    weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(cnt*cnt);
         
         [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val :NumIter];
         weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(cnt*cnt);
@@ -245,7 +245,7 @@
     
     double metric = 0;
     
-    int nP1Spc = (int)[p1spcs count];
+ //   int nP1Spc = (int)[p1spcs count];
     int nP2Spc = (int)[p2spcs count];
 
     int p1Total = [self scoreOfMinSpaceSet:p1spcs];
@@ -279,7 +279,7 @@
   //  if(captureFlagMode)
     //    metric += ([self weightedDistanceFromFlagSingle:p2spcs :player2] - [self weightedDistanceFromFlagSingle:p1spcs :player1])*DIST_WEIGHT;
     
-    if(nP1Spc == 0) return metric + WIN_WEIGHT_FACT;
+  //  if(nP1Spc == 0) return metric + WIN_WEIGHT_FACT;
 
     return metric;
 }
@@ -289,7 +289,7 @@
     double metric = 0;
     
     int nP1Spc = (int)[p1spcs count];
-    int nP2Spc = (int)[p2spcs count];
+   // int nP2Spc = (int)[p2spcs count];
 
     int p1Total = [self scoreOfMinSpaceSet:p1spcs];
     int compTotal = [self scoreOfMinSpaceSet:p2spcs];
@@ -306,7 +306,7 @@
    // if(captureFlagMode)
      //   metric += ([self weightedDistanceFromFlagSingle:p1spcs :player1] - [self weightedDistanceFromFlagSingle:p2spcs :player2])*DIST_WEIGHT;
  
-    if(nP2Spc == 0) return metric + WIN_WEIGHT_FACT;
+   // if(nP2Spc == 0) return metric + WIN_WEIGHT_FACT;
     
     return metric;
 }
