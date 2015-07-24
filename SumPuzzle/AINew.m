@@ -191,8 +191,6 @@
 
 - (double)calcWeight: (NSMutableArray*)tempBoard :(NSMutableSet*) p2Spaces : (NSMutableSet*) p1Spaces : (int)p1Val : (int)p2Val {
     
-  //  NSMutableArray *tempBoard = [self newTempBoard];
-    
     [self clearTempBord:tempBoard];
     
     NSMutableSet *tempP1Spaces = [self setUpTempBoardAndPlayerSpaces:tempBoard :p1Spaces];
@@ -200,19 +198,13 @@
     
     double weight = 0;
     
-    int cnt = 0;
+    int cnt = 1;
     int NumIter = numRnIter;
     
     weight = [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
     
-   // if(captureFlagMode && [self checkIfAtFlag:tempP2Spaces :player2])
-     //   return 1e20;
-    
     [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val: NumIter];
     weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces];
-    
-   // if(captureFlagMode && [self checkIfAtFlag:tempP1Spaces :player1])
-     //   weight -= 1e10;
     
     NumIter = 1;
     
@@ -232,7 +224,7 @@
         ++cnt;
         
         [self makeBestP2Move:tempBoard :tempP1Spaces :tempP2Spaces :p1Val :&p2Val :NumIter];
-    //    weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(cnt*cnt);
+        weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(cnt*cnt);
         
         [self makeBestP1Move:tempBoard :tempP1Spaces :tempP2Spaces :&p1Val :p2Val :NumIter];
         weight += [self calcP2BoardMetric:tempP1Spaces :tempP2Spaces]/(cnt*cnt);
@@ -255,31 +247,10 @@
 
     double wavg = 0;
     
-  //  if(nP2Spc > 0)
-   //     wavg += (compTotal/nP2Spc)*PPN_FACT;
-    
-   // if(nP1Spc > 0)
-     //   wavg += PPN_O_FACT/(p1Total*nP1Spc);
-    
-      //  wavg = (compTotal*nP2Spc - p1Total*nP1Spc*nP1Spc)*WAVG_FACT;
-    
-  //  double sd = [self stdDev:p2spcs]*SD_FACT;
-  //  double wd = [self weightedDistance:p2spcs :p1spcs]*WD_FACT;
-    
-   // metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg;// + wd + nP2Spc*NUM_FACT;
-    
-  //  if(captureFlagMode)
-    //    metric += [self distWeight:p2spcs :player2]*DIST_WEIGHT;
-    
     if(nP2Spc > 0)
         wavg += (compTotal/nP2Spc)*PPN_FACT;
     
     metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg;
-
-  //  if(captureFlagMode)
-    //    metric += ([self weightedDistanceFromFlagSingle:p2spcs :player2] - [self weightedDistanceFromFlagSingle:p1spcs :player1])*DIST_WEIGHT;
-    
-  //  if(nP1Spc == 0) return metric + WIN_WEIGHT_FACT;
 
     return metric;
 }
@@ -302,11 +273,6 @@
         wavg += (p1Total/nP1Spc)*PPN_FACT;
     
     metric = (double)(POINT_DIFF_FACT*scoreDiff) + wavg;
-    
-   // if(captureFlagMode)
-     //   metric += ([self weightedDistanceFromFlagSingle:p1spcs :player1] - [self weightedDistanceFromFlagSingle:p2spcs :player2])*DIST_WEIGHT;
- 
-   // if(nP2Spc == 0) return metric + WIN_WEIGHT_FACT;
     
     return metric;
 }

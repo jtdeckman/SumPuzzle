@@ -1263,7 +1263,7 @@
             nRnIter = 2;
         }
         else {
-            niter = 5;
+            niter = 3;
             nRnIter = 1;
         }
 
