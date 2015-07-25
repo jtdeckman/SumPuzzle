@@ -27,6 +27,30 @@
     [self setUpGamePlay];
     
     timer = [NSTimer scheduledTimerWithTimeInterval:1/1 target:self selector:@selector(runLoop) userInfo:nil repeats:YES];
+    
+ /*   [board removePiece:[board getSpaceForIndices:0 :0]];
+    [board removePiece:[board getSpaceForIndices:0 :4]];
+    [board removePiece:[board getSpaceForIndices:4 :0]];
+    [board removePiece:[board getSpaceForIndices:4 :4]];
+
+    [board addPiece:0 :0 :5 :player1 :p1Color];
+    [board addPiece:1 :0 :5 :player2 :p2Color];
+    [board addPiece:3 :0 :35 :player1 :p1Color];
+    [board addPiece:0 :2 :62 :player1 :p1Color];
+    [board addPiece:0 :3 :10 :player1 :p1Color];
+    [board addPiece:1 :2 :374 :player1 :p1Color];
+    [board addPiece:2 :1 :90 :player1 :p1Color];
+    [board addPiece:2 :3 :110 :player1 :p1Color];
+    [board addPiece:2 :4 :550 :player1 :p1Color];
+    [board addPiece:3 :3 :10 :player1 :p1Color];
+    
+    [board addPiece:2 :0 :30 :player2 :p2Color];
+    [board addPiece:3 :1 :260 :player2 :p2Color];
+    [board addPiece:4 :1 :50 :player2 :p2Color];
+    [board addPiece:3 :2 :12 :player2 :p2Color];
+    [board addPiece:3 :4 :540 :player2 :p2Color];
+ [board addPiece:4 :3 :10 :player2 :p2Color];  */
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
