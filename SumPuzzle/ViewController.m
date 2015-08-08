@@ -305,7 +305,7 @@
                     }
                     else if(space.player != currentPlayer && selectedPiece.value > space.value) {
                         
-                        int newVal = selectedPiece.value - space.value*DIV_FACT;
+                        int newVal = selectedPiece.value + space.value*overTakeFact;
 
                         [board convertPiece:space :newVal :[self getColorForPlayer] :currentPlayer];
                         [board removePiece:selectedPiece];
@@ -424,7 +424,7 @@
             
             if(moveTo.player == player1) {
                 
-                int newVal = moveFrom.value - moveTo.value*DIV_FACT;
+                int newVal = moveFrom.value + moveTo.value*overTakeFact;
                 
                 [self animateComputerMove:moveFrom :newVal];
                 [board convertPiece:moveTo :newVal :[self getColorForPlayer] :player2];
@@ -532,6 +532,9 @@
         [self.view bringSubviewToFront:flag1];
         [self.view bringSubviewToFront:flag2];
     }
+    
+    if(!computerPlayer) levelLabel.hidden = YES;
+    else levelLabel.hidden = NO;
 }
 
 - (JDColor)getColorForPlayer {
@@ -556,10 +559,20 @@
     
     startValue = (int)[defaults integerForKey:@"startValue"];
     tileValue = (int)[defaults integerForKey:@"tileValue"];
+    
+    level = (int)[defaults integerForKey:@"level"];
+    
     tileInc = TILE_INC;
     
     [self setUpDifficulty];
 
+    if(computerPlayer) {
+        overTakeFact = 1 - (level-1)*DIV_FACT;
+        if(overTakeFact < -0.5) overTakeFact = -0.5;
+    }
+    else
+        overTakeFact = 1.0;
+    
     [defaults synchronize];
 }
 
@@ -792,6 +805,17 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     [defaults setInteger:winner forKey:@"winner"];
+    
+    if(computerPlayer) {
+        
+        if(winner == player2)
+            level = 1;
+        else
+            ++level;
+    
+        [defaults setInteger:level forKey:@"level"];
+    }
+    
     [defaults synchronize];
 }
 
@@ -1106,6 +1130,25 @@
     
     [self.view addSubview:flag1];
     [self.view addSubview:flag2];
+    
+    
+    viewFrame.size.height = player1PntsLabel.frame.size.height;
+    viewFrame.size.width = 2.0*player1PntsLabel.frame.size.width;
+    viewFrame.origin.y = player1PntsLabel.frame.origin.y - 1.15*viewFrame.size.height;
+    viewFrame.origin.x = player1PntsLabel.frame.origin.x;
+    
+    levelLabel = [[UILabel alloc] initWithFrame:viewFrame];
+    
+    levelLabel.clipsToBounds = YES;
+    levelLabel.backgroundColor = [UIColor clearColor];
+    levelLabel.layer.borderColor = [[UIColor clearColor] CGColor];
+    levelLabel.textColor = [UIColor colorWithRed:0.8 green:0.2 blue:0.2 alpha:1.0];
+    [levelLabel setTextAlignment:NSTextAlignmentLeft];
+    [levelLabel setFont:[UIFont fontWithName:@"Arial" size:1.65*FONT_FACT*viewFrame.size.height]];
+    
+    levelLabel.text = [NSString stringWithFormat:@"Level: %d", level];
+    
+    [self.view addSubview:levelLabel];
 }
 
 - (void)setUpColors {
@@ -1300,7 +1343,7 @@
         
         if(computerPlayer) {
             
-            if(captureFlag)
+            if(difficulty == 1)
                 [defaults setInteger:[defaults integerForKey:@"nCompWinsCF"]+1 forKey:@"nCompWinsCF"];
             
             else
@@ -1309,7 +1352,7 @@
         
         else {
             
-            if(captureFlag)
+            if(difficulty == 1)
                 [defaults setInteger:[defaults integerForKey:@"nP2WinsCF"]+1 forKey:@"nP2WinsCF"];
             else
                 [defaults setInteger:[defaults integerForKey:@"nP2Wins"]+1 forKey:@"nP2Wins"];

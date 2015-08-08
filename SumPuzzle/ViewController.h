@@ -67,6 +67,8 @@
     uint cFlagPos1;
     uint cFlagPos2;
     
+    uint level;
+    
     UILabel *nextTile;
     UILabel *p2NextTile;
     UILabel *playerLabel;
@@ -76,8 +78,8 @@
     UILabel *player2PntsLabel;
     
     UILabel *timeLabel;
-    
     UILabel *winLabel;
+    UILabel *levelLabel;
     
     UIImage *p1Img;
     UIImage *p2Img;
@@ -107,6 +109,8 @@
     CGFloat moveXinc;
     CGFloat moveYinc;
     CGFloat fpOffset;
+    
+    CGFloat hightScore;
     
     CGPoint floatOffset;
     

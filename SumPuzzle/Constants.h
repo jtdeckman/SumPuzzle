@@ -11,6 +11,8 @@
 #ifndef NumSum_Constants_h
 #define NumSum_Constants_h
 
+static double overTakeFact;
+
 #define WIDTH_FACT 1.00
 #define HEIGHT_FACT 1.00
 #define TOPBAR_V_FACT 0.2
@@ -38,7 +40,7 @@
 
 #define WIN_WEIGHT_FACT 1e4
 
-#define DIV_FACT 0.5
+#define DIV_FACT 0.25
 
 // Weighting Factors
 

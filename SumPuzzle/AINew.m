@@ -148,7 +148,7 @@
                 nbrSpace.value = nbr.value;
                 origSpace.value = item.value;
                 
-                nbr.value = item.value - (float)(nbr.value)*DIV_FACT;
+                nbr.value = item.value + (float)(nbr.value)*overTakeFact;
                 nbr.player = player2;
                 
                 item.value = 0;
@@ -387,7 +387,7 @@
                 nbrSpace.value = nbr.value;
                 origSpace.value = item.value;
                 
-                nbr.value = item.value - (float)(nbr.value)*DIV_FACT;;
+                nbr.value = item.value + (float)(nbr.value)*overTakeFact;
                 nbr.player = player1;
                 
                 item.value = 0;
@@ -489,7 +489,7 @@
             moveTo.value = moveTo.space.value;
             moveTo.player = player2;
                 
-            moveTo.space.value = moveFrom.space.value - moveTo.space.value*DIV_FACT;
+            moveTo.space.value = moveFrom.space.value + moveTo.space.value*overTakeFact;
             moveTo.space.player = player1;
                 
             moveFrom.space.value = 0;
@@ -614,7 +614,7 @@
                 nbrSpace.value = nbr.value;
                 origSpace.value = item.value;
                 
-                nbr.value = item.value - (float)(nbr.value)*DIV_FACT;;
+                nbr.value = item.value + (float)(nbr.value)*overTakeFact;
                 nbr.player = player2;
                 
                 item.value = 0;
@@ -714,7 +714,7 @@
             moveTo.value = moveTo.space.value;
             moveTo.player = player1;
             
-            moveTo.space.value = moveFrom.space.value - moveTo.space.value*DIV_FACT;
+            moveTo.space.value = moveFrom.space.value + moveTo.space.value*overTakeFact;
             moveTo.space.player = player2;
             
             moveFrom.space.value = 0;
@@ -827,7 +827,7 @@
                 nbrSpace.value = nbr.value;
                 origSpace.value = item.value;
                 
-                nbr.value = item.value - (float)(nbr.value)*DIV_FACT;
+                nbr.value = item.value + (float)(nbr.value)*overTakeFact;
                 nbr.player = player2;
                 
                 item.value = 0;
@@ -966,7 +966,7 @@
                 nbrSpace.value = nbr.value;
                 origSpace.value = item.value;
                 
-                nbr.value = item.value - (float)(nbr.value)*DIV_FACT;
+                nbr.value = item.value + (float)(nbr.value)*overTakeFact;
                 nbr.player = player1;
                 
                 item.value = 0;

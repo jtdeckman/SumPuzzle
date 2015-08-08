@@ -100,6 +100,9 @@
         [defaults setInteger:0 forKey:@"nCompWinsCF"];
         [defaults setInteger:10000000 forKey:@"bestTimeCF"];
         
+        [defaults setInteger:1 forKey:@"level"];
+        [defaults setFloat:0 forKey:@"highScore"];
+        
         [defaults synchronize];
     }
 }
